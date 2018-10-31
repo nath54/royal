@@ -41,15 +41,21 @@ cvit=[0          ,0           ,3          ,3          ,3          ,2            
 cpor=[150        ,200         ,50         ,150        ,200        ,40           ,55          ,50         ,350        ,50          ,125             ,50         ,350             ]
 ctpc=[2          ,2           ,1          ,1          ,1          ,1            ,1           ,1          ,1          ,1           ,2               ,1          ,1               ]
 crar=[0          ,0           ,0          ,0          ,1          ,1            ,2           ,3          ,3          ,0           ,1               ,1          ,1               ]
-cnbp=[1          ,1           ,1          ,2          ,1          ,1            ,1           ,1          ,1          ,5           ,1               ,1          ,1               ]
+cnbp=[1          ,1           ,1          ,2          ,1          ,1            ,1           ,1          ,1          ,20          ,1               ,1          ,1               ]
 cimg=["te1.png"  ,"te2.png"   ,"c0.png"   ,"c1.png"   ,"c2.png"   ,"c6.png"     ,"c3.png"    ,"c4.png"   ,"c5.png"   ,"c7.png"    ,"c8.png"        ,"c9.png"   ,"c10.png"       ]
-ctxx=[75/1200*tex,100/1200*tex,50/1200*tex,50/1200*tex,50/1200*tex,50/1200*tex  ,100/1200*tex,50/1200*tex,50/1200*tex,50/1200*tex ,50/1200*tex     ,75/1200*tex,50/1200*tex     ]
-ctyy=[75/1000*tey,100/1000*tey,50/1000*tey,50/1000*tey,50/1000*tey,50/1000*tey  ,100/1000*tey,50/1000*tey,50/1000*tey,50/1000*tey ,50/1000*tey     ,75/1000*tey,50/1000*tey     ]
+ctxx=[75/1200*tex,100/1200*tex,50/1200*tex,50/1200*tex,50/1200*tex,50/1200*tex  ,100/1200*tex,50/1200*tex,50/1200*tex,30/1200*tex ,50/1200*tex     ,75/1200*tex,50/1200*tex     ]
+ctyy=[75/1000*tey,100/1000*tey,50/1000*tey,50/1000*tey,50/1000*tey,50/1000*tey  ,100/1000*tey,50/1000*tey,50/1000*tey,30/1000*tey ,50/1000*tey     ,75/1000*tey,50/1000*tey     ]
 nctxx,nctyy=[],[]
 for c in ctxx: nctxx.append(int(c))
 for c in ctyy: nctyy.append(int(c))
 ctxx,ctyy=nctxx,nctyy
 #rar: 0=commun , 1=rare , 2=epique , 3=legendaire , 4=dieu
+
+def affattack(p1,p2):
+    if p1.camp==1: cc=(0,0,250)
+    else: cc=(250,0,0)
+    pygame.draw.line(fenetre,cc,(p1.px,p1.py),(p2.px,p2.py),1)
+    pygame.display.update()
 
 def dtouch(c1,c2):
     if pygame.Rect(c1.px-c1.portee,c1.py-c1.portee,c1.tx+c1.portee,c1.ty+c1.portee).colliderect(c2.px,c2.py,c2.tx,c2.ty): return True
@@ -90,9 +96,11 @@ class Carte:
             for c in tchs:
                 if lpp.px-self.px < c.px-self.px and lpp.py-self.py < c.py-self.py: lpp=c
             lpp.vie-=self.att
+            affattack(self,lpp)
         elif self.tpatt==2:
             for c in tchs:
                 c.vie-=self.att
+                affattack(self,c)
     def dcibl(self):
         if self.camp==1: cc=carts2
         else: cc=carts1
@@ -133,7 +141,10 @@ def botpc(j,aa):
         if j.camp==2:
             if aa: xx,yy=650/1200*tex,400/1000*tey
             else: xx,yy=150/1200*tex,400/1000*tey
-            for x in range(cnbp[j.cartactu[j.cartselec]]): carts2.append(Carte(xx-x*10,yy-50*x,j.cartactu[j.cartselec],2))
+            for x in range(cnbp[j.cartactu[j.cartselec]]):
+                dp1=random.randint(-1,1)*ctxx[j.cartactu[j.cartselec]]
+                dp2=random.randint(-1,1)*ctxx[j.cartactu[j.cartselec]]
+                carts2.append(Carte(xx-x*dp1,yy-dp1*x,j.cartactu[j.cartselec],2))
             j.elixir-=celi[j.cartactu[j.cartselec]]
             del(j.cartactu[j.cartselec])
         else:
@@ -169,7 +180,7 @@ def aff():
         for c in j1.cartactu:
             m=fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cimg[c]),[int(50/1200*tex),int(70/1000*tey)]),[int(850/1200*tex),int(ky/1000*tey)])
             j1.rcartactu.append(m)
-            if celi[c]>=j1.elixir : fenetre.blit(font.render(str(celi[c]),20,(150,20,150)),[1000/1200*tex,ky/1000*tey])
+            if celi[c]<=j1.elixir : fenetre.blit(font.render(str(celi[c]),20,(150,20,150)),[1000/1200*tex,ky/1000*tey])
             else                  : fenetre.blit(font.render(str(celi[c]),20,(250,5,20)),[1000/1200*tex,ky/1000*tey])
             if j1.cartselec==dd: pygame.draw.rect(fenetre,(50,50,150),(850/1200*tex,ky/1000*tey,50/1200*tex,70/1000*tey),5)
             else: pygame.draw.rect(fenetre,(150,150,150),(850/1200*tex,ky/1000*tey,50/1200*tex,70/1000*tey),5)
@@ -230,7 +241,10 @@ while encour:
             rpos=pygame.Rect(pos[0],pos[1],1,1)
             if pos[0] >= 0 and pos[0] <= tpx and pos[1] >= tpy/2:
                 if j1.cartselec != None and j1.elixir >= celi[j1.cartactu[j1.cartselec]]:
-                    for x in range(cnbp[j1.cartactu[j1.cartselec]]): carts1.append( Carte(pos[0]-10*x,pos[1]-50*x,j1.cartactu[j1.cartselec],1) )
+                    for x in range(cnbp[j1.cartactu[j1.cartselec]]):
+                        dp1=random.randint(-1,1)*ctxx[j1.cartactu[j1.cartselec]]
+                        dp2=random.randint(-1,1)*ctxx[j1.cartactu[j1.cartselec]]
+                        carts1.append( Carte(pos[0]-dp1*x,pos[1]-dp2*x,j1.cartactu[j1.cartselec],1) )
                     j1.elixir-=celi[j1.cartactu[j1.cartselec]]
                     del(j1.cartactu[j1.cartselec])
                     j1.cartselec=None
