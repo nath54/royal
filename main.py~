@@ -67,7 +67,6 @@ def get_card(ic):
     ll=[]
     for tp in ctpp:
         if tp!=0 and tp!=1: ll.append(tp)
-    print(ll)
     crt=random.choice(ll)
     while crar[crt]!=ic: crt=random.choice(ll)
     return crt
@@ -106,6 +105,7 @@ def coffre(c):
             time.sleep(0.01)
         ac()
         time.sleep(0.5)
+    time.sleep(0.5)
     
 ##################################################
 

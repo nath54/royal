@@ -26,7 +26,8 @@ class Joueur:
 
 j1=Joueur(1)
 j2=Joueur(2)
-cpdps=[2,3,4,5,6,7,8,9,10,11,12,13]
+j2.tpe=0.5
+cpdps=[2,3,4,5,6,7,8,9,10,11,12,13,14]
 j1.deck=cpdps
 j2.deck=cpdps
 
@@ -93,7 +94,7 @@ class Carte:
                         carts2.append(lpp)
             elif self.tpatt==2:
                 for c in tchs:
-                    if c.endroit in self.att_endroit
+                    if c.endroit in self.att_endroit:
                         c.vie-=self.att
                         affattack(self,c)
     def dcibl(self):
