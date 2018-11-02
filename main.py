@@ -1,5 +1,5 @@
 #coding:utf-8
-import pygame,time,os
+import pygame,time,os,random
 from pygame.locals import *
 from cartes import *
 
@@ -22,6 +22,7 @@ def aff():
     bm3=fenetre.blit(pygame.transform.scale(pygame.image.load("images/m3.png"),[int(tex/4),75]),[tex/4*2,0])
     bm4=fenetre.blit(pygame.transform.scale(pygame.image.load("images/m4.png"),[int(tex/4),75]),[tex/4*3,0])
     rcs=[]
+    rcf=[]
     if smenu==2:
         #bplay=pygame.draw.rect(fenetre,(150,150,50),(tex/4,tey/1.8,tex/5,tey/5),0)
         #fenetre.blit(font.render("play",20,(50,50,150)),[tex/3,tey/1.6])
@@ -49,11 +50,63 @@ def aff():
             if xx>tex-tx*1.2:
                 xx=50
                 yy+=ty+35
+    elif smenu==4:
+        xx,yy=50,100
+        tx,ty=150,150
+        for cf in cftpp:
+            rcf.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cfimg[cf]),[tx,ty]),[xx,yy]) )
+            fenetre.blit(font.render(cfnom[cf],20,(250,250,250)),[xx,yy+ty+5])
+            xx+=tx+20
+            if xx >= tex-tx+1:
+                xx=50
+                yy+=ty+50
     pygame.display.update()
-    return bplay,bm1,bm2,bm3,bm4,rcs
+    return bplay,bm1,bm2,bm3,bm4,rcs,rcf
 
+def get_card(ic):
+    ll=[]
+    for tp in ctpp:
+        if tp!=0 or tp!=1: ll.append(tp)
+    crt=random.choice(ll)
+    while crar[crt]!=ic: crt=random.choice(ll)
+    return crt
 
+def ac():
+    while True:
+        for event in pygame.event.get():
+            if event.type==MOUSEBUTTONUP: return True
+            if event.type==QUIT: exit()
 
+def coffre(c):
+    crts=[]
+    ore=random.randint(cfore[c][0],cfore[c][1])
+    for ccc in cfcrt[c]:
+        print(ccc)
+        for x in range(ccc[1]): crts.append(get_card(ccc[0]))
+    crts=list(set(crts))
+    fenetre.fill((10,0,50))
+    fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cfimg[c]),[int(cftxx[c]/1200*tex),int(cftyy[c]/1000*tey)]),[tex/4,tey/4])
+    pygame.display.update()
+    for x in range(100):
+            fenetre.fill((10,0,50))
+            fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cfimg[c]),[int(cftxx[c]/1200*tex),int(cftyy[c]/1000*tey)]),[tex/4,tey/4])
+            fenetre.blit(pygame.transform.scale(font.render("or : "+str(ore),20,(150,150,20)),[x*2,int(x*2.5)]),[tex/3,tey/3])
+            pygame.display.update()
+            time.sleep(0.01)
+    ac()
+    time.sleep(0.5)
+    for cc in crts:
+        for x in range(100):
+            fenetre.fill((10,0,50))
+            pygame.draw.rect(fenetre,craret[crar[cc]],(tex/3,tey/3,x*2,int(x*2.5)),5)
+            fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cfimg[c]),[int(cftxx[c]/1200*tex),int(cftyy[c]/1000*tey)]),[tex/4,tey/4])
+            fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cimg[cc]),[x*2,int(x*2.5)]),[tex/3,tey/3])
+            fenetre.blit(pygame.transform.scale(font.render(cnom[cc],20,(200,200,200)),[x*2,int(x*1.001)]),[tex/3,tey/3.5])
+            pygame.display.update()
+            time.sleep(0.01)
+        ac()
+        time.sleep(0.5)
+    
 ##################################################
 
 fenetre=pygame.display.set_mode([tex,tey])
@@ -64,7 +117,7 @@ time.sleep(1)
 
 encour=True
 while encour:
-    bplay,bm1,bm2,bm3,bm4,rcs=aff()
+    bplay,bm1,bm2,bm3,bm4,rcs,rcf=aff()
     for event in pygame.event.get():
         if event.type==QUIT: encour=False
         elif event.type==KEYDOWN:
@@ -81,6 +134,9 @@ while encour:
                 if rpos.colliderect(c):
                     if cselec!=rcs.index(c): cselec=rcs.index(c)
                     else: cselec=None
+            for c in rcf:
+                if rpos.colliderect(c):
+                    coffre(rcf.index(c))
             
     
 

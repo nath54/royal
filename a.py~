@@ -26,11 +26,11 @@ class Joueur:
 
 j1=Joueur(1)
 j2=Joueur(2)
-cpdps=[2,3,4,5,6,7,8,9,10,11,12]
+cpdps=[2,3,4,5,6,7,8,9,10,11,12,13]
 j1.deck=cpdps
 j2.deck=cpdps
 
-from cartes improt *
+from cartes import *
 #rar: 0=commun , 1=rare , 2=epique , 3=legendaire , 4=dieu
 
 def affattack(p1,p2):
@@ -63,26 +63,39 @@ class Carte:
         self.elixir=celi[tp]
         self.dnat=time.time()
         self.tpatt=ctpa[tp]
+        self.endroit=cend[tp]
+        self.att_endroit=caen[tp]
         self.cible=None
     def attack(self):
-      if time.time()-self.dnat > self.vitatt:
-        self.dnat=time.time()
-        if self.camp==1: cc=carts2
-        else: cc=carts1
-        tchs=[]
-        for c in cc:
-            if dtouch(self,c): tchs.append(c)
-        if tchs==[]: return False
-        if  self.tpatt == 1:
-            lpp=tchs[0]
-            for c in tchs:
-                if lpp.px-self.px < c.px-self.px and lpp.py-self.py < c.py-self.py: lpp=c
-            lpp.vie-=self.att
-            affattack(self,lpp)
-        elif self.tpatt==2:
-            for c in tchs:
-                c.vie-=self.att
-                affattack(self,c)
+        if time.time()-self.dnat > self.vitatt:
+            self.dnat=time.time()
+            if self.camp==1: cc=carts2
+            else: cc=carts1
+            tchs=[]
+            for c in cc:
+                if dtouch(self,c): tchs.append(c)
+            if tchs==[]: return False
+            if  self.tpatt == 1:
+                lpp=tchs[0]
+                for c in tchs:
+                    if lpp.px-self.px < c.px-self.px and lpp.py-self.py < c.py-self.py and c.endroit in self.att_endroit: lpp=c
+                lpp.vie-=self.att
+                affattack(self,lpp)
+                if self.tp==13:
+                    lpp.cible=None
+                    if self.camp==1:
+                        del(carts2[carts2.index(lpp)])
+                        lpp.camp=1
+                        carts1.append(lpp)
+                    else:
+                        del(carts1[carts1.index(lpp)])
+                        lpp.camp=2
+                        carts2.append(lpp)
+            elif self.tpatt==2:
+                for c in tchs:
+                    if c.endroit in self.att_endroit
+                        c.vie-=self.att
+                        affattack(self,c)
     def dcibl(self):
         if self.camp==1: cc=carts2
         else: cc=carts1
@@ -250,6 +263,7 @@ elif carts1==[]:
     img="images/perdu.png"
     encour2=True
 fenetre.blit(pygame.transform.scale(pygame.image.load(img),[tex,tey]),[0,0])
+bmenu=fenetre.blit(pygame.transform.scale(pygame.image.load("images/bmenu.png"),[int(100/1200*tex),int(50/1000*tey)]),[tex/2,tey/2])
 pygame.display.update()
 
 while encour2:
@@ -257,6 +271,10 @@ while encour2:
         if event.type==QUIT: encour2=False
         elif event.type==KEYDOWN:
             if event.key==K_q: encour2=False
+        elif event.type==MOUSEBUTTONUP:
+            p=pygame.mouse.get_pos()
+            rpos=pygame.Rect(p[0],p[1],1,1)
+            if rpos.colliderect(bmenu): encour2=False
 
 
 
