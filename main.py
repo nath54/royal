@@ -66,7 +66,7 @@ def aff():
 def get_card(ic):
     ll=[]
     for tp in ctpp:
-        if tp!=0 or tp!=1: ll.append(tp)
+        if tp!=0 and tp!=1: ll.append(tp)
     crt=random.choice(ll)
     while crar[crt]!=ic: crt=random.choice(ll)
     return crt
@@ -81,7 +81,6 @@ def coffre(c):
     crts=[]
     ore=random.randint(cfore[c][0],cfore[c][1])
     for ccc in cfcrt[c]:
-        print(ccc)
         for x in range(ccc[1]): crts.append(get_card(ccc[0]))
     crts=list(set(crts))
     fenetre.fill((10,0,50))
