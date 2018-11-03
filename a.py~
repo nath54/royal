@@ -26,8 +26,7 @@ class Joueur:
 
 j1=Joueur(1)
 j2=Joueur(2)
-j2.tpe=0.5
-cpdps=[2,3,4,5,6,7,8,9,10,11,12,13,14]
+cpdps=[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
 j1.deck=cpdps
 j2.deck=cpdps
 
@@ -41,7 +40,10 @@ def affattack(p1,p2):
     pygame.display.update()
 
 def dtouch(c1,c2):
-    if pygame.Rect(c1.px-c1.portee,c1.py-c1.portee,c1.tx+c1.portee,c1.ty+c1.portee).colliderect(c2.px,c2.py,c2.tx,c2.ty): return True
+    if c1.camp==1: cl=(0,0,200)
+    else           : cl=(200,0,0)
+    rr=pygame.draw.circle(fenetre,cl,(int(c1.px+c1.tx/2),int(c1.py+c1.ty/2)),c1.portee,1)
+    if rr.colliderect(c2.px,c2.py,c2.tx,c2.ty): return True
     return False
 
 class Carte:
@@ -66,7 +68,32 @@ class Carte:
         self.tpatt=ctpa[tp]
         self.endroit=cend[tp]
         self.att_endroit=caen[tp]
+        self.tpcarte=ctpc[tp]
         self.cible=None
+        if self.tpcarte==3:
+            for x in range(30):
+                fenetre.blit(self.img,[self.px-((30-x)*2),self.py-((30-x)*3)])
+                time.sleep(0.015)
+                pygame.display.update()
+            fenetre.blit(pygame.image.load("images/explose.png"),[self.px,self.py])
+            pygame.display.update()
+            if self.camp==1: cl=(0,0,200)
+            else           : cl=(200,0,0)
+            rr=pygame.draw.circle(fenetre,cl,(int(self.px+self.tx/2),int(self.py+self.ty/2)),self.portee,1)
+            if self.camp==1: cc=carts2
+            else: cc=carts1
+            tchs=[]
+            for c in cc:
+                if rr.colliderect(pygame.Rect(c.px,c.py,c.tx,c.ty)): tchs.append(c)
+            if tchs!=[]:
+                if self.tpatt==2:
+                    for c in tchs: c.vie-=self.att
+                else:
+                    lpp=tchs[0]
+                    for c in tchs:
+                        if abs(self.px-c.px) < abs(self.px-lpp.px) and abs(self.py-c.py) < abs(self.py-lpp.py): lpp=c
+                    lpp.vie-=self.att
+            pygame.display.update()
     def attack(self):
         if time.time()-self.dnat > self.vitatt:
             self.dnat=time.time()
@@ -133,22 +160,33 @@ pause=False
 
 def botpc(j,aa):
     j.cartselec=random.randint(0,3)
-    if j.elixir>celi[j.cartactu[j.cartselec]]:
+    jcs=j.cartactu[j.cartselec]
+    if j.elixir>celi[jcs]:
         if j.camp==2:
-            if aa: xx,yy=650/1200*tex,400/1000*tey
-            else: xx,yy=150/1200*tex,400/1000*tey
-            for x in range(cnbp[j.cartactu[j.cartselec]]):
-                dp1=random.randint(-1,1)*ctxx[j.cartactu[j.cartselec]]
-                dp2=random.randint(-1,1)*ctxx[j.cartactu[j.cartselec]]
-                carts2.append(Carte(xx-x*dp1,yy-dp1*x,j.cartactu[j.cartselec],2))
-            j.elixir-=celi[j.cartactu[j.cartselec]]
+            if ctpc[jcs]!=3:
+                if aa: xx,yy=650/1200*tex,400/1000*tey
+                else: xx,yy=150/1200*tex,400/1000*tey
+            else:
+                if carts1!=[]:
+                    cc=random.choice(carts1)
+                    xx,yy=cc.px,cc.py
+            for x in range(cnbp[jcs]):
+                dp1=random.randint(-1,1)*ctxx[jcs]
+                dp2=random.randint(-1,1)*ctxx[jcs]
+                carts2.append(Carte(xx-x*dp1,yy-dp1*x,jcs,2))
+            j.elixir-=celi[jcs]
             del(j.cartactu[j.cartselec])
         else:
-            if aa: xx,yy=650/1200*tex,600/1000*tey
-            else: xx,yy=150/1200*tex,600/1000*tey
-            carts1.append(Carte(xx,yy,j.cartactu[j.cartselec],1))
-            j.elixir-=celi[j.cartactu[j.cartselec]]
-            del(j.cartactu[j.cartselec])
+            if cptc[jcs]!=3:
+                if aa: xx,yy=650/1200*tex,600/1000*tey
+                else: xx,yy=150/1200*tex,600/1000*tey
+            else:
+                if carts1!=[]:
+                    cc=random.choice(carts2)
+                    xx,yy=cc.px,cc.py
+            carts1.append(Carte(xx,yy,jcs,1))
+            j.elixir-=celi[jcs]
+            del(jcs)
 
 def bot(j):
     botpc(j,random.randint(0,1))
@@ -235,20 +273,25 @@ while encour:
         elif event.type==MOUSEBUTTONUP:
             pos=pygame.mouse.get_pos()
             rpos=pygame.Rect(pos[0],pos[1],1,1)
-            if pos[0] >= 0 and pos[0] <= tpx and pos[1] >= tpy/2:
-                if j1.cartselec != None and j1.elixir >= celi[j1.cartactu[j1.cartselec]]:
-                    for x in range(cnbp[j1.cartactu[j1.cartselec]]):
-                        dp1=random.randint(-1,1)*ctxx[j1.cartactu[j1.cartselec]]
-                        dp2=random.randint(-1,1)*ctxx[j1.cartactu[j1.cartselec]]
-                        carts1.append( Carte(pos[0]+dp1*x,pos[1]+dp2*x,j1.cartactu[j1.cartselec],1) )
-                    j1.elixir-=celi[j1.cartactu[j1.cartselec]]
-                    del(j1.cartactu[j1.cartselec])
-                    j1.cartselec=None
-            else:
-                for cs in j1.rcartactu:
-                    if cs.colliderect(rpos):
-                        j1.cartselec=j1.rcartactu.index(cs)
-                        break
+            if j1.cartselec!=None:
+                jcs=j1.cartactu[j1.cartselec]
+                cond1=pos[0] >= 0 and pos[0] <= tpx and pos[1] >= tpy/2
+                cond2=pos[0] >= 0 and pos[0] <= tpx
+                if ctpc[jcs]!=3: cond=cond1
+                else: cond=cond2
+                if cond:
+                    if  j1.elixir >= celi[jcs]:
+                        for x in range(cnbp[jcs]):
+                            dp1=random.randint(-1,1)*ctxx[jcs]
+                            dp2=random.randint(-1,1)*ctxx[jcs]
+                            carts1.append( Carte(pos[0]+dp1*x,pos[1]+dp2*x,jcs,1) )
+                        j1.elixir-=celi[jcs]
+                        del(j1.cartactu[j1.cartselec])
+                        j1.cartselec=None
+            for cs in j1.rcartactu:
+                if cs.colliderect(rpos):
+                    j1.cartselec=j1.rcartactu.index(cs)
+                    break
         elif event.type==KEYDOWN:
             if event.key==K_q:
                 encour=False
