@@ -9,6 +9,8 @@ tpx,tpy=int(tex/1.5),tey
 carts1=[]
 carts2=[]
 maxelixir=10
+miss=[]
+
 pygame.init()
 
 class Joueur:
@@ -36,8 +38,8 @@ from cartes import *
 def affattack(p1,p2):
     if p1.camp==1: cc=(0,0,250)
     else: cc=(250,0,0)
-    pygame.draw.line(fenetre,cc,(p1.px,p1.py),(p2.px,p2.py),1)
-    pygame.display.update()
+    #pygame.draw.line(fenetre,cc,(p1.px,p1.py),(p2.px,p2.py),1)
+    #pygame.display.update()
 
 def dtouch(c1,c2):
     if c1.camp==1: cl=(0,0,200)
@@ -45,6 +47,45 @@ def dtouch(c1,c2):
     rr=pygame.draw.circle(fenetre,cl,(int(c1.px+c1.tx/2),int(c1.py+c1.ty/2)),c1.portee,1)
     if rr.colliderect(c2.px,c2.py,c2.tx,c2.ty): return True
     return False
+
+class Mis:
+    def __init__(self,pos,cible):
+        self.pos=pos
+        self.px=int(self.pos.px+self.pos.tx/2)
+        self.py=int(self.pos.py+self.pos.ty/2)
+        self.tx=int(30/1200*tex)
+        self.ty=int(30/1000*tey)
+        agl=int(math.atan(cible.py-self.py/cible.px-self.px))
+        self.img=pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/"+self.pos.mimg),[self.tx,self.ty]),agl)
+        self.vit=40
+        self.cible=cible
+        self.inut=False
+        self.rect=None
+    def ev(self):
+        if math.sqrt((self.cible.px-self.px)*(self.cible.px-self.px)+(self.cible.py-self.py)*(self.cible.py-self.py)) > self.vit:
+            a=-abs(self.cible.px-self.px)
+            b=-abs(self.cible.py-self.py)
+            c,f=int(math.sqrt(a*a+b*b)),self.vit
+            if f<c: #self.px,self.py=self.px+int(a*f/c),self.py+int(b*f/c)
+                e=int(b*f/c)
+                d=int(a*f/c)
+                if self.px > self.cible.px: self.px+=d
+                else                      : self.px-=d
+                if self.py > self.cible.py: self.py+=e
+                else                      : self.py-=e
+            else: self.px,self.px=self.px+a,self.py+b
+            if  self.px>=tpx-self.tx: self.px=tpx-self.tx
+            elif self.px <= 0: self.px=0
+            if  self.py>=tpy-self.ty: self.py=tpy-self.ty
+            elif self.py <= 0: self.py=0
+        else:
+            self.px+=self.cible.px-self.px
+            self.py+=self.cible.py-self.py
+        if self.rect==None: cond=pygame.Rect(self.px,self.py,self.tx,self.ty).colliderect(pygame.Rect(self.cible.px,self.cible.py,self.cible.tx,self.cible.ty))
+        else: cond=self.rect.colliderect(pygame.Rect(self.cible.px,self.cible.py,self.cible.tx,self.cible.ty))
+        if cond:
+            self.inut=True
+            self.cible.vie-=self.pos.att
 
 class Carte:
     def __init__(self,x,y,tp,camp):
@@ -69,6 +110,7 @@ class Carte:
         self.endroit=cend[tp]
         self.att_endroit=caen[tp]
         self.tpcarte=ctpc[tp]
+        self.mimg=cims[tp]
         self.cible=None
         if self.tpcarte==3:
             for x in range(1,30):
@@ -94,6 +136,10 @@ class Carte:
                         if abs(self.px-c.px) < abs(self.px-lpp.px) and abs(self.py-c.py) < abs(self.py-lpp.py): lpp=c
                     lpp.vie-=self.att
             pygame.display.update()
+    def atta(self,cible):
+        if self.mimg!=None:
+            miss.append(Mis(self,cible))
+        else: cible.vie-=self.att
     def attack(self):
         if time.time()-self.dnat > self.vitatt:
             self.dnat=time.time()
@@ -107,7 +153,7 @@ class Carte:
                 lpp=tchs[0]
                 for c in tchs:
                     if lpp.px-self.px < c.px-self.px and lpp.py-self.py < c.py-self.py and c.endroit in self.att_endroit: lpp=c
-                lpp.vie-=self.att
+                self.atta(lpp)
                 affattack(self,lpp)
                 if self.tp==13:
                     lpp.cible=None
@@ -122,7 +168,7 @@ class Carte:
             elif self.tpatt==2:
                 for c in tchs:
                     if c.endroit in self.att_endroit:
-                        c.vie-=self.att
+                        self.atta(c)
                         affattack(self,c)
     def dcibl(self):
         if self.camp==1: cc=carts2
@@ -135,11 +181,9 @@ class Carte:
     def bouger(self):
         if self.cible==None or self.cible.vie<=0: self.dcibl()
         else:
-          if abs(self.px-self.cible.px) > self.portee or abs(self.py-self.cible.py) > self.portee:
-            if self.cible.px<=self.px: a=self.cible.px-self.px
-            else                     : a=self.px-self.cible.px
-            if self.cible.py<=self.py: b=self.cible.py-self.py
-            else                     : b=self.py-self.cible.py
+          if math.sqrt((self.cible.px-self.px)*(self.cible.px-self.px)+(self.cible.py-self.py)*(self.cible.py-self.py)) > self.portee:
+            a=-abs(self.cible.px-self.px)
+            b=-abs(self.cible.py-self.py)
             c,f=int(math.sqrt(a*a+b*b)),self.vit
             if f<c: #self.px,self.py=self.px+int(a*f/c),self.py+int(b*f/c)
                 e=int(b*f/c)
@@ -207,7 +251,7 @@ def aff():
             if c.vie<c.vie_tot:
                 pygame.draw.rect(fenetre,(250,0,0),(c.px,c.py-10,int(c.vie/c.vie_tot*c.tx),5),0)
                 pygame.draw.rect(fenetre,(50,0,0),(c.px,c.py-10,c.tx,5),1)
-            
+        for m in miss: m.rect=fenetre.blit(m.img,[m.px,m.py])
         #interface
         ky=50
         dd=0
@@ -249,6 +293,9 @@ def bb():
         j2.dnel=time.time()
         j2.elixir+=1
         if j2.elixir>=maxelixir: j2.elixir=maxelixir
+    for m in miss:
+        if m.inut: del(miss[miss.index(m)])
+        m.ev()
     while len(j1.cartactu) < 4: j1.cartactu.append(random.choice(j1.deck))
     while len(j2.cartactu) < 4: j2.cartactu.append(random.choice(j2.deck))
 
