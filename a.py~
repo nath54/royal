@@ -49,15 +49,15 @@ def dtouch(c1,c2):
     return False
 
 class Mis:
-    def __init__(self,pos,cible):
+    def __init__(self,pos,cible,tp):
         self.pos=pos
         self.px=int(self.pos.px+self.pos.tx/2)
         self.py=int(self.pos.py+self.pos.ty/2)
-        self.tx=int(30/1200*tex)
-        self.ty=int(30/1000*tey)
+        self.tx=mtxx[tp]
+        self.ty=mtyy[tp]
         agl=int(math.atan(cible.py-self.py/cible.px-self.px))
-        self.img=pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/"+self.pos.mimg),[self.tx,self.ty]),agl)
-        self.vit=40
+        self.img=pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/"+mimg[self.pos.mtp]),[self.tx,self.ty]),agl)
+        self.vit=mvit[tp]
         self.cible=cible
         self.inut=False
         self.rect=None
@@ -110,7 +110,7 @@ class Carte:
         self.endroit=cend[tp]
         self.att_endroit=caen[tp]
         self.tpcarte=ctpc[tp]
-        self.mimg=cims[tp]
+        self.mtp=cims[tp]
         self.cible=None
         if self.tpcarte==3:
             for x in range(1,30):
@@ -137,8 +137,8 @@ class Carte:
                     lpp.vie-=self.att
             pygame.display.update()
     def atta(self,cible):
-        if self.mimg!=None:
-            miss.append(Mis(self,cible))
+        if self.mtp!=None:
+            miss.append(Mis(self,cible,self.mtp))
         else: cible.vie-=self.att
     def attack(self):
         if time.time()-self.dnat > self.vitatt:
