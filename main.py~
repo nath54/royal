@@ -89,6 +89,7 @@ def coffre(c):
     for x in range(100):
             fenetre.fill((10,0,50))
             fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cfimg[c]),[int(cftxx[c]/1200*tex),int(cftyy[c]/1000*tey)]),[tex/4,tey/4])
+            pygame.draw.rect(fenetre,(100,100,0),(tex/3,tey/3,x*2,int(x*2.5)),5)
             fenetre.blit(pygame.transform.scale(font.render("or : "+str(ore),20,(150,150,20)),[x*2,int(x*2.5)]),[tex/3,tey/3])
             pygame.display.update()
             time.sleep(0.01)
@@ -97,14 +98,33 @@ def coffre(c):
     for cc in crts:
         for x in range(100):
             fenetre.fill((10,0,50))
-            pygame.draw.rect(fenetre,craret[crar[cc]],(tex/3,tey/3,x*2,int(x*2.5)),5)
             fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cfimg[c]),[int(cftxx[c]/1200*tex),int(cftyy[c]/1000*tey)]),[tex/4,tey/4])
+            pygame.draw.rect(fenetre,craret[crar[cc]],(tex/3,tey/3,x*2,int(x*2.5)),5)
             fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cimg[cc]),[x*2,int(x*2.5)]),[tex/3,tey/3])
             fenetre.blit(pygame.transform.scale(font.render(cnom[cc],20,(200,200,200)),[x*2,int(x*1.001)]),[tex/3,tey/3.5])
             pygame.display.update()
             time.sleep(0.01)
         ac()
         time.sleep(0.5)
+    fenetre.fill((10,0,50))
+    fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cfimg[c]),[int(cftxx[c]/1200*tex),int(cftyy[c]/1000*tey)]),[tex/4,tey/4])
+    xx,yy=50,50
+    txx,tyy=50,75
+    pygame.draw.rect(fenetre,(100,100,0),(xx,yy,txx,tyy),5)
+    fenetre.blit(pygame.transform.scale(font.render("or : "+str(ore),20,(100,100,0)),[txx,tyy]),[xx,yy])
+    xx+=txx+20
+    pygame.display.update()
+    for cc in crts:
+        pygame.draw.rect(fenetre,craret[crar[cc]],(xx,yy,txx,tyy),5)
+        fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cimg[cc]),[txx,tyy]),[xx,yy])
+        fenetre.blit(font.render(cnom[cc],20,(200,200,200)),[xx,yy+tyy])
+        xx+=txx+20
+        if xx >= tex-txx-20:
+            xx=50
+            yy+=tyy+20
+        pygame.display.update()
+    time.sleep(0.5)
+    ac()
     time.sleep(0.5)
     
 ##################################################

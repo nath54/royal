@@ -35,5 +35,6 @@ ctxx,ctyy=nctxx,nctyy
 mtpp=[0        ,1             ,2            ]
 mnom=["fleche" ,"boule de feu","boulet"     ]
 mimg=["ms1.png","ms2.png"     ,"ms3.png"    ]
+mvit=[35       ,40            ,45           ]
 mtxx=[30       ,25            ,10           ]
 mtyy=[30       ,25            ,10           ]

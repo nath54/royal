@@ -55,10 +55,13 @@ class Mis:
         self.py=int(self.pos.py+self.pos.ty/2)
         self.tx=mtxx[tp]
         self.ty=mtyy[tp]
-        agl=int(math.atan(cible.py-self.py/cible.px-self.px))
+        self.cible=cible
+        try: 
+            aa=float((float(self.py)-float(self.cible.py))/(float(self.px)-float(self.cible.px)))
+        except: aa=1
+        agl=math.atan(aa)
         self.img=pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/"+mimg[self.pos.mtp]),[self.tx,self.ty]),agl)
         self.vit=mvit[tp]
-        self.cible=cible
         self.inut=False
         self.rect=None
     def ev(self):
