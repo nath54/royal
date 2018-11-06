@@ -2,7 +2,7 @@
 tex,tey=1000,800
 ctpp=[0          ,1           ,2          ,3          ,4          ,5            ,6           ,7          ,8          ,9           ,10              ,11         ,12         ,13          ,14          ,15               ,16          ,17         ,18                  ,19                     ,20          ,21           ]
 cnom=["tour1"    ,"tour2"     ,"chevalier","archer"   ,"mage"     ,"petit golem","golem"     ,"fantome"  ,"princesse","squelettes","tour a canons" ,"le géant" ,"le sniper","le psycho" ,"le dragon" ,"la boule de feu","la comète" ,"le zombie","la horde de zombie","le sorcier electrique","le cloneur","le geleur"  ]
-celi=[0          ,0           ,2          ,3          ,4          ,5            ,8           ,2          ,3          ,3           ,4               ,4          ,5          ,5           ,6           ,4                ,6           ,3          ,5                   ,4                      ,4           ,5            ]
+celi=[0          ,0           ,2          ,3          ,4          ,5            ,8           ,2          ,3          ,3           ,4               ,4          ,5          ,5           ,6           ,4                ,6           ,1          ,5                   ,4                      ,4           ,5            ]
 cvie=[2500       ,5000        ,200        ,180        ,350        ,400          ,3000        ,50         ,150        ,40          ,400             ,4000       ,50         ,80          ,1200        ,0                ,0           ,150        ,170                 ,350                    ,200         ,250          ]
 catt=[20         ,50          ,15         ,10         ,50         ,100          ,500         ,50         ,100        ,10          ,100             ,1          ,1000       ,1           ,250         ,250              ,1000        ,40         ,60                  ,50                     ,10          ,100          ]
 cvat=[1          ,1           ,0.5        ,0.8        ,2          ,1.5          ,3           ,0.2        ,1.5        ,0.1         ,1.5             ,0.1        ,3          ,2           ,1.5         ,0                ,0           ,1.3        ,1.2                 ,1                      ,2.5         ,5            ]
@@ -27,7 +27,7 @@ cdes=["C'est une petite tour qui a pour but de proteger la tour du roi",
       "Le petit golem est un petite version du golem mais il a autant envie de détruire que le golem",
       "Le golem est titanesque, il détruit tout sur son passage",
       "Le fantome est rapide mais assez faible",
-      "La princess attaque de loin avec son arc",
+      "La princesse attaque de loin avec son arc",
       "les squelettes sont des petits attaquants assez faibles mais en groupe, ils deviennent plus fort",
       "La tour a canon est une tour qui attaque tout ce qui passe sous son nez",
       "Le géant est un attaquant qui a énormément de vie, mais qui a une très faible attaque, il sert a prendre a la place des autres les coups des ennemis",

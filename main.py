@@ -57,11 +57,12 @@ def aff():
                 fenetre.blit(font.render("elixir = "     +str(celi[g])        ,20,(150,0,150))     ,[xi+150,yi+40])
                 fenetre.blit(font.render("rareté = "     +str(rarete[crar[g]]),20,craret[crar[g]]) ,[xi+150,yi+60])
                 txt=cdes[g]
-                tl=20
+                tl=30
                 aa=int(len(txt)/tl)
                 ttx=[]
                 for w in range(aa):
-                    if w==aa: ttx.append( txt[int(w*tl)::] )
+                    if w+1==aa:
+                        ttx.append( txt[int(w*tl):] )
                     else: ttx.append( txt[int(w*tl):int(w*tl+tl)] )
                 for tt in ttx: fenetre.blit(font.render(str(tt),20,(50,50,50))      ,[xi+5 ,yi+80+(20*ttx.index(tt))])
                 
@@ -124,7 +125,7 @@ def coffre(c):
     fenetre.fill((10,0,50))
     fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cfimg[c]),[int(cftxx[c]/1200*tex),int(cftyy[c]/1000*tey)]),[tex/4,tey/4])
     xx,yy=50,50
-    txx,tyy=100,150
+    txx,tyy=120,170
     pygame.draw.rect(fenetre,(100,100,0),(xx,yy,txx,tyy),5)
     fenetre.blit(pygame.transform.scale(font.render("or : "+str(ore),20,(100,100,0)),[txx,tyy]),[xx,yy])
     xx+=txx+20
