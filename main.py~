@@ -30,8 +30,11 @@ def aff():
     elif smenu==1:
         xx,yy=50,100
         tx,ty=int(100/1200*tex),int(125/1000*tey)
+        xxx=None
         for g in ctpp:
-            if g == cselec: iii="images/fcs.png"
+            if g == cselec:
+                iii="images/fcs.png"
+                xxx=xx
             else: iii="images/fc.png"
             rcs.append( fenetre.blit(pygame.transform.scale(pygame.image.load(iii),[tx+30,ty+30]),[xx-15,yy-15]) )
             fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cimg[g]),[tx,ty]),[xx,yy])
@@ -42,6 +45,8 @@ def aff():
         if cselec!=None:
                 g=cselec
                 txi,tyi=400,400
+                if xxx != None:
+                    if xxx
                 xi,yi=tex-txi,tey-tyi
                 pygame.draw.rect(fenetre,(200,200,200),(xi,yi,txi,tyi),0)
                 fenetre.blit(font.render(str(cnom[g])                         ,20,(50,50,50))      ,[xi+5 ,yi])
