@@ -56,6 +56,15 @@ def aff():
                 fenetre.blit(font.render("vitesse = "    +str(cvit[g])        ,20,(0,0,0))         ,[xi+150,yi+20])
                 fenetre.blit(font.render("elixir = "     +str(celi[g])        ,20,(150,0,150))     ,[xi+150,yi+40])
                 fenetre.blit(font.render("rareté = "     +str(rarete[crar[g]]),20,craret[crar[g]]) ,[xi+150,yi+60])
+                txt=cdes[g]
+                tl=20
+                aa=int(len(txt)/tl)
+                ttx=[]
+                for w in range(aa):
+                    if w==aa: ttx.append( txt[int(w*tl)::] )
+                    else: ttx.append( txt[int(w*tl):int(w*tl+tl)] )
+                for tt in ttx: fenetre.blit(font.render(str(tt),20,(50,50,50))      ,[xi+5 ,yi+80+(20*ttx.index(tt))])
+                
     elif smenu==4:
         xx,yy=50,100
         tx,ty=150,150
