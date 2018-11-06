@@ -40,6 +40,7 @@ def aff():
                 xx=50
                 yy+=ty+35
         if cselec!=None:
+                g=cselec
                 txi,tyi=400,400
                 xi,yi=tex-txi,tey-tyi
                 pygame.draw.rect(fenetre,(200,200,200),(xi,yi,txi,tyi),0)
@@ -145,7 +146,7 @@ while encour:
         elif event.type==MOUSEBUTTONUP:
             pos=pygame.mouse.get_pos()
             rpos=pygame.Rect(pos[0],pos[1],1,1)
-            if rpos.colliderect(bplay): os.system("python a.py")
+            if rpos.colliderect(bplay): os.system("python3 a.py")
             elif rpos.colliderect(bm1): smenu=1
             elif rpos.colliderect(bm2): smenu=2
             elif rpos.colliderect(bm3): smenu=3

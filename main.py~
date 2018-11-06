@@ -40,7 +40,7 @@ def aff():
                 xx=50
                 yy+=ty+35
         if cselec!=None:
-                iii="images/fcs.png"
+                g=cselec
                 txi,tyi=400,400
                 xi,yi=tex-txi,tey-tyi
                 pygame.draw.rect(fenetre,(200,200,200),(xi,yi,txi,tyi),0)

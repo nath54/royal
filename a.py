@@ -28,7 +28,7 @@ class Joueur:
 
 j1=Joueur(1)
 j2=Joueur(2)
-cpdps=[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+cpdps=[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
 j1.deck=cpdps
 j2.deck=cpdps
 
@@ -93,6 +93,9 @@ class Mis:
             if self.tp==3:
                 self.cible.dnat=time.time()
                 self.cible.cible=None
+            elif self.tp==4:
+                self.cible.etat.append("gelé")
+                self.cible.etat=list(set(self.cible.etat))
 
 class Carte:
     def __init__(self,x,y,tp,camp):
@@ -120,6 +123,7 @@ class Carte:
         self.tpcarte=ctpc[tp]
         self.mtp=cims[tp]
         self.cible=None
+        self.etat=[]
         if self.tpcarte==3:
             for x in range(1,30):
                 fenetre.blit(self.img,[self.px-((30-x)*2),self.py-((30-x)*3)])
@@ -182,7 +186,8 @@ class Carte:
                         self.atta(c)
                         affattack(self,c)
                         if self.tp==20:
-                            if c.tpcarte!=2 and c.tp!=20:
+                            if c.tpcarte!=2 and c.tp!=20 and not "cloné" in c.etat:
+                                c.etat.append("cloné")
                                 if self.camp==1: carts1.append(Carte(c.px+c.tx,c.py,c.tp,1))
                                 else           : carts2.append(Carte(c.px+c.tx,c.py,c.tp,2))
     def dcibl(self):
@@ -266,6 +271,7 @@ def aff():
             if c.vie<c.vie_tot:
                 pygame.draw.rect(fenetre,(250,0,0),(c.px,c.py-10,int(c.vie/c.vie_tot*c.tx),5),0)
                 pygame.draw.rect(fenetre,(50,0,0),(c.px,c.py-10,c.tx,5),1)
+            if "gelé" in c.etat: fenetre.blit(pygame.transform.scale(pygame.image.load("images/glace.png"),[c.tx,c.ty]),[c.px,c.py])
         for m in miss: m.rect=fenetre.blit(m.img,[m.px,m.py])
         #interface
         ky=50
@@ -295,10 +301,12 @@ def cm():
 
 def bb():
     for c1 in carts1:
-        c1.bouger()
+        if not "gelé" in c1.etat:
+            c1.bouger()
         if c1.vie<=0: del(carts1[carts1.index(c1)])
     for c2 in carts2:
-        c2.bouger()
+        if not "gelé" in c2.etat:
+            c2.bouger()
         if c2.vie<=0: del(carts2[carts2.index(c2)])
     if time.time()-j1.dnel > j1.tpel:
         j1.dnel=time.time()
