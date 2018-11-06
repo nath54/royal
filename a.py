@@ -28,7 +28,7 @@ class Joueur:
 
 j1=Joueur(1)
 j2=Joueur(2)
-cpdps=[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,20,20,20,20,20]
+cpdps=[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
 j1.deck=cpdps
 j2.deck=cpdps
 
@@ -182,7 +182,7 @@ class Carte:
                         self.atta(c)
                         affattack(self,c)
                         if self.tp==20:
-                            if c.tpcarte!=2:
+                            if c.tpcarte!=2 and c.tp!=20:
                                 if self.camp==1: carts1.append(Carte(c.px+c.tx,c.py,c.tp,1))
                                 else           : carts2.append(Carte(c.px+c.tx,c.py,c.tp,2))
     def dcibl(self):

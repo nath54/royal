@@ -182,7 +182,7 @@ class Carte:
                         self.atta(c)
                         affattack(self,c)
                         if self.tp==20:
-                            if c.tpcarte!=2:
+                            if c.tpcarte!=2 and c.tp!=20:
                                 if self.camp==1: carts1.append(Carte(c.px+c.tx,c.py,c.tp,1))
                                 else           : carts2.append(Carte(c.px+c.tx,c.py,c.tp,2))
     def dcibl(self):
@@ -317,7 +317,7 @@ def bb():
 #######################################################
 
 fenetre=pygame.display.set_mode([tex,tey])
-pygame.display.set_caption("COMBAT ROYAL")
+pygame.display.set_caption("THE FUN FIGHTING")
 
 cm()
 
