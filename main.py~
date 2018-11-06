@@ -46,8 +46,8 @@ def aff():
                 g=cselec
                 txi,tyi=400,400
                 if xxx != None:
-                    if xxx
-                xi,yi=tex-txi,tey-tyi
+                    if xxx <= tex/2:  xi,yi=tex-txi,tey-tyi
+                    else: xi,yi=0,tey-tyi
                 pygame.draw.rect(fenetre,(200,200,200),(xi,yi,txi,tyi),0)
                 fenetre.blit(font.render(str(cnom[g])                         ,20,(50,50,50))      ,[xi+5 ,yi])
                 fenetre.blit(font.render("vie = "        +str(cvie[g])        ,20,(0,0,0))         ,[xi+5 ,yi+20])
