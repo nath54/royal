@@ -28,7 +28,7 @@ class Joueur:
 
 j1=Joueur(1)
 j2=Joueur(2)
-cpdps=[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+cpdps=[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,20,20,20,20,20]
 j1.deck=cpdps
 j2.deck=cpdps
 
@@ -50,6 +50,7 @@ def dtouch(c1,c2):
 
 class Mis:
     def __init__(self,pos,cible,tp):
+        self.tp=tp
         self.pos=pos
         self.px=int(self.pos.px+self.pos.tx/2)
         self.py=int(self.pos.py+self.pos.ty/2)
@@ -89,6 +90,9 @@ class Mis:
         if cond:
             self.inut=True
             self.cible.vie-=self.pos.att
+            if self.tp==3:
+                self.cible.dnat=time.time()
+                self.cible.cible=None
 
 class Carte:
     def __init__(self,x,y,tp,camp):
@@ -110,6 +114,7 @@ class Carte:
         self.elixir=celi[tp]
         self.dnat=time.time()
         self.tpatt=ctpa[tp]
+        self.tipeatt=cpta[tp]
         self.endroit=cend[tp]
         self.att_endroit=caen[tp]
         self.tpcarte=ctpc[tp]
@@ -142,7 +147,10 @@ class Carte:
     def atta(self,cible):
         if self.mtp!=None:
             miss.append(Mis(self,cible,self.mtp))
-        else: cible.vie-=self.att
+        else:
+            cible.vie-=self.att
+            if self.tipeatt==2 and self.cible.vie<=0:
+                carts1.append( Carte(self.px-self.tx,self.py-self.ty/2,self.tp,self.camp) )
     def attack(self):
         if time.time()-self.dnat > self.vitatt:
             self.dnat=time.time()
@@ -173,6 +181,10 @@ class Carte:
                     if c.endroit in self.att_endroit:
                         self.atta(c)
                         affattack(self,c)
+                        if self.tp==20:
+                            if c.tpcarte!=2:
+                                if self.camp==1: carts1.append(Carte(c.px+c.tx,c.py,c.tp,1))
+                                else           : carts2.append(Carte(c.px+c.tx,c.py,c.tp,2))
     def dcibl(self):
         if self.camp==1: cc=carts2
         else: cc=carts1
@@ -305,7 +317,7 @@ def bb():
 #######################################################
 
 fenetre=pygame.display.set_mode([tex,tey])
-pygame.display.set_caption("COMBAT ROYAL")
+pygame.display.set_caption("THE FUN FIGHTING")
 
 cm()
 

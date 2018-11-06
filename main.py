@@ -31,8 +31,15 @@ def aff():
         xx,yy=50,100
         tx,ty=int(100/1200*tex),int(125/1000*tey)
         for g in ctpp:
-            if g==cselec:
-                iii="images/fcs.png"
+            if g == cselec: iii="images/fcs.png"
+            else: iii="images/fc.png"
+            rcs.append( fenetre.blit(pygame.transform.scale(pygame.image.load(iii),[tx+30,ty+30]),[xx-15,yy-15]) )
+            fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cimg[g]),[tx,ty]),[xx,yy])
+            xx+=tx+35
+            if xx>tex-tx*1.2:
+                xx=50
+                yy+=ty+35
+        if cselec!=None:
                 txi,tyi=400,400
                 xi,yi=tex-txi,tey-tyi
                 pygame.draw.rect(fenetre,(200,200,200),(xi,yi,txi,tyi),0)
@@ -43,13 +50,6 @@ def aff():
                 fenetre.blit(font.render("vitesse = "    +str(cvit[g])        ,20,(0,0,0))         ,[xi+150,yi+20])
                 fenetre.blit(font.render("elixir = "     +str(celi[g])        ,20,(150,0,150))     ,[xi+150,yi+40])
                 fenetre.blit(font.render("rareté = "     +str(rarete[crar[g]]),20,craret[crar[g]]) ,[xi+150,yi+60])
-            else: iii="images/fc.png"
-            rcs.append( fenetre.blit(pygame.transform.scale(pygame.image.load(iii),[tx+30,ty+30]),[xx-15,yy-15]) )
-            fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cimg[g]),[tx,ty]),[xx,yy])
-            xx+=tx+35
-            if xx>tex-tx*1.2:
-                xx=50
-                yy+=ty+35
     elif smenu==4:
         xx,yy=50,100
         tx,ty=150,150
