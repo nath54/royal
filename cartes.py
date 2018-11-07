@@ -48,11 +48,12 @@ for c in ctyy: nctyy.append(int(c))
 
 cftpp=[0                ,1                  ,2                    ,3                        ,4                  ,5                ]
 cfnom=["coffre de bois" ,"coffre en  bronze","coffre en argent"   ,"coffre en or"           ,"coffre légendaire","coffre divin"   ]
-cfcrt=[[[0,5],[1,1]]    ,[[0,10],[1,5]]     ,[[0,15],[1,10],[2,5]],[[0,5],[1,5],[2,5],[3,1]],[[3,5]]            ,[[4,2]]            ]
-cfore=[[0,1000]         ,[500,3500]         ,[1000,5000]          ,[3500,7500]              ,[5000,10000]       ,[5000,10000]     ]
+cfcrt=[[[0,5],[1,1]]    ,[[0,10],[1,5]]     ,[[0,15],[1,10],[2,5]],[[0,5],[1,5],[2,5],[3,1]],[[3,5]]            ,[[4,2]]          ]
+cfore=[[0,50]           ,[50,150]           ,[100,500]            ,[350,750]                ,[500,1000]         ,[500,1000]       ]
 cfimg=["cf1.png"        ,"cf2.png"          ,"cf3.png"            ,"cf4.png"                ,"cf5.png"          ,"cf6.png"        ]
 cftxx=[int(200/1200*tex),int(200/1200*tex)  ,int(200/1200*tex)    ,int(200/1200*tex)        ,int(200/1200*tex)  ,int(200/1200*tex)]
 cftyy=[int(200/1000*tey),int(200/1000*tey)  ,int(200/1000*tey)    ,int(200/1000*tey)        ,int(200/1000*tey)  ,int(200/1000*tey)]
+cfarg=[100              ,250                ,750                  ,1500                     ,10000              ,20000            ]
 ctxx,ctyy=nctxx,nctyy
 
 mtpp=[0        ,1             ,2        ,3                 ,4                   ]

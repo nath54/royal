@@ -53,6 +53,7 @@ def aff():
     bm2=fenetre.blit(pygame.transform.scale(pygame.image.load("images/m2.png"),[int(tex/4),75]),[tex/4*1,0])
     bm3=fenetre.blit(pygame.transform.scale(pygame.image.load("images/m3.png"),[int(tex/4),75]),[tex/4*2,0])
     bm4=fenetre.blit(pygame.transform.scale(pygame.image.load("images/m4.png"),[int(tex/4),75]),[tex/4*3,0])
+    fenetre.blit(font.render("vous avez "+str(j.argent)+" or",20,(150,145,15)),[50,tey-20])
     rcs=[]
     rcf=[]
     rcd=[]
@@ -113,6 +114,9 @@ def aff():
         for cf in cftpp:
             rcf.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cfimg[cf]),[tx,ty]),[xx,yy]) )
             fenetre.blit(font.render(cfnom[cf],20,(250,250,250)),[xx,yy+ty+5])
+            if j.argent >= cfarg[cf]: clf=(150,145,15)
+            else: clf=(180,0,0)
+            fenetre.blit(font.render(str(cfarg[cf])+" or",20,clf),[xx,yy+ty+25])
             xx+=tx+20
             if xx >= tex-tx+1:
                 xx=50
@@ -180,6 +184,8 @@ def coffre(c):
             xx=50
             yy+=tyy+20
         pygame.display.update()
+    j.argent+=ore
+    for c in crts: j.cartpos[c]=1
     time.sleep(0.5)
     ac()
     time.sleep(0.5)
@@ -214,7 +220,7 @@ while encour:
                     if cselec!=rcs.index(c): cselec=rcs.index(c)
                     else: cselec=None
                     if time.time()-dc < tdc:
-                        if len(j.deck) < 8:
+                        if len(j.deck) < 8 and j.cartpos[rcs.index(c)]==1:
                             j.deck.append(rcs.index(c))
                             j.deck=list(set(j.deck))
                     dc=time.time()
@@ -225,7 +231,9 @@ while encour:
                     dc=time.time()
             for c in rcf:
                 if rpos.colliderect(c):
-                    coffre(rcf.index(c))
+                    if j.argent >= cfarg[rcf.index(c)]:
+                        coffre(rcf.index(c))
+                        j.argent-=cfarg[rcf.index(c)]
             save()
     
 

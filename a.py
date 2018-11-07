@@ -40,8 +40,8 @@ ara=jjr[1].split("|")
 nar=[]
 for a in ara: nar.append(int(a))
 j1.deck=nar
-j1.argent=jjr[2]
-j1.trophes=jjr[3]
+j1.argent=int(jjr[2])
+j1.trophes=int(jjr[3])
 ara=jjr[4].split("|")
 nar=[]
 for a in ara: nar.append(int(a))
@@ -387,18 +387,55 @@ while encour:
             if event.key==K_q:
                 encour=False
 
+def save():
+    j=j1
+    ff=open("stats.nath","w")
+    t1=str(j.nom)
+    t2=""
+    for jj in j.deck:
+        t2+=str(jj)+"|"
+    t2=t2[:-1]
+    t3=str(j.argent)
+    t4=str(j.trophes)
+    t5=""
+    for jj in j.cartpos:
+        t5+=str(jj)+"|"
+    t5=t5[:-1]
+    txt=t1+t2+"\n"+t3+"\n"+t4+"\n"+t5+"\n"+"\n"
+    ff.write(txt)
+    ff.close()
+
 
 fenetre.fill((0,0,0))
 img="images/perdu.png"
 encour2=False
+arg,tro=0,0
 if carts2==[]:
     img="images/gagné.png"
     encour2=True
+    arg=random.randint(10,50)
+    tro=random.randint(20,30)
+    j1.argent+=arg
+    j1.trophes+=tro
+    fenetre.blit(font.render("vous avez gagné "+str(tro)+" trophés",20,(10,10,10)),[tex/1.5,tey/1.2])
 elif carts1==[]:
     img="images/perdu.png"
     encour2=True
+    arg=random.randint(0,10)
+    tro=-random.randint(20,30)
+    j1.argent+=arg
+    j1.trophes+=tro
+    fenetre.blit(font.render("vous avez perdu "+str(abs(tro))+" trophés",20,(10,10,10)),[tex/1.5,tey/1.2])
+
+
+
+save()
+
 fenetre.blit(pygame.transform.scale(pygame.image.load(img),[tex,tey]),[0,0])
 bmenu=fenetre.blit(pygame.transform.scale(pygame.image.load("images/bmenu.png"),[int(100/1200*tex),int(50/1000*tey)]),[tex/2,tey/2])
+fenetre.blit(font.render("vous avez gagné "+str(arg)+" or",20,(10,10,10)),[tex/1.5,tey/1.5])
+fenetre.blit(font.render("vous avez gagné "+str(tro)+" trophés",20,(10,10,10)),[tex/1.5,tey/1.2])
+
 pygame.display.update()
 
 while encour2:
