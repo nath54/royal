@@ -220,7 +220,7 @@ while encour:
                     if cselec!=rcs.index(c): cselec=rcs.index(c)
                     else: cselec=None
                     if time.time()-dc < tdc:
-                        if len(j.deck) < 8 and j.cartpos[rcs.index(c)]==1:
+                        if len(j.deck) < 8 and j.cartpos[rcs.index(c)]==1 and ctpp[rcs.index(c)]!=0 and ctpp[rcs.index(c)]!=1:
                             j.deck.append(rcs.index(c))
                             j.deck=list(set(j.deck))
                     dc=time.time()

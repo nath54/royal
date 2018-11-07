@@ -427,13 +427,14 @@ elif carts1==[]:
     j1.trophes+=tro
     fenetre.blit(font.render("vous avez perdu "+str(abs(tro))+" trophés",20,(10,10,10)),[tex/1.5,tey/1.2])
 
-fenetre.blit(font.render("vous avez gagné "+str(arg)+" or",20,(10,10,10)),[tex/1.5,tey/1.5])
+
 
 save()
 
 fenetre.blit(pygame.transform.scale(pygame.image.load(img),[tex,tey]),[0,0])
 bmenu=fenetre.blit(pygame.transform.scale(pygame.image.load("images/bmenu.png"),[int(100/1200*tex),int(50/1000*tey)]),[tex/2,tey/2])
-
+fenetre.blit(font.render("vous avez gagné "+str(arg)+" or",20,(10,10,10)),[tex/1.5,tey/1.5])
+fenetre.blit(font.render("vous avez gagné "+str(tro)+" trophés",20,(10,10,10)),[tex/1.5,tey/1.2])
 
 pygame.display.update()
 
