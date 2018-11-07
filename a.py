@@ -13,10 +13,12 @@ miss=[]
 
 pygame.init()
 
+jjr=open("stats.nath","r").readlines()
+
 class Joueur:
     def __init__(self,camp):
         self.camp=camp
-        self.nom=None
+        self.nom="bot"
         self.deck=[]
         self.cartactu=[]
         self.rcartactu=[]
@@ -25,12 +27,31 @@ class Joueur:
         self.argent=0
         self.dnel=time.time()
         self.tpel=1.5
+        self.trophes=random.randint(10,10000)
+        self.cartpos=[]
+
+
+##############
+cpdps=[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
 
 j1=Joueur(1)
+j1.nom=jjr[0]
+ara=jjr[1].split("|")
+nar=[]
+for a in ara: nar.append(int(a))
+j1.deck=nar
+j1.argent=jjr[2]
+j1.trophes=jjr[3]
+ara=jjr[4].split("|")
+nar=[]
+for a in ara: nar.append(int(a))
+j1.cartpos=nar
+
 j2=Joueur(2)
-cpdps=[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
-j1.deck=cpdps
-j2.deck=cpdps
+
+while len(j2.deck) < 8:
+    j2.deck.append(random.choice(cpdps))
+    j2.deck=list(set(j2.deck))
 
 from cartes import *
 #rar: 0=commun , 1=rare , 2=epique , 3=legendaire , 4=dieu
