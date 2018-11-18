@@ -1,6 +1,7 @@
 #coding:utf-8
 import random,pygame,math,time
 from pygame.locals import *
+from cartes import *
 
 tex,tey=1000,800
 
@@ -29,6 +30,7 @@ class Joueur:
         self.tpel=1.5
         self.trophes=random.randint(10,10000)
         self.cartpos=[]
+        self.arene=1
 
 
 ##############
@@ -38,16 +40,32 @@ j1=Joueur(1)
 j1.nom=jjr[0]
 ara=jjr[1].split("|")
 nar=[]
-for a in ara: nar.append(int(a))
+if len(ara)>1:
+    for a in ara: nar.append(int(a))
 j1.deck=nar
 j1.argent=int(jjr[2])
 j1.trophes=int(jjr[3])
+j1.arene=int(jjr[5])
 ara=jjr[4].split("|")
 nar=[]
 for a in ara: nar.append(int(a))
 j1.cartpos=nar
 
 j2=Joueur(2)
+
+imgfond1=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_3.png") ,[int(800/1200*tex),tey] )
+imgfond2=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_3.png") ,[int(800/1200*tex),tey] )
+if1x,if1y,if2x,if2y=0,0,int(800/1200*tex),0
+imgsol1=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_1.png") ,[int(700/1200*tex),int(450/1000*tey)] )
+is1x,is1y=(50)/1200*tex,(50)/1000*tey
+imgsol2=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_1.png") ,[int(700/1200*tex),int(450/1000*tey)] )
+is2x,is2y=(50)/1200*tex,(550)/1000*tey
+imgpon1=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_2.png") ,[int(75/1200*tex),int(100/1000*tey)] )
+ip1x,ip1y=(100)/1200*tex,(460)/1000*tey
+imgpon2=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_2.png") ,[int(75/1200*tex),int(100/1000*tey)] )
+ip2x,ip2y=(600)/1200*tex,(460)/1000*tey
+
+lms=[pygame.Rect(is1x,is1y,700/1200*tex,350/1000*tey),pygame.Rect(is2x,is2y,700/1200*tex,350/1000*tey),pygame.Rect(ip1x,ip1y,75/1200*tex,100/1000*tey),pygame.Rect(ip2x,ip2y,75/1200*tex,100/1000*tey)]
 
 while len(j2.deck) < 8:
     j2.deck.append(random.choice(cpdps))
@@ -113,10 +131,16 @@ class Mis:
             self.cible.vie-=self.pos.att
             if self.tp==3:
                 self.cible.dnat=time.time()
+                self.cible.dbg=time.time()
                 self.cible.cible=None
             elif self.tp==4:
                 self.cible.etat.append("gelé")
                 self.cible.etat=list(set(self.cible.etat))
+
+def tcs(p):
+    for m in lms:
+        if m.colliderect(p.recte): return True
+    return False
 
 class Carte:
     def __init__(self,x,y,tp,camp):
@@ -142,9 +166,13 @@ class Carte:
         self.endroit=cend[tp]
         self.att_endroit=caen[tp]
         self.tpcarte=ctpc[tp]
+        self.dbg=time.time()
+        self.tbg=0.03
         self.mtp=cims[tp]
         self.cible=None
         self.etat=[]
+        self.recte=pygame.Rect(self.px,self.py,self.tx,self.ty)
+        self.aaa,self.bbb=random.randint(0,1),random.randint(0,1)
         if self.tpcarte==3:
             for x in range(1,30):
                 fenetre.blit(self.img,[self.px-((30-x)*2),self.py-((30-x)*3)])
@@ -176,6 +204,9 @@ class Carte:
             cible.vie-=self.att
             if self.tipeatt==2 and self.cible.vie<=0:
                 carts1.append( Carte(self.px-self.tx,self.py-self.ty/2,self.tp,self.camp) )
+            if self.tipeatt==4 and not "pondu" in self.etat:
+                self.etat.append("pondu")
+                carts1.append( Carte(self.px-self.tx,self.py,self.tp,self.camp) )
     def attack(self):
         if time.time()-self.dnat > self.vitatt:
             self.dnat=time.time()
@@ -220,13 +251,14 @@ class Carte:
                 if abs(self.px-c.px) <= abs(self.px-lpp.px) and abs(self.py-c.py) <= abs(self.py-lpp.py): lpp=c
             self.cible=lpp
     def bouger(self):
-        if self.cible==None or self.cible.vie<=0: self.dcibl()
-        else:
-          if math.sqrt((self.cible.px-self.px)*(self.cible.px-self.px)+(self.cible.py-self.py)*(self.cible.py-self.py)) > self.portee:
+        if self.cible==None or self.cible.vie<=0 or self.cible.camp==self.camp: self.dcibl()
+        if time.time()-self.dbg>=self.tbg:
+          self.dbg=time.time()
+          if math.sqrt((self.cible.px-self.px)*(self.cible.px-self.px)+(self.cible.py-self.py)*(self.cible.py-self.py)) > self.portee and self.vit!=0:
             a=-abs(self.cible.px-self.px)
             b=-abs(self.cible.py-self.py)
             c,f=int(math.sqrt(a*a+b*b)),self.vit
-            if f<c: #self.px,self.py=self.px+int(a*f/c),self.py+int(b*f/c)
+            if f<c and f > 1.05: #self.px,self.py=self.px+int(a*f/c),self.py+int(b*f/c)
                 e=int(b*f/c)
                 d=int(a*f/c)
                 if self.px > self.cible.px: self.px+=d
@@ -234,10 +266,40 @@ class Carte:
                 if self.py > self.cible.py: self.py+=e
                 else                      : self.py-=e
             else: self.px,self.px=self.px+a,self.py+b
-            if  self.px>=tpx-self.tx: self.px=tpx-self.tx
-            elif self.px <= 0: self.px=0
-            if  self.py>=tpy-self.ty: self.py=tpy-self.ty
-            elif self.py <= 0: self.py=0
+            """
+            az=0
+            vitt=2
+            while (not tcs(self)) and self.endroit==1:
+                if self.px >= tex-100: self.px-=vitt
+                if self.px <= 100    : self.px+=vitt
+                if self.py >= tey-100: self.py-=vitt
+                if self.py <= 100    : self.py+=vitt
+                self.recte=pygame.Rect(self.px,self.py,self.tx,self.ty)
+                az+=vitt
+                if az >= 20: break
+            """
+        df=5
+        for c in carts1+carts2:
+          if c!=self:
+            #if c.px >= self.px-df and c.px <= self.px+df and c.py >= self.py-df and c.py <= self.py+df and c!=self:
+            if self.recte==None or True: self.recte=pygame.Rect(self.px,self.py,self.tx,self.ty)
+            if c.recte==None or True: c.recte=pygame.Rect(c.px,c.py,c.tx,c.ty)
+            vitt=int(1)
+            az=0
+            while self.endroit == c.endroit and self.recte.colliderect(c.recte):
+                if self.tpcarte!=1: break
+                else:
+                    if self.aaa: self.px+=vitt
+                    else       : self.px-=vitt
+                    if self.bbb: self.py+=vitt
+                    else       : self.py-=vitt
+                    self.recte=pygame.Rect(self.px,self.py,self.tx,self.ty)
+                    az+=1
+                    if az >= 50: break
+        if self.px>800/1200*tex:self.px=800/1200*tex-self.tx-1
+        if self.px<0  :self.px=1
+        if self.py>tex:self.py=tey-self.ty-1
+        if self.py<0  :self.py=1
         self.attack()
         
 
@@ -255,10 +317,7 @@ def botpc(j,aa):
                 if carts1!=[]:
                     cc=random.choice(carts1)
                     xx,yy=cc.px,cc.py
-            for x in range(cnbp[jcs]):
-                dp1=random.randint(-1,1)*ctxx[jcs]
-                dp2=random.randint(-1,1)*ctxx[jcs]
-                carts2.append(Carte(xx-x*dp1,yy-dp1*x,jcs,2))
+            for x in range(cnbp[jcs]): carts2.append(Carte(xx,yy,jcs,2))
             j.elixir-=celi[jcs]
             del(j.cartactu[j.cartselec])
         else:
@@ -280,18 +339,26 @@ def bot(j):
 
 fond=pygame.transform.scale(pygame.image.load("images/fond.png"),[tpx,tpy])
 font=pygame.font.SysFont("Serif",20)
+fon=pygame.font.SysFont("Serif",10)
 def aff():
     if not pause:
         fenetre.fill((0,0,0))
         #jeu
-        fenetre.blit(fond,[0,0])
+        fenetre.blit(imgfond1,[if1x,if1y])
+        fenetre.blit(imgfond2,[if2x,if2y])
+        fenetre.blit(imgsol1,[is1x,is1y])
+        fenetre.blit(imgsol2,[is1x,is2y])
+        fenetre.blit(imgpon1,[ip1x,ip1y])
+        fenetre.blit(imgpon1,[ip2x,ip2y])
+        pygame.draw.rect(fenetre,(0,0,0),(int(800/1200*tex),0,int(400/1200*tex),tey),0)
         for c in carts1+carts2:
             if c.camp==1: pygame.draw.circle(fenetre,(0,0,150),(int(c.px+c.tx/2),int(c.py+c.ty/1.5)),int(c.tx/2),1)
             else        : pygame.draw.circle(fenetre,(150,0,0),(int(c.px+c.tx/2),int(c.py+c.ty/1.5)),int(c.tx/2),1)
-            fenetre.blit(c.img,[c.px,c.py])
-            if c.vie<c.vie_tot and c.vie_tot!=0:
+            c.recte=fenetre.blit(c.img,[c.px,c.py])
+            if c.vie<c.vie_tot and c.vie_tot>0:
                 pygame.draw.rect(fenetre,(250,0,0),(c.px,c.py-10,int(c.vie/c.vie_tot*c.tx),5),0)
                 pygame.draw.rect(fenetre,(50,0,0),(c.px,c.py-10,c.tx,5),1)
+                if c.tp==0 or c.tp==1 : fenetre.blit(fon.render(str(c.vie)+" / "+str(c.vie_tot),20,(250,250,250)),[c.px,c.py-20])
             if "gelé" in c.etat: fenetre.blit(pygame.transform.scale(pygame.image.load("images/glace.png"),[c.tx,c.ty]),[c.px,c.py])
         for m in miss: m.rect=fenetre.blit(m.img,[m.px,m.py])
         #interface
@@ -321,14 +388,27 @@ def cm():
     carts2.append( Carte(350/1200*tex,100/1000*tey,1,2) )
 
 def bb():
+    global if1x,if2x
+    if1x+=1
+    if2x+=1
+    if if1x >= 800/1200*tex: if1x=-800/1200*tex
+    if if2x >= 800/1200*tex: if2x=-800/1200*tex
     for c1 in carts1:
         if not "gelé" in c1.etat:
             c1.bouger()
         if c1.vie<=0: del(carts1[carts1.index(c1)])
+        if c1.px>800/1200*tex:c1.px=800/1200*tex-c1.tx-1
+        if c1.px<0  :c1.px=1
+        if c1.py>tex:c1.py=tey-c1.ty-1
+        if c1.py<0  :c1.py=1
     for c2 in carts2:
         if not "gelé" in c2.etat:
             c2.bouger()
         if c2.vie<=0: del(carts2[carts2.index(c2)])
+        if c2.px>800/1200*tex:c2.px=800/1200*tex-c2.tx-1
+        if c2.px<0  :c2.px=1
+        if c2.py>tex:c2.py=tey-c2.ty-1
+        if c2.py<0  :c2.py=1
     if time.time()-j1.dnel > j1.tpel:
         j1.dnel=time.time()
         j1.elixir+=1
@@ -340,8 +420,12 @@ def bb():
     for m in miss:
         if m.inut: del(miss[miss.index(m)])
         m.ev()
-    while len(j1.cartactu) < 4: j1.cartactu.append(random.choice(j1.deck))
-    while len(j2.cartactu) < 4: j2.cartactu.append(random.choice(j2.deck))
+    while len(j1.cartactu) < 4:
+        azz=random.choice(j1.deck)
+        if not azz in j1.cartactu: j1.cartactu.append(azz)
+    while len(j2.cartactu) < 4:
+        azz=random.choice(j2.deck)
+        if not azz in j2.cartactu: j2.cartactu.append(azz)
 
 #######################################################
 
@@ -372,10 +456,7 @@ while encour:
                 else: cond=cond2
                 if cond:
                     if  j1.elixir >= celi[jcs]:
-                        for x in range(cnbp[jcs]):
-                            dp1=random.randint(-1,1)*ctxx[jcs]
-                            dp2=random.randint(-1,1)*ctxx[jcs]
-                            carts1.append( Carte(pos[0]+dp1*x,pos[1]+dp2*x,jcs,1) )
+                        for x in range(cnbp[jcs]): carts1.append( Carte(pos[0],pos[1],jcs,1) )
                         j1.elixir-=celi[jcs]
                         del(j1.cartactu[j1.cartselec])
                         j1.cartselec=None
@@ -387,8 +468,7 @@ while encour:
             if event.key==K_q:
                 encour=False
 
-def save():
-    j=j1
+def save(j):
     ff=open("stats.nath","w")
     t1=str(j.nom)
     t2=""
@@ -401,7 +481,8 @@ def save():
     for jj in j.cartpos:
         t5+=str(jj)+"|"
     t5=t5[:-1]
-    txt=t1+t2+"\n"+t3+"\n"+t4+"\n"+t5+"\n"+"\n"
+    t6=str(j.arene)
+    txt=t1+t2+"\n"+t3+"\n"+t4+"\n"+t5+"\n"+t6+"\n"
     ff.write(txt)
     ff.close()
 
@@ -429,14 +510,19 @@ elif carts1==[]:
 
 
 
-save()
+save(j1)
+save(j1)
 
 fenetre.blit(pygame.transform.scale(pygame.image.load(img),[tex,tey]),[0,0])
 bmenu=fenetre.blit(pygame.transform.scale(pygame.image.load("images/bmenu.png"),[int(100/1200*tex),int(50/1000*tey)]),[tex/2,tey/2])
-fenetre.blit(font.render("vous avez gagné "+str(arg)+" or",20,(10,10,10)),[tex/1.5,tey/1.5])
-fenetre.blit(font.render("vous avez gagné "+str(tro)+" trophés",20,(10,10,10)),[tex/1.5,tey/1.2])
+fenetre.blit(font.render("vous avez gagné "+str(arg)+" or",20,(150,150,10)),[tex-650,tey-200])
+fenetre.blit(font.render("vous avez gagné "+str(tro)+" trophés",20,(150,150,10)),[tex-650,tey-150])
+
+save(j1)
 
 pygame.display.update()
+
+save(j1)
 
 while encour2:
     for event in pygame.event.get():
@@ -448,7 +534,8 @@ while encour2:
             rpos=pygame.Rect(p[0],p[1],1,1)
             if rpos.colliderect(bmenu): encour2=False
 
-
+save(j1)
+save(j1)
 
 
 
