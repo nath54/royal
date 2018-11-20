@@ -265,7 +265,8 @@ while encour:
                     for cc in j.deck:
                         if j.cartpos[cc] >= 1: j.cartpos[cc]-=1
                     save() 
-                    subprocess.call("python a.py", shell=True)
+                    try: subprocess.call("python3 a.py")
+                    except: subprocess.call("python a.py", shell=True)
                 else:
                     fenetre.blit(font.render("Votre deck n'est pas composé de 8 cartes !!!",20,(200,0,0)),[250,250])
                     time.sleep(0.5)
