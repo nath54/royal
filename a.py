@@ -258,6 +258,17 @@ class Carte:
                                 c.etat.append("cloné")
                                 if self.camp==1: carts1.append(Carte(c.px+c.tx,c.py,c.tp,1))
                                 else           : carts2.append(Carte(c.px+c.tx,c.py,c.tp,2))
+            if self.tipeatt==6:
+                if self.camp==1: cc=carts1
+                else: cc=carts2
+                tchs=[]
+                for c in cc:
+                    if dtouch(self,c): tchs.append(c)
+                for c in tchs:
+                    if c.vie < c.vie_tot:
+                        c.vie+=self.att
+                        if c.vie > c.vie_tot: c.vie=c.vie_tot
+                        
     def dcibl(self):
         if self.camp==1: cc=carts2
         else: cc=carts1

@@ -38,7 +38,7 @@ craret=[(0,0,140),(150,105,25),(150,0,150),(20,150,20),(250,250,0)]
 if not "stats.nath" in os.listdir("./"):
     txt=""
     import textbox
-    txt+=textbox.main()+"\n\n1000\n0\n0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0\n0"
+    txt+=textbox.main()+"\n\n1000\n0\n0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0\n0"
     f=open("stats.nath","w")
     f.write(txt)
     f.close()
