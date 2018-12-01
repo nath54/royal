@@ -218,6 +218,11 @@ class Carte:
                     carts1.append( Carte(self.px-self.tx,self.py,self.tp,self.camp) )
                 else:
                     carts2.append( Carte(self.px-self.tx,self.py,self.tp,self.camp) )
+            if self.tipeatt==5:
+                self.vie+=self.att
+                if self.vie>=self.vie_tot:
+                    cible.vie-=self.vie_tot-self.vie
+                    self.vie=self.vie_tot
     def attack(self):
         if time.time()-self.dnat > self.vitatt:
             self.dnat=time.time()
