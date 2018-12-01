@@ -76,7 +76,7 @@ def main():
                 if texte!="":
                     ncour=False
             elif event.type==KEYDOWN:
-                for t in tchsq:
+                for t in tchsa:
                     if t[0]==event.key: 
                         texte+=t[1]
                 if event.key==K_RETURN:

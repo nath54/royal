@@ -443,10 +443,26 @@ def bb():
         azz=random.choice(j2.deck)
         if not azz in j2.cartactu: j2.cartactu.append(azz)
 
+def deb():
+    t=time.time()
+    tt=time.time()
+    ff=pygame.font.SysFont("Segoe",40)
+    ct=(150,45,20)
+    while tt-t <= 3:
+        fenetre.blit(pygame.transform.scale(pygame.image.load("images/vs.png"),[tex,tey]),[0,0])
+        fenetre.blit(ff.render(str(3-int(tt-t)),40,ct),[tex/2,50])
+        fenetre.blit(ff.render(j1.nom,40,(5,5,5)),[tex/4*1,tey/3*1])
+        fenetre.blit(ff.render("bot",40,(5,5,5)),[tex/4*3,tey/3*2])
+        pygame.display.update()
+        tt=time.time()
+    
+
 #######################################################
 
 fenetre=pygame.display.set_mode([tex,tey])
 pygame.display.set_caption("THE FUN FIGHTING")
+
+deb()
 
 cm()
 
