@@ -1,4 +1,24 @@
 #coding:utf-8
+
+def test():
+    rv = (3,1)
+    import sys,os
+    cv = sys.version_info
+    if cv < rv:
+         raise "vous utilisez une version de python trop ancienne, veuillez installer python"+str(rv[0])+"."+str(rv[1])
+    try: import subprocess
+    except:
+        print("La librairie subprocess va etre installée sur votre ordinateur...")
+        os.system("pip install subprocess")
+        print("La librairie subprocess devrait etre installée sur votre ordinateur.")
+    try: import pygame
+    except:
+        print("La librairie pygame va etre installée sur votre ordinateur...")
+        subprocess.call("pip install pygame")
+        print("La librairie pygame devrait etre installée sur votre ordinateur.")
+
+test()
+
 import pygame,time,os,random
 from pygame.locals import *
 from cartes import *
@@ -14,6 +34,18 @@ font=pygame.font.SysFont("Serif",20)
 
 rarete=["commun","rare","epique","legendaire","divin"]
 craret=[(0,0,140),(150,105,25),(150,0,150),(20,150,20),(250,250,0)]
+
+if not "stats.nath" in os.listdir("./"):
+    txt=""
+    import textbox
+    txt+=textbox.main()+"\n\n1000\n0\n0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0\n0"
+    f=open("stats.nath","w")
+    f.write(txt)
+    f.close()
+
+
+
+
 
 jjr=open("stats.nath","r").readlines()
 class Joueur:
@@ -81,7 +113,7 @@ def aff():
     bm1=fenetre.blit(pygame.transform.scale(pygame.image.load(imgm1),[int(tex/3),75]),[tex/3*0,0])
     bm2=fenetre.blit(pygame.transform.scale(pygame.image.load(imgm2),[int(tex/3),75]),[tex/3*1,0])
     bm3=fenetre.blit(pygame.transform.scale(pygame.image.load(imgm3),[int(tex/3),75]),[tex/3*2,0])
-    fenetre.blit(font.render("vous avez "+str(j.argent)+" or  ,  "+str(j.trophes)+" trophés",20,(150,145,15)),[50,tey-20])
+    fenetre.blit(font.render(j.nom+" : "+str(j.argent)+" or  ,  "+str(j.trophes)+" trophés  ,  arene : "+str(j.arene),20,(150,145,15)),[50,tey-20])
     rcs=[]
     rcf=[]
     rcd=[]

@@ -67,6 +67,14 @@ ip2x,ip2y=(600)/1200*tex,(460)/1000*tey
 
 lms=[pygame.Rect(is1x,is1y,700/1200*tex,350/1000*tey),pygame.Rect(is2x,is2y,700/1200*tex,350/1000*tey),pygame.Rect(ip1x,ip1y,75/1200*tex,100/1000*tey),pygame.Rect(ip2x,ip2y,75/1200*tex,100/1000*tey)]
 
+nrmape=lms[0]
+nrmape.union(lms[1])
+#for zr in lms: nrmape.union(zr)
+
+rmape=pygame.Rect(0,0,int(800/1200*tex),tey)
+for rr in lms: rmape.clip(rr)
+#print(rmape)
+
 while len(j2.deck) < 8:
     j2.deck.append(random.choice(cpdps))
     j2.deck=list(set(j2.deck))
@@ -204,9 +212,12 @@ class Carte:
             cible.vie-=self.att
             if self.tipeatt==2 and self.cible.vie<=0:
                 carts1.append( Carte(self.px-self.tx,self.py-self.ty/2,self.tp,self.camp) )
-            if self.tipeatt==4 and not "pondu" in self.etat:
+            if self.tipeatt==4 and not "pondu" in self.etat and len(carts1)+len(carts2)<=150:
                 self.etat.append("pondu")
-                carts1.append( Carte(self.px-self.tx,self.py,self.tp,self.camp) )
+                if self.camp==1:
+                    carts1.append( Carte(self.px-self.tx,self.py,self.tp,self.camp) )
+                else:
+                    carts2.append( Carte(self.px-self.tx,self.py,self.tp,self.camp) )
     def attack(self):
         if time.time()-self.dnat > self.vitatt:
             self.dnat=time.time()
