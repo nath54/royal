@@ -5,7 +5,8 @@ def test():
     import sys,os
     cv = sys.version_info
     if cv < rv:
-         raise "vous utilisez une version de python trop ancienne, veuillez installer python"+str(rv[0])+"."+str(rv[1])
+         print("vous utilisez une version de python trop ancienne, veuillez installer python"+str(rv[0])+"."+str(rv[1]))
+         exit()
     try: import subprocess
     except:
         print("La librairie subprocess va etre installée sur votre ordinateur...")
@@ -14,7 +15,7 @@ def test():
     try: import pygame
     except:
         print("La librairie pygame va etre installée sur votre ordinateur...")
-        subprocess.call("pip install pygame")
+        os.system("pip install pygame")
         print("La librairie pygame devrait etre installée sur votre ordinateur.")
 
 test()
@@ -38,7 +39,7 @@ craret=[(0,0,140),(150,105,25),(150,0,150),(20,150,20),(250,250,0)]
 if not "stats.nath" in os.listdir("./"):
     txt=""
     import textbox
-    txt+=textbox.main()+"\n\n1000\n0\n0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0\n0"
+    txt+=textbox.main()+"\n\n1000\n0\n0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0\n0"
     f=open("stats.nath","w")
     f.write(txt)
     f.close()

@@ -210,6 +210,7 @@ class Carte:
             miss.append(Mis(self,cible,self.mtp))
         else:
             cible.vie-=self.att
+            if cible.tpcarte==2 and self.tipeatt==7: cible.vie-=self.att
             if self.tipeatt==2 and self.cible.vie<=0:
                 carts1.append( Carte(self.px-self.tx,self.py-self.ty/2,self.tp,self.camp) )
             if self.tipeatt==4 and not "pondu" in self.etat and len(carts1)+len(carts2)<=150:
@@ -263,7 +264,19 @@ class Carte:
                 else: cc=carts2
                 tchs=[]
                 for c in cc:
-                    if dtouch(self,c): tchs.append(c)
+                    if c.tpcarte == 1 and dtouch(self,c): tchs.append(c)
+                for c in tchs:
+                    if c.vie < c.vie_tot:
+                        c.vie+=self.att
+                        if c.vie > c.vie_tot: c.vie=c.vie_tot
+            if self.tipeatt==7:
+                if self.camp==1: cc=carts1
+                else: cc=carts2
+                tchs=[]
+                for c in cc:
+                    if dtouch(self,c):
+                        if c.tpcarte == 2:
+                            tchs.append(c)
                 for c in tchs:
                     if c.vie < c.vie_tot:
                         c.vie+=self.att
