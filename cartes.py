@@ -49,7 +49,9 @@ cdes=["C'est une petite tour qui a pour but de proteger la tour du roi",
       "la mouche fait apparaitre d'autres mouches à chaque attaque",
       "Il pique la vie des ses ennemis tout en buvant de leur sang",
       "Il aime soigner ses amis qui sont proches de lui",
-      "Il répare les batiments endomagés et inflige plus de dégats aux batiments ennemis"]
+      "Il répare les batiments endomagés et inflige plus de dégats aux batiments ennemis",
+      "Une pluie de fleche tirée par des archers divins",
+      "Des éclairs très puissants et très préssés d'electrocuter des ennemis"]
                                                                                                                                                                                                                                                                                                                                             
 nctxx,nctyy=[],[]
 for c in ctxx: nctxx.append(int(c))
