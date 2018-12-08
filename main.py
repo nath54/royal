@@ -26,7 +26,7 @@ from cartes import *
 import subprocess
 
 pygame.init()
-tex,tey=1200,900
+tex,tey=1000,750
 smenu=2
 cselec=None
 
@@ -123,15 +123,15 @@ def aff():
         fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[j.arene])+"_2.png"),[int(70/1200*txx),int(100/1000*tyy)]),[xxx+txx-60,yyy+tyy/2-20])
         fenetre.blit(font.render(anom[j.arene],20,(150,150,150)),[xxx,yyy+tyy+50])
         if j.arene>=len(atpp):
-            fenetre.blit(font.render("Vous etes à l'arène maximale",20,(215,210,230)),[50/1200*tex,750/1000*tey])
+            fenetre.blit(font.render("Vous etes à l'arène maximale",20,(215,210,230)),[50/1200*tex,800/1000*tey])
         else:
             ars=atpp[j.arene+1]
-            fenetre.blit(font.render("Arène suivante : "+str(atro[ars])+" , "+str(atro[ars]-j.trophes)+" trophés restants",20,(215,210,230)),[50/1200*tex,750/1000*tey])
+            fenetre.blit(font.render("Arène suivante : "+str(atro[ars])+" , "+str(atro[ars]-j.trophes)+" trophés restants",20,(215,210,230)),[50/1200*tex,800/1000*tey])
     elif smenu==1:
         for cc in j.deck:
             if j.cartpos[cc]==0: del(j.deck[j.deck.index(cc)])
         xx,yy=50,350
-        tx,ty=int(75/1200*tex),int(100/1000*tey)
+        tx,ty=int(60/1200*tex),int(85/1000*tey)
         xxx=None
         for g in ctpp:
             if g == cselec:
@@ -181,7 +181,7 @@ def aff():
                 fenetre.blit(font.render(str(ttx),20,(50,50,50)),[xi+5,yty])
         pygame.draw.rect(fenetre,(100,50,25),(0,(100/1000*tey),tex,200),0)
         pygame.draw.rect(fenetre,(150,150,5),(20,(120/1000*tey),tex-40,160),5)
-        xx,yy,tx,ty=50,120,70,100
+        xx,yy,tx,ty=50,120,int(60/1200*tex),int(85/1000*tey)
         for ca in j.deck:
             rcd.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/fc.png"),[tx+30,ty+30]),[xx-15,yy]) )
             fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cimg[ca]),[tx,ty]),[xx,yy+15])
