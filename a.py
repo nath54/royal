@@ -12,9 +12,11 @@ carts2=[]
 maxelixir=10
 miss=[]
 
+j1ga=False
+j2ga=False
 pygame.init()
 
-jjr=open("stats.nath","r").readlines()
+jjr=open("stats.nath","r").read().split("#")
 
 class Joueur:
     def __init__(self,camp):
@@ -31,6 +33,7 @@ class Joueur:
         self.trophes=random.randint(10,10000)
         self.cartpos=[]
         self.arene=1
+        self.nbtour=3
 
 
 ##############
@@ -174,6 +177,7 @@ class Carte:
         self.endroit=cend[tp]
         self.att_endroit=caen[tp]
         self.tpcarte=ctpc[tp]
+        self.apcarte=cact[tp]
         self.dbg=time.time()
         self.tbg=0.03
         self.mtp=cims[tp]
@@ -198,7 +202,9 @@ class Carte:
                 if rr.colliderect(pygame.Rect(c.px,c.py,c.tx,c.ty)): tchs.append(c)
             if tchs!=[]:
                 if self.tpatt==2:
-                    for c in tchs: c.vie-=self.att
+                    for c in tchs:
+                        c.vie-=self.att
+                        if self.tp==35 and c.tpcarte==1: c.etat.append("gelé")
                 else:
                     lpp=tchs[0]
                     for c in tchs:
@@ -213,7 +219,7 @@ class Carte:
             if cible.tpcarte==2 and self.tipeatt==7: cible.vie-=self.att
             if self.tipeatt==2 and self.cible.vie<=0:
                 carts1.append( Carte(self.px-self.tx,self.py-self.ty/2,self.tp,self.camp) )
-            if self.tipeatt==4 and not "pondu" in self.etat and len(carts1)+len(carts2)<=150:
+            if self.tipeatt==4 and not "pondu" in self.etat and len(carts1)+len(carts2)<=100:
                 self.etat.append("pondu")
                 if self.camp==1:
                     carts1.append( Carte(self.px-self.tx,self.py,self.tp,self.camp) )
@@ -229,6 +235,10 @@ class Carte:
             self.dnat=time.time()
             if self.camp==1: cc=carts2
             else: cc=carts1
+            if self.apcarte != None:
+                if len(carts1+carts2)<=100:
+                    if self.camp==1: carts1.append( Carte(self.px+self.tx/2,self.py-self.ty-10,self.apcarte,self.camp) )
+                    else: carts2.append( Carte(self.px+self.tx/2,self.py+self.ty+10,self.apcarte,self.camp) )
             tchs=[]
             for c in cc:
                 if dtouch(self,c): tchs.append(c)
@@ -477,9 +487,18 @@ def deb():
         fenetre.blit(ff.render(str(3-int(tt-t)),40,ct),[tex/2,50])
         fenetre.blit(ff.render(j1.nom,40,(5,5,5)),[tex/4*1,tey/3*1])
         fenetre.blit(ff.render("bot",40,(5,5,5)),[tex/4*3,tey/3*2])
+        fenetre.blit(pygame.transform.scale(pygame.image.load("images/por0.png"),[int(150/1200*tex),int(150/1000*tey)]),[tex/4*1-160,tey/3*1])
+        pygame.draw.rect(fenetre,(250,250,250),(tex/4*1-160,tey/3*1,int(150/1200*tex),int(150/1000*tey)),5)
+        fenetre.blit(pygame.transform.scale(pygame.image.load("images/por0.png"),[int(150/1200*tex),int(150/1000*tey)]),[tex/4*3-160,tey/3*2])
+        pygame.draw.rect(fenetre,(250,250,250),(tex/4*3-160,tey/3*2,int(150/1200*tex),int(150/1000*tey)),5)
         pygame.display.update()
         tt=time.time()
-    
+
+def countr(crts):
+    nb=0
+    for c in crts:
+        if c.tp==0 or c.tp==1: nb+=1
+    return nb
 
 #######################################################
 
@@ -523,6 +542,16 @@ while encour:
         elif event.type==KEYDOWN:
             if event.key==K_q:
                 encour=False
+    j1.nbtr=countr(carts1)
+    j2.nbtr=countr(carts2)
+    if j1.nbtr == 0 or carts1==[]:
+        encour=False
+        j2ga=True
+        time.sleep(0.5)
+    if j2.nbtr == 0 or carts2==[]:
+        encour=False
+        j1ga=True
+        time.sleep(0.5)
 
 def save(j):
     ff=open("stats.nath","w")
@@ -538,7 +567,7 @@ def save(j):
         t5+=str(jj)+"|"
     t5=t5[:-1]
     t6=str(j.arene)
-    txt=t1+t2+"\n"+t3+"\n"+t4+"\n"+t5+"\n"+t6+"\n"
+    txt=t1+"#"+t2+"#"+t3+"#"+t4+"#"+t5+"#"+t6+"#"
     ff.write(txt)
     ff.close()
 
@@ -547,26 +576,25 @@ fenetre.fill((0,0,0))
 img="images/perdu.png"
 encour2=False
 arg,tro=0,0
-if carts2==[]:
+if carts2==[] or j1ga:
     img="images/gagné.png"
     encour2=True
-    arg=random.randint(10,50)
-    tro=random.randint(20,30)
+    arg=random.randint(20,60)
+    tro=random.randint(20,40)
     j1.argent+=arg
     j1.trophes+=tro
     fenetre.blit(font.render("vous avez gagné "+str(tro)+" trophés",20,(10,10,10)),[tex/1.5,tey/1.2])
-elif carts1==[]:
+elif carts1==[] or j2ga:
     img="images/perdu.png"
     encour2=True
     arg=random.randint(0,10)
-    tro=-random.randint(20,30)
+    tro=random.randint(20,30)
     j1.argent+=arg
-    j1.trophes+=tro
+    j1.trophes-=tro
     fenetre.blit(font.render("vous avez perdu "+str(abs(tro))+" trophés",20,(10,10,10)),[tex/1.5,tey/1.2])
 
 
 
-save(j1)
 save(j1)
 
 fenetre.blit(pygame.transform.scale(pygame.image.load(img),[tex,tey]),[0,0])
@@ -574,11 +602,7 @@ bmenu=fenetre.blit(pygame.transform.scale(pygame.image.load("images/bmenu.png"),
 fenetre.blit(font.render("vous avez gagné "+str(arg)+" or",20,(150,150,10)),[tex-650,tey-200])
 fenetre.blit(font.render("vous avez gagné "+str(tro)+" trophés",20,(150,150,10)),[tex-650,tey-150])
 
-save(j1)
-
 pygame.display.update()
-
-save(j1)
 
 while encour2:
     for event in pygame.event.get():

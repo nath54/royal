@@ -39,7 +39,7 @@ craret=[(0,0,140),(150,105,25),(150,0,150),(20,150,20),(250,250,0)]
 if not "stats.nath" in os.listdir("./"):
     txt=""
     import textbox
-    txt+=textbox.main()+"\n\n1000\n0\n0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0\n0"
+    txt+=textbox.main()+"##1000#0#0|0|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1#0"
     f=open("stats.nath","w")
     f.write(txt)
     f.close()
@@ -48,24 +48,35 @@ if not "stats.nath" in os.listdir("./"):
 
 
 
-jjr=open("stats.nath","r").readlines()
 class Joueur:
     def __init__(self):
-        self.nom=jjr[0]
-        ara,nar=jjr[1].split("|"),[]
-        if len(ara) > 1:
-            for a in ara: nar.append(int(a))
-        self.deck=nar
-        self.argent=int(jjr[2])
-        self.trophes=int(jjr[3])
-        ara,nar=jjr[4].split("|"),[]
-        for a in ara: nar.append(int(a))
-        self.cartpos=nar
+        self.nom="None"
+        self.deck=[]
+        self.argent=0
+        self.trophes=0
+        self.cartpos=[]
         self.arene=1
         for ar in atpp:
             if self.trophes >= atro[ar]: self.arene=ar
+def load(j):
+    jjr=open("stats.nath","r").read().split("#")
+    j.nom=jjr[0]
+    ara,nar=jjr[1].split("|"),[]
+    if len(ara) > 1:
+       for a in ara: nar.append(int(a))
+    j.deck=nar
+    j.argent=int(jjr[2])
+    j.trophes=int(jjr[3])
+    ara,nar=jjr[4].split("|"),[]
+    for a in ara: nar.append(int(a))
+    j.cartpos=nar
+    j.arene=1
+    for ar in atpp:
+        if j.trophes >= atro[ar]: j.arene=ar
+    return j
+    
 j=Joueur()
-
+j=load(j)
 
 def save():
     ff=open("stats.nath","w")
@@ -81,26 +92,9 @@ def save():
     for jj in j.cartpos:
         t5+=str(jj)+"|"
     t5=t5[:-1]
-    txt=t1+t2+"\n"+t3+"\n"+t4+"\n"+t5+"\n"+t6+"\n"
+    txt=t1+"#"+t2+"#"+t3+"#"+t4+"#"+t5+"#"+t6+"#"
     ff.write(txt)
     ff.close()
-
-def load():
-    j=Joueur()
-    j.nom=jjr[0]
-    ara,nar=jjr[1].split("|"),[]
-    if len(ara) > 1:
-        for a in ara: nar.append(int(a))
-    j.deck=nar
-    j.argent=int(jjr[2])
-    j.trophes=int(jjr[3])
-    ara,nar=jjr[4].split("|"),[]
-    for a in ara: nar.append(int(a))
-    j.cartpos=nar
-    j.arene=1
-    for ar in atpp:
-        if j.trophes >= atro[ar]: j.arene=ar
-    return j
 
 def aff():
     fenetre.fill((50,20,100))
@@ -128,6 +122,11 @@ def aff():
         fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[j.arene])+"_2.png"),[int(70/1200*txx),int(100/1000*tyy)]),[xxx+30,yyy+tyy/2-20])
         fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[j.arene])+"_2.png"),[int(70/1200*txx),int(100/1000*tyy)]),[xxx+txx-60,yyy+tyy/2-20])
         fenetre.blit(font.render(anom[j.arene],20,(150,150,150)),[xxx,yyy+tyy+50])
+        if j.arene>=len(atpp):
+            fenetre.blit(font.render("Vous etes à l'arène maximale",20,(215,210,230)),[50/1200*tex,750/1000*tey])
+        else:
+            ars=atpp[j.arene+1]
+            fenetre.blit(font.render("Arène suivante : "+str(atro[ars])+" , "+str(atro[ars]-j.trophes)+" trophés restants",20,(215,210,230)),[50/1200*tex,750/1000*tey])
     elif smenu==1:
         for cc in j.deck:
             if j.cartpos[cc]==0: del(j.deck[j.deck.index(cc)])
@@ -168,12 +167,18 @@ def aff():
                 txt=cdes[g]
                 tl=30
                 aa=int(len(txt)/tl)
-                ttx=[]
-                for w in range(aa):
-                    if w+1==aa:
-                        ttx.append( txt[int(w*tl):] )
-                    else: ttx.append( txt[int(w*tl):int(w*tl+tl)] )
-                for tt in ttx: fenetre.blit(font.render(str(tt),20,(50,50,50))      ,[xi+5 ,yi+80+(20*ttx.index(tt))])
+                ttx=" "
+                w=0
+                yty=yi+80
+                for t in txt:
+                    if w>=tl and t==" ":
+                        w=0
+                        fenetre.blit(font.render(str(ttx),20,(50,50,50)),[xi+5,yty])
+                        yty+=20
+                        ttx=""
+                    ttx+=t
+                    w+=1
+                fenetre.blit(font.render(str(ttx),20,(50,50,50)),[xi+5,yty])
         pygame.draw.rect(fenetre,(100,50,25),(0,(100/1000*tey),tex,200),0)
         pygame.draw.rect(fenetre,(150,150,5),(20,(120/1000*tey),tex-40,160),5)
         xx,yy,tx,ty=50,120,70,100
@@ -181,6 +186,9 @@ def aff():
             rcd.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/fc.png"),[tx+30,ty+30]),[xx-15,yy]) )
             fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cimg[ca]),[tx,ty]),[xx,yy+15])
             xx+=tx+50
+        if len(j.deck)==8: cl=(0,200,0)
+        else: cl=(200,0,0)
+        fenetre.blit(pygame.font.SysFont("Sans",40).render(str(len(j.deck))+"/ 8",20,cl),[tex-150,150])
     elif smenu==3:
         xx,yy=50,100
         tx,ty=150,150
@@ -300,8 +308,12 @@ while encour:
                     save() 
                     try: subprocess.call("python3 a.py")
                     except: subprocess.call("python a.py", shell=True)
+                    fenetre.blit(pygame.font.SysFont("Serif",50).render("si votre partie est finie, cliquez",0,(0,200,150)),[20,tey/2])
+                    pygame.display.update()
+                    ac()
+                    j=load(j)
                 else:
-                    fenetre.blit(font.render("Votre deck n'est pas composé de 8 cartes !!!",20,(200,0,0)),[250,250])
+                    fenetre.blit(pygame.font.SysFont("Serif",40).render("Votre deck n'est pas composé de 8 cartes !!!",20,(200,0,0)),[250,250])
                     time.sleep(0.5)
                     pygame.display.update()
             elif rpos.colliderect(bm1): smenu=1
