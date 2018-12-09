@@ -205,12 +205,13 @@ def aff():
     pygame.display.update()
     return bplay,bm1,bm2,bm3,rcs,rcf,rcd
 
-def get_card(ic,aren):
+def get_card(rar,aren):
     ll=[]
     for tp in ctpp:
         if tp!=0 and tp!=1: ll.append(tp)
     crt=random.choice(ll)
-    while crar[crt]!=ic and care[crt]>aren: crt=random.choice(ll)
+    while crar[crt]!=rar or care[crt]>aren:
+        crt=random.choice(ll)
     return crt
 
 def ac():
@@ -223,16 +224,55 @@ def coffre(c,aren):
     crts=[]
     nbcr=[]
     ore=random.randint(cfore[c][0],cfore[c][1])
-    for ccc in cfcrt[c]:
-        for x in range(ccc[1]): 
-            crts.append(get_card(ccc[0],aren))
+    if c==0:
+        cfcrt=[ [5,0],
+                [4,1] ]
+    elif c==1:
+        cfcrt=[ [6,0],
+                [5,1],
+                [3,2] ]
+    elif c==2:
+        cfcrt=[ [9,0],
+                [7,1],
+                [6,2],
+                [2,3] ]
+    elif c==3:
+        cfcrt=[ [9,0],
+                [5,1],
+                [3,2],
+                [2,3],
+                [1,4] ]
+    elif c==4:
+        cfcrt=[ [6,2],
+                [10,3],
+                [3,4] ]
+    elif c==5:
+        cfcrt=[ [6,2],
+                [5,3],
+                [10,4] ]
+    for ccc in cfcrt:
+        print(ccc)
+        for x in range(ccc[0]): 
+            crt=get_card(ccc[1],aren)
+            if crar[crt]!=ccc[1]: print("mauvais")
+            crts.append(crt)
     crts=list(set(crts))
+    r0=[1,10]
+    r1=[1,8]
+    r2=[1,6]
+    r3=[1,3]
+    r4=[1,2]
+    if c==4 or c==5:
+        r3=[1,30]
+        print("c>=4")
+    if c==5:
+        r4=[1,30]
     for cc in crts:
-        if crar[cc]==0: nbcr.append(random.randint(1,10))
-        elif crar[cc]==1: nbcr.append(random.randint(1,8))
-        elif crar[cc]==2: nbcr.append(random.randint(1,6))
-        elif crar[cc]==3: nbcr.append(random.randint(1,3))
-        elif crar[cc]==4: nbcr.append(random.randint(1,2))
+        if crar[cc]==0: nbcr.append(random.randint(r0[0],r0[1]))
+        elif crar[cc]==1: nbcr.append(random.randint(r1[0],r1[1]))
+        elif crar[cc]==2: nbcr.append(random.randint(r2[0],r2[1]))
+        elif crar[cc]==3: nbcr.append(random.randint(r3[0],r3[1]))
+        elif crar[cc]==4: nbcr.append(random.randint(r4[0],r4[1]))
         else: nbcr.append(1)
     fenetre.fill((10,0,50))
     fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cfimg[c]),[int(cftxx[c]/1200*tex),int(cftyy[c]/1000*tey)]),[tex/4,tey/4])
