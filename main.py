@@ -39,7 +39,7 @@ craret=[(0,0,140),(150,105,25),(150,0,150),(20,150,20),(250,250,0)]
 if not "stats.nath" in os.listdir("./"):
     txt=""
     import textbox
-    txt+=textbox.main()+"##1000#0#0|0|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1#0"
+    txt+=textbox.main()+"##1000#0#0|0|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1#0"
     f=open("stats.nath","w")
     f.write(txt)
     f.close()
@@ -122,7 +122,7 @@ def aff():
         fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[j.arene])+"_2.png"),[int(70/1200*txx),int(100/1000*tyy)]),[xxx+30,yyy+tyy/2-20])
         fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[j.arene])+"_2.png"),[int(70/1200*txx),int(100/1000*tyy)]),[xxx+txx-60,yyy+tyy/2-20])
         fenetre.blit(font.render(anom[j.arene],20,(150,150,150)),[xxx,yyy+tyy+50])
-        if j.arene>=len(atpp):
+        if j.arene>=len(atpp)-1:
             fenetre.blit(font.render("Vous etes à l'arène maximale",20,(215,210,230)),[50/1200*tex,800/1000*tey])
         else:
             ars=atpp[j.arene+1]

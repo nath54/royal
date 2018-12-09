@@ -235,6 +235,11 @@ class Carte:
             self.dnat=time.time()
             if self.camp==1: cc=carts2
             else: cc=carts1
+            if self.tp==37:
+                if self.camp==1:
+                    if j1.elixir<10: j1.elixir+=1
+                else:
+                    if j2.elixir<10: j2.elixir+=1
             if self.apcarte != None:
                 if len(carts1+carts2)<=100:
                     if self.camp==1: carts1.append( Carte(self.px+self.tx/2,self.py-self.ty-10,self.apcarte,self.camp) )
@@ -269,7 +274,7 @@ class Carte:
                                 c.etat.append("cloné")
                                 if self.camp==1: carts1.append(Carte(c.px+c.tx,c.py,c.tp,1))
                                 else           : carts2.append(Carte(c.px+c.tx,c.py,c.tp,2))
-            if self.tipeatt==6:
+            elif self.tipeatt==6:
                 if self.camp==1: cc=carts1
                 else: cc=carts2
                 tchs=[]
@@ -279,7 +284,7 @@ class Carte:
                     if c.vie < c.vie_tot:
                         c.vie+=self.att
                         if c.vie > c.vie_tot: c.vie=c.vie_tot
-            if self.tipeatt==7:
+            elif self.tipeatt==7:
                 if self.camp==1: cc=carts1
                 else: cc=carts2
                 tchs=[]
@@ -291,7 +296,8 @@ class Carte:
                     if c.vie < c.vie_tot:
                         c.vie+=self.att
                         if c.vie > c.vie_tot: c.vie=c.vie_tot
-                        
+            elif self.tipeatt==8:
+                if c.tpcarte == 1 and not "empoisoné" in c.etat: c.etat.append("empoisoné")
     def dcibl(self):
         if self.camp==1: cc=carts2
         else: cc=carts1
@@ -410,6 +416,7 @@ def aff():
                 pygame.draw.rect(fenetre,(50,0,0),(c.px,c.py-10,c.tx,5),1)
                 if c.tp==0 or c.tp==1 : fenetre.blit(fon.render(str(c.vie)+" / "+str(c.vie_tot),20,(250,250,250)),[c.px,c.py-20])
             if "gelé" in c.etat: fenetre.blit(pygame.transform.scale(pygame.image.load("images/glace.png"),[c.tx,c.ty]),[c.px,c.py])
+            if "empoisoné" in c.etat: fenetre.blit(pygame.transform.scale(pygame.image.load("images/emp.png"),[c.tx,c.ty]),[c.px,c.py])
         for m in miss: m.rect=fenetre.blit(m.img,[m.px,m.py])
         #interface
         ky=50
@@ -446,19 +453,25 @@ def bb():
     for c1 in carts1:
         if not "gelé" in c1.etat:
             c1.bouger()
+        if "empoisoné" in c1.etat: c1.vie-=1
         if c1.vie<=0: del(carts1[carts1.index(c1)])
         if c1.px>800/1200*tex:c1.px=800/1200*tex-c1.tx-1
         if c1.px<0  :c1.px=1
         if c1.py>tex:c1.py=tey-c1.ty-1
         if c1.py<0  :c1.py=1
+        if c1.tpcarte==2 and (c1.tp!=0 and c1.tp!=1):
+            c1.vie-=1
     for c2 in carts2:
         if not "gelé" in c2.etat:
             c2.bouger()
+        if "empoisoné" in c2.etat: c2.vie-=1
         if c2.vie<=0: del(carts2[carts2.index(c2)])
         if c2.px>800/1200*tex:c2.px=800/1200*tex-c2.tx-1
         if c2.px<0  :c2.px=1
         if c2.py>tex:c2.py=tey-c2.ty-1
         if c2.py<0  :c2.py=1
+        if c2.tpcarte==2 and (c2.tp!=0 and c2.tp!=1):
+            c2.vie-=1
     if time.time()-j1.dnel > j1.tpel:
         j1.dnel=time.time()
         j1.elixir+=1
