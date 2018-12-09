@@ -39,7 +39,7 @@ craret=[(0,0,140),(150,105,25),(150,0,150),(20,150,20),(250,250,0)]
 if not "stats.nath" in os.listdir("./"):
     txt=""
     import textbox
-    txt+=textbox.main()+"##1000#0#0|0|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1#0"
+    txt+=textbox.main()+"##1000#0#0|0|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1#0"
     f=open("stats.nath","w")
     f.write(txt)
     f.close()
@@ -259,8 +259,8 @@ def coffre(c,aren):
         time.sleep(0.5)
     fenetre.fill((10,0,50))
     fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cfimg[c]),[int(cftxx[c]/1200*tex),int(cftyy[c]/1000*tey)]),[tex/4,tey/4])
-    xx,yy=50,50
-    txx,tyy=120,170
+    xx,yy=int(50/1200*tex),int(50/1000*tey)
+    txx,tyy=int(120/1200*tex),int(170/1000*tey)
     pygame.draw.rect(fenetre,(100,100,0),(xx,yy,txx,tyy),5)
     fenetre.blit(pygame.transform.scale(font.render("or : "+str(ore),20,(100,100,0)),[txx,tyy]),[xx,yy])
     xx+=txx+20

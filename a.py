@@ -500,14 +500,20 @@ def countr(crts):
         if c.tp==0 or c.tp==1: nb+=1
     return nb
 
+def vcp(x,y,tx,ty):
+    re=pygame.Rect(x,y,tx,ty)
+    for c in carts1+carts2:
+        if c.tpcarte==2 and re.colliderect(pygame.Rect(c.px,c.py,c.tx,c.ty)): return True
+    return False
+
 #######################################################
 
 fenetre=pygame.display.set_mode([tex,tey])
 pygame.display.set_caption("THE FUN FIGHTING")
 
 deb()
-
 cm()
+
 
 encour=True
 while encour:
@@ -531,10 +537,11 @@ while encour:
                 else: cond=cond2
                 if cond:
                     if  j1.elixir >= celi[jcs]:
-                        for x in range(cnbp[jcs]): carts1.append( Carte(pos[0],pos[1],jcs,1) )
-                        j1.elixir-=celi[jcs]
-                        del(j1.cartactu[j1.cartselec])
-                        j1.cartselec=None
+                        if not vcp(pos[0],pos[1],ctxx[jcs],ctyy[jcs]) or ctpc[jcs]==1 or ctpc[jcs]==3:
+                            for x in range(cnbp[jcs]): carts1.append( Carte(pos[0],pos[1],jcs,1) )
+                            j1.elixir-=celi[jcs]
+                            del(j1.cartactu[j1.cartselec])
+                            j1.cartselec=None
             for cs in j1.rcartactu:
                 if cs.colliderect(rpos):
                     j1.cartselec=j1.rcartactu.index(cs)
