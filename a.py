@@ -11,6 +11,8 @@ carts1=[]
 carts2=[]
 maxelixir=10
 miss=[]
+sorts=[]
+cltxt=(215,215,215)
 
 j1ga=False
 j2ga=False
@@ -55,6 +57,8 @@ for a in ara: nar.append(int(a))
 j1.cartpos=nar
 
 j2=Joueur(2)
+
+if j1.arene==4: cltxt=(0,0,0)
 
 imgfond1=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_3.png") ,[int(800/1200*tex),tey] )
 imgfond2=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_3.png") ,[int(800/1200*tex),tey] )
@@ -153,6 +157,29 @@ def tcs(p):
         if m.colliderect(p.recte): return True
     return False
 
+def faf():
+        fenetre.fill((0,0,0))
+        fenetre.blit(imgfond1,[if1x,if1y])
+        fenetre.blit(imgfond2,[if2x,if2y])
+        fenetre.blit(imgsol1,[is1x,is1y])
+        fenetre.blit(imgsol2,[is1x,is2y])
+        fenetre.blit(imgpon1,[ip1x,ip1y])
+        fenetre.blit(imgpon1,[ip2x,ip2y])
+        pygame.draw.rect(fenetre,(0,0,0),(int(800/1200*tex),0,int(400/1200*tex),tey),0)
+        for c in carts1+carts2:
+            if c.camp==1: pygame.draw.circle(fenetre,(0,0,150),(int(c.px+c.tx/2),int(c.py+c.ty/1.5)),int(c.tx/2),1)
+            else        : pygame.draw.circle(fenetre,(150,0,0),(int(c.px+c.tx/2),int(c.py+c.ty/1.5)),int(c.tx/2),1)
+            c.recte=fenetre.blit(c.img,[c.px,c.py])
+            if c.vie<c.vie_tot and c.vie_tot>0:
+                pygame.draw.rect(fenetre,(250,0,0),(c.px,c.py-10,int(c.vie/c.vie_tot*c.tx),5),0)
+                pygame.draw.rect(fenetre,(50,0,0),(c.px,c.py-10,c.tx,5),1)
+                if c.tp==0 or c.tp==1 : fenetre.blit(fon.render(str(c.vie)+" / "+str(c.vie_tot),20,(250,250,250)),[c.px,c.py-20])
+            if "gelé" in c.etat: fenetre.blit(pygame.transform.scale(pygame.image.load("images/glace.png"),[c.tx,c.ty]),[c.px,c.py])
+            if "empoisoné" in c.etat: fenetre.blit(pygame.transform.scale(pygame.image.load("images/emp.png"),[c.tx,c.ty]),[c.px,c.py])
+        for m in miss: m.rect=fenetre.blit(m.img,[m.px,m.py])
+        pygame.display.update()
+    
+
 class Carte:
     def __init__(self,x,y,tp,camp):
         self.tp=tp
@@ -185,8 +212,10 @@ class Carte:
         self.etat=[]
         self.recte=pygame.Rect(self.px,self.py,self.tx,self.ty)
         self.aaa,self.bbb=random.randint(0,1),random.randint(0,1)
+        """
         if self.tpcarte==3:
             for x in range(1,30):
+                faf()
                 fenetre.blit(self.img,[self.px-((30-x)*2),self.py-((30-x)*3)])
                 time.sleep(0.015)
                 pygame.display.update()
@@ -205,12 +234,17 @@ class Carte:
                     for c in tchs:
                         c.vie-=self.att
                         if self.tp==35 and c.tpcarte==1: c.etat.append("gelé")
+                elif self.tipeatt==8:
+                    for c in tchs:
+                        c.vie-=self.att
+                        if c.tpcarte==1: c.etat.append("empoisoné")
                 else:
                     lpp=tchs[0]
                     for c in tchs:
                         if abs(self.px-c.px) < abs(self.px-lpp.px) and abs(self.py-c.py) < abs(self.py-lpp.py): lpp=c
                     lpp.vie-=self.att
             pygame.display.update()
+        """
     def atta(self,cible):
         if self.mtp!=None:
             miss.append(Mis(self,cible,self.mtp))
@@ -219,7 +253,7 @@ class Carte:
             if cible.tpcarte==2 and self.tipeatt==7: cible.vie-=self.att
             if self.tipeatt==2 and self.cible.vie<=0:
                 carts1.append( Carte(self.px-self.tx,self.py-self.ty/2,self.tp,self.camp) )
-            if self.tipeatt==4 and not "pondu" in self.etat and len(carts1)+len(carts2)<=100:
+            if self.tipeatt==4 and cible.tp==26 and not "pondu" in self.etat and len(carts1)+len(carts2)<=100:
                 self.etat.append("pondu")
                 if self.camp==1:
                     carts1.append( Carte(self.px-self.tx,self.py,self.tp,self.camp) )
@@ -246,7 +280,7 @@ class Carte:
                     else: carts2.append( Carte(self.px+self.tx/2,self.py+self.ty+10,self.apcarte,self.camp) )
             tchs=[]
             for c in cc:
-                if dtouch(self,c): tchs.append(c)
+                if dtouch(self,c) and c.tpcarte!=3: tchs.append(c)
             if tchs==[]: return False
             if  self.tpatt == 1:
                 lpp=tchs[0]
@@ -264,7 +298,7 @@ class Carte:
                         del(carts1[carts1.index(lpp)])
                         lpp.camp=2
                         carts2.append(lpp)
-            elif self.tpatt==2:
+            if self.tpatt==2:
                 for c in tchs:
                     if c.endroit in self.att_endroit:
                         self.atta(c)
@@ -274,7 +308,7 @@ class Carte:
                                 c.etat.append("cloné")
                                 if self.camp==1: carts1.append(Carte(c.px+c.tx,c.py,c.tp,1))
                                 else           : carts2.append(Carte(c.px+c.tx,c.py,c.tp,2))
-            elif self.tipeatt==6:
+            if self.tipeatt==6:
                 if self.camp==1: cc=carts1
                 else: cc=carts2
                 tchs=[]
@@ -284,7 +318,7 @@ class Carte:
                     if c.vie < c.vie_tot:
                         c.vie+=self.att
                         if c.vie > c.vie_tot: c.vie=c.vie_tot
-            elif self.tipeatt==7:
+            if self.tipeatt==7:
                 if self.camp==1: cc=carts1
                 else: cc=carts2
                 tchs=[]
@@ -296,8 +330,9 @@ class Carte:
                     if c.vie < c.vie_tot:
                         c.vie+=self.att
                         if c.vie > c.vie_tot: c.vie=c.vie_tot
-            elif self.tipeatt==8:
-                if c.tpcarte == 1 and not "empoisoné" in c.etat: c.etat.append("empoisoné")
+            if self.tipeatt==8 or self.tp==38:
+                if c.tpcarte == 1 and not "empoisoné" in c.etat:
+                    c.etat.append("empoisoné")
     def dcibl(self):
         if self.camp==1: cc=carts2
         else: cc=carts1
@@ -414,10 +449,16 @@ def aff():
             if c.vie<c.vie_tot and c.vie_tot>0:
                 pygame.draw.rect(fenetre,(250,0,0),(c.px,c.py-10,int(c.vie/c.vie_tot*c.tx),5),0)
                 pygame.draw.rect(fenetre,(50,0,0),(c.px,c.py-10,c.tx,5),1)
-                if c.tp==0 or c.tp==1 : fenetre.blit(fon.render(str(c.vie)+" / "+str(c.vie_tot),20,(250,250,250)),[c.px,c.py-20])
+                if c.tp==0 or c.tp==1 : fenetre.blit(fon.render(str(c.vie)+" / "+str(c.vie_tot),20,cltxt),[c.px,c.py-20])
             if "gelé" in c.etat: fenetre.blit(pygame.transform.scale(pygame.image.load("images/glace.png"),[c.tx,c.ty]),[c.px,c.py])
             if "empoisoné" in c.etat: fenetre.blit(pygame.transform.scale(pygame.image.load("images/emp.png"),[c.tx,c.ty]),[c.px,c.py])
         for m in miss: m.rect=fenetre.blit(m.img,[m.px,m.py])
+        for ss in sorts:
+            s=ss[0]
+            if s.camp==1: cl=(0,0,250)
+            else: cl=(250,0,0)
+            pygame.draw.circle(fenetre,cl,(int(c.px+c.tx/2),int(c.ty)),int(c.tx/2),1)
+            fenetre.blit(s.img,[s.px,s.py])
         #interface
         ky=50
         dd=0
@@ -450,6 +491,20 @@ def bb():
     if2x+=1
     if if1x >= 800/1200*tex: if1x=-800/1200*tex
     if if2x >= 800/1200*tex: if2x=-800/1200*tex
+    bs=2
+    for ss in sorts:
+        s=ss[0]
+        ss[1]-=bs
+        s.px+=bs
+        s.py+=bs
+        if ss[1]<=0:
+            if s.camp==1:
+                for c in carts2:
+                    if dtouch(s,c):
+                        c.vie-=s.att
+                        if s.tipeatt==8 and c.tpcarte==1:c.etat.append("empoisoné")
+                        elif s.tipeatt==9 and c.tpcarte==1: c.etat.append("gelé")
+            del(sorts[sorts.index(ss)])
     for c1 in carts1:
         if not "gelé" in c1.etat:
             c1.bouger()
@@ -551,10 +606,17 @@ while encour:
                 if cond:
                     if  j1.elixir >= celi[jcs]:
                         if not vcp(pos[0],pos[1],ctxx[jcs],ctyy[jcs]) or ctpc[jcs]==1 or ctpc[jcs]==3:
-                            for x in range(cnbp[jcs]): carts1.append( Carte(pos[0],pos[1],jcs,1) )
-                            j1.elixir-=celi[jcs]
-                            del(j1.cartactu[j1.cartselec])
-                            j1.cartselec=None
+                            if ctpc[jcs]==3:
+                                sa=40
+                                sorts.append( [Carte(pos[0]-sa,pos[1]-sa,jcs,1),sa] )
+                                j1.elixir-=celi[jcs]
+                                del(j1.cartactu[j1.cartselec])
+                                j1.cartselec=None
+                            else:
+                                for x in range(cnbp[jcs]): carts1.append( Carte(pos[0],pos[1],jcs,1) )
+                                j1.elixir-=celi[jcs]
+                                del(j1.cartactu[j1.cartselec])
+                                j1.cartselec=None
             for cs in j1.rcartactu:
                 if cs.colliderect(rpos):
                     j1.cartselec=j1.rcartactu.index(cs)

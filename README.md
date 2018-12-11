@@ -8,7 +8,8 @@ Le but est de détruire toutes les troupes ennemies.
 Pour y jouer, il faut :
 
  -installer python3(si vous ne l'avez pas) et pygame(si vous ne l'avez pas)
- 
+ (pour installer python 3 : "https://www.python.org/downloads/"),(pour installer pygame : "pip install pygame" ou "pip3 install pygame")
+
  -cloner ou telecharger le project
  
  -se déplacer avec sa ligne de commande(ou terminal) dans le bon répertoire(la racine du projet)
