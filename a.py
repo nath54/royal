@@ -212,39 +212,7 @@ class Carte:
         self.etat=[]
         self.recte=pygame.Rect(self.px,self.py,self.tx,self.ty)
         self.aaa,self.bbb=random.randint(0,1),random.randint(0,1)
-        """
-        if self.tpcarte==3:
-            for x in range(1,30):
-                faf()
-                fenetre.blit(self.img,[self.px-((30-x)*2),self.py-((30-x)*3)])
-                time.sleep(0.015)
-                pygame.display.update()
-            fenetre.blit(pygame.image.load("images/explose.png"),[self.px,self.py])
-            pygame.display.update()
-            if self.camp==1: cl=(0,0,200)
-            else           : cl=(200,0,0)
-            rr=pygame.draw.circle(fenetre,cl,(int(self.px+self.tx/2),int(self.py+self.ty/2)),self.portee,1)
-            if self.camp==1: cc=carts2
-            else: cc=carts1
-            tchs=[]
-            for c in cc:
-                if rr.colliderect(pygame.Rect(c.px,c.py,c.tx,c.ty)): tchs.append(c)
-            if tchs!=[]:
-                if self.tpatt==2:
-                    for c in tchs:
-                        c.vie-=self.att
-                        if self.tp==35 and c.tpcarte==1: c.etat.append("gelé")
-                elif self.tipeatt==8:
-                    for c in tchs:
-                        c.vie-=self.att
-                        if c.tpcarte==1: c.etat.append("empoisoné")
-                else:
-                    lpp=tchs[0]
-                    for c in tchs:
-                        if abs(self.px-c.px) < abs(self.px-lpp.px) and abs(self.py-c.py) < abs(self.py-lpp.py): lpp=c
-                    lpp.vie-=self.att
-            pygame.display.update()
-        """
+        
     def atta(self,cible):
         if self.mtp!=None:
             miss.append(Mis(self,cible,self.mtp))

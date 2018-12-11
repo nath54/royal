@@ -251,10 +251,10 @@ def coffre(c,aren):
                 [5,3],
                 [10,4] ]
     for ccc in cfcrt:
-        print(ccc)
+        #print(ccc)
         for x in range(ccc[0]): 
             crt=get_card(ccc[1],aren)
-            if crar[crt]!=ccc[1]: print("mauvais")
+            #if crar[crt]!=ccc[1]: print("mauvais")
             crts.append(crt)
     crts=list(set(crts))
     r0=[1,10]
@@ -264,7 +264,7 @@ def coffre(c,aren):
     r4=[1,2]
     if c==4 or c==5:
         r3=[1,30]
-        print("c>=4")
+        #print("c>=4")
     if c==5:
         r4=[1,30]
     for cc in crts:
