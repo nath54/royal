@@ -16,6 +16,8 @@ cltxt=(215,215,215)
 
 j1ga=False
 j2ga=False
+modj=False
+
 pygame.init()
 
 jjr=open("stats.nath","r").read().split("#")
@@ -27,7 +29,7 @@ class Joueur:
         self.deck=[]
         self.cartactu=[]
         self.rcartactu=[]
-        self.cartselec=None
+        self.cartselec=random.randint(0,3)
         self.elixir=0
         self.argent=0
         self.dnel=time.time()
@@ -124,7 +126,8 @@ class Mis:
             a=-abs(self.cible.px-self.px)
             b=-abs(self.cible.py-self.py)
             c,f=int(math.sqrt(a*a+b*b)),self.vit
-            if f<c: #self.px,self.py=self.px+int(a*f/c),self.py+int(b*f/c)
+            #self.px,self.py=self.px+int(a*f/c),self.py+int(b*f/c)
+            if f<c: 
                 e=int(b*f/c)
                 d=int(a*f/c)
                 if self.px > self.cible.px: self.px+=d
@@ -141,7 +144,7 @@ class Mis:
             self.py+=self.cible.py-self.py
         if self.rect==None: cond=pygame.Rect(self.px,self.py,self.tx,self.ty).colliderect(pygame.Rect(self.cible.px,self.cible.py,self.cible.tx,self.cible.ty))
         else: cond=self.rect.colliderect(pygame.Rect(self.cible.px,self.cible.py,self.cible.tx,self.cible.ty))
-        if cond:
+        if cond and not self.inut:
             self.inut=True
             self.cible.vie-=self.pos.att
             if self.tp==3:
@@ -302,22 +305,24 @@ class Carte:
                 if c.tpcarte == 1 and not "empoisoné" in c.etat:
                     c.etat.append("empoisoné")
     def dcibl(self):
-        if self.camp==1: cc=carts2
-        else: cc=carts1
-        if cc!=[]:
-            lpp=cc[0]
-            for c in cc:
-                if abs(self.px-c.px) <= abs(self.px-lpp.px) and abs(self.py-c.py) <= abs(self.py-lpp.py): lpp=c
-            self.cible=lpp
+ #       if self.camp==1: cc=carts2
+#        else: cc=carts1
+        cc=carts1+carts2
+        lpp=None
+        for c in cc:
+            if lpp==None or ( c!=lpp and math.sqrt((self.px-c.px)*(self.px-c.px)+(self.py-c.py)*(self.py-c.py)) < math.sqrt((self.px-lpp.px)*(self.px-lpp.px)+(self.py-lpp.py)*(self.py-lpp.py)) ):
+                if self.camp!=c.camp : lpp=c
+        if lpp != None : self.cible=lpp
     def bouger(self):
-        if self.cible==None or self.cible.vie<=0 or self.cible.camp==self.camp: self.dcibl()
+        if True or self.cible==None or self.cible.camp==self.camp: self.dcibl()
         if time.time()-self.dbg>=self.tbg:
           self.dbg=time.time()
-          if math.sqrt((self.cible.px-self.px)*(self.cible.px-self.px)+(self.cible.py-self.py)*(self.cible.py-self.py)) > self.portee and self.vit!=0:
+          if self.vit!=0 and math.sqrt((self.cible.px-self.px)*(self.cible.px-self.px)+(self.cible.py-self.py)*(self.cible.py-self.py)) > self.portee:
             a=-abs(self.cible.px-self.px)
             b=-abs(self.cible.py-self.py)
             c,f=int(math.sqrt(a*a+b*b)),self.vit
-            if f<c and f > 1.05: #self.px,self.py=self.px+int(a*f/c),self.py+int(b*f/c)
+            #self.px,self.py=self.px+int(a*f/c),self.py+int(b*f/c)
+            if f<c and f > 1.05:
                 e=int(b*f/c)
                 d=int(a*f/c)
                 if self.px > self.cible.px: self.px+=d
@@ -364,35 +369,38 @@ class Carte:
 
 pause=False
 
-def botpc(j,aa):
-    j.cartselec=random.randint(0,3)
+def botpc(j):
     jcs=j.cartactu[j.cartselec]
     if j.elixir>celi[jcs]:
         if j.camp==2:
             if ctpc[jcs]!=3:
-                if aa: xx,yy=650/1200*tex,400/1000*tey
-                else: xx,yy=150/1200*tex,400/1000*tey
+                xx,yy=random.randint(0,tex-int(200/1200*tex)),random.randint(0,int(tey/2))
             else:
                 if carts1!=[]:
                     cc=random.choice(carts1)
                     xx,yy=cc.px,cc.py
-            for x in range(cnbp[jcs]): carts2.append(Carte(xx,yy,jcs,2))
+            for x in range(cnbp[jcs]):
+                if ctpc[jcs]!=3: carts2.append(Carte(xx,yy,jcs,j.camp))
+                else: sorts.append( [Carte(xx-30,yy-30,jcs,j.camp),30] )
             j.elixir-=celi[jcs]
+            j.cartselec=random.randint(0,3)
             del(j.cartactu[j.cartselec])
         else:
-            if cptc[jcs]!=3:
-                if aa: xx,yy=650/1200*tex,600/1000*tey
-                else: xx,yy=150/1200*tex,600/1000*tey
+            if ctpc[jcs]!=3:
+                xx,yy=random.randint(0,tex-int(200/1200*tex)),random.randint(int(tey/2),tey)
             else:
-                if carts1!=[]:
+                if carts2!=[]:
                     cc=random.choice(carts2)
                     xx,yy=cc.px,cc.py
-            carts1.append(Carte(xx,yy,jcs,1))
+            for x in range(cnbp[jcs]):
+                if ctpc[jcs]!=3: carts1.append(Carte(xx,yy,jcs,j.camp))
+                else: sorts.append( [Carte(xx-30,yy-30,jcs,j.camp),30] )
             j.elixir-=celi[jcs]
-            del(jcs)
+            j.cartselec=random.randint(0,3)
+            del(j.cartactu[j.cartselec])
 
 def bot(j):
-    botpc(j,random.randint(0,1))
+    botpc(j)
         
             
 
@@ -559,6 +567,7 @@ while encour:
     aff()
     bb()
     bot(j2)
+    if modj: bot(j1)
     for event in pygame.event.get():
         if event.type==QUIT:
             encour=False
@@ -592,6 +601,7 @@ while encour:
         elif event.type==KEYDOWN:
             if event.key==K_q:
                 encour=False
+            elif event.key==K_SPACE: modj=not modj
     j1.nbtr=countr(carts1)
     j2.nbtr=countr(carts2)
     if j1.nbtr == 0 or carts1==[]:

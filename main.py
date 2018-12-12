@@ -39,7 +39,7 @@ craret=[(0,0,140),(150,105,25),(150,0,150),(20,150,20),(250,250,0)]
 if not "stats.nath" in os.listdir("./"):
     txt=""
     import textbox
-    txt+=textbox.main()+"##1000#0#0|0|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1#0"
+    txt+=textbox.main()+"##1000#0#0|0|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1#0"
     f=open("stats.nath","w")
     f.write(txt)
     f.close()
@@ -99,6 +99,7 @@ def save():
 def aff():
     fenetre.fill((50,20,100))
     bplay=pygame.Rect(0,0,0,0)
+    bale=pygame.Rect(0,0,0,0)
     if smenu!=1:  imgm1="images/m1.png"
     else       :  imgm1="images/m1sel.png"
     if smenu!=2:  imgm2="images/m2.png"
@@ -189,6 +190,8 @@ def aff():
         if len(j.deck)==8: cl=(0,200,0)
         else: cl=(200,0,0)
         fenetre.blit(pygame.font.SysFont("Sans",40).render(str(len(j.deck))+"/ 8",20,cl),[tex-150,150])
+        bale=pygame.Rect(int(tex-90/1200*tex),int(125/1000*tey),int(65/1200*tex),int(45/1000*tey))
+        fenetre.blit(pygame.transform.scale(pygame.image.load("images/bale.png"),[int(65/1200*tex),int(45/1000*tey)]),[int(tex-90/1200*tex),int(125/1000*tey)])
     elif smenu==3:
         xx,yy=50,100
         tx,ty=150,150
@@ -203,7 +206,7 @@ def aff():
                 xx=50
                 yy+=ty+50
     pygame.display.update()
-    return bplay,bm1,bm2,bm3,rcs,rcf,rcd
+    return bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale
 
 def get_card(rar,aren):
     ll=[]
@@ -320,7 +323,16 @@ def coffre(c,aren):
     time.sleep(0.5)
     ac()
     time.sleep(0.5)
-    
+
+def deckale(j):
+    deck=[]
+    while len(deck)<8:
+        a=random.choice(ctpp)
+        if a!=0 and a!=1 and j.cartpos[a]>0:
+            deck.append(a)
+            deck=list(set(deck))
+    return deck
+
 ##################################################
 
 fenetre=pygame.display.set_mode([tex,tey])
@@ -333,7 +345,7 @@ tdc=0.5
 
 encour=True
 while encour:
-    bplay,bm1,bm2,bm3,rcs,rcf,rcd=aff()
+    bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale=aff()
     for event in pygame.event.get():
         if event.type==QUIT: encour=False
         elif event.type==KEYDOWN:
@@ -359,6 +371,7 @@ while encour:
             elif rpos.colliderect(bm1): smenu=1
             elif rpos.colliderect(bm2): smenu=2
             elif rpos.colliderect(bm3): smenu=3
+            elif rpos.colliderect(bale): j.deck=deckale(j)
             for c in rcs:
                 if rpos.colliderect(c):
                     if cselec!=rcs.index(c): cselec=rcs.index(c)
