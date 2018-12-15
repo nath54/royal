@@ -13,9 +13,11 @@ maxelixir=10
 miss=[]
 sorts=[]
 cltxt=(215,215,215)
-
+temps=300
+dtps=time.time()
 j1ga=False
 j2ga=False
+jegal=False
 modj=False
 
 pygame.init()
@@ -224,7 +226,7 @@ class Carte:
             if cible.tpcarte==2 and self.tipeatt==7: cible.vie-=self.att
             if self.tipeatt==2 and self.cible.vie<=0:
                 carts1.append( Carte(self.px-self.tx,self.py-self.ty/2,self.tp,self.camp) )
-            if self.tipeatt==4 and cible.tp==26 and not "pondu" in self.etat and len(carts1)+len(carts2)<=100:
+            if self.tipeatt==4 and cible.tp!=26 and not "pondu" in self.etat and len(carts1)+len(carts2)<=100:
                 self.etat.append("pondu")
                 if self.camp==1:
                     carts1.append( Carte(self.px-self.tx,self.py,self.tp,self.camp) )
@@ -279,6 +281,7 @@ class Carte:
                                 c.etat.append("cloné")
                                 if self.camp==1: carts1.append(Carte(c.px+c.tx,c.py,c.tp,1))
                                 else           : carts2.append(Carte(c.px+c.tx,c.py,c.tp,2))
+            #tipeatt
             if self.tipeatt==6:
                 if self.camp==1: cc=carts1
                 else: cc=carts2
@@ -305,16 +308,25 @@ class Carte:
                 if c.tpcarte == 1 and not "empoisoné" in c.etat:
                     c.etat.append("empoisoné")
     def dcibl(self):
- #       if self.camp==1: cc=carts2
-#        else: cc=carts1
-        cc=carts1+carts2
         lpp=None
-        for c in cc:
-            if lpp==None or ( c!=lpp and math.sqrt((self.px-c.px)*(self.px-c.px)+(self.py-c.py)*(self.py-c.py)) < math.sqrt((self.px-lpp.px)*(self.px-lpp.px)+(self.py-lpp.py)*(self.py-lpp.py)) ):
-                if self.camp!=c.camp : lpp=c
+        if self.tp==29:
+            if self.camp==1: cc=carts1
+            else: cc=carts2
+            dc=[]
+            for c in cc:
+                if c.tpcarte==2 and c.vie<c.vie_tot: dc.append(c)
+            for c in dc:
+                if lpp==None or ( c!=lpp and math.sqrt((self.px-c.px)*(self.px-c.px)+(self.py-c.py)*(self.py-c.py)) < math.sqrt((self.px-lpp.px)*(self.px-lpp.px)+(self.py-lpp.py)*(self.py-lpp.py)) ):
+                    lpp=c
+        if self.tp != 29 or lpp==None:
+            cc=carts1+carts2
+            for c in cc:
+                if lpp==None or ( c!=lpp and math.sqrt((self.px-c.px)*(self.px-c.px)+(self.py-c.py)*(self.py-c.py)) < math.sqrt((self.px-lpp.px)*(self.px-lpp.px)+(self.py-lpp.py)*(self.py-lpp.py)) ):
+                    if self.camp!=c.camp : lpp=c
         if lpp != None : self.cible=lpp
+        
     def bouger(self):
-        if True or self.cible==None or self.cible.camp==self.camp: self.dcibl()
+        if True or self.cible==None: self.dcibl()
         if time.time()-self.dbg>=self.tbg:
           self.dbg=time.time()
           if self.vit!=0 and math.sqrt((self.cible.px-self.px)*(self.cible.px-self.px)+(self.cible.py-self.py)*(self.cible.py-self.py)) > self.portee:
@@ -417,6 +429,9 @@ def aff():
         fenetre.blit(imgsol2,[is1x,is2y])
         fenetre.blit(imgpon1,[ip1x,ip1y])
         fenetre.blit(imgpon1,[ip2x,ip2y])
+        fenetre.blit(font.render(j1.nom+" : "+str(3-j2.nbtour),20,(0,0,250)),[20,20])
+        fenetre.blit(font.render(j2.nom+" : "+str(3-j1.nbtour),20,(250,0,0)),[220,20])
+        fenetre.blit(font.render(str(temps)+" sec restantes",20,(250,0,250)),[420,20])
         pygame.draw.rect(fenetre,(0,0,0),(int(800/1200*tex),0,int(400/1200*tex),tey),0)
         for c in carts1+carts2:
             if c.camp==1: pygame.draw.circle(fenetre,(0,0,150),(int(c.px+c.tx/2),int(c.py+c.ty/1.5)),int(c.tx/2),1)
@@ -462,11 +477,14 @@ def cm():
     carts2.append( Carte(350/1200*tex,100/1000*tey,1,2) )
 
 def bb():
-    global if1x,if2x
+    global if1x,if2x,dtps,temps
     if1x+=1
     if2x+=1
     if if1x >= 800/1200*tex: if1x=-800/1200*tex
     if if2x >= 800/1200*tex: if2x=-800/1200*tex
+    if time.time()-dtps >= 1:
+        temps-=1
+        dtps=time.time()
     bs=2
     for ss in sorts:
         s=ss[0]
@@ -604,14 +622,21 @@ while encour:
             elif event.key==K_SPACE: modj=not modj
     j1.nbtr=countr(carts1)
     j2.nbtr=countr(carts2)
+    atp=0.8
     if j1.nbtr == 0 or carts1==[]:
         encour=False
         j2ga=True
-        time.sleep(0.5)
+        time.sleep(atp)
     if j2.nbtr == 0 or carts2==[]:
         encour=False
         j1ga=True
-        time.sleep(0.5)
+        time.sleep(atp)
+    if temps <= 0:
+        if j1.nbtour>j2.nbtour: j1ga=True
+        elif j1.nbtour<j2.nbtour: j2ga=True
+        else: jegal=True
+        encour=False
+        time.sleep(atp)
 
 def save(j):
     ff=open("stats.nath","w")
@@ -636,7 +661,13 @@ fenetre.fill((0,0,0))
 img="images/perdu.png"
 encour2=False
 arg,tro=0,0
-if carts2==[] or j1ga:
+if jegal or countr(carts1)==countr(carts2):
+    img="images/egal.png"
+    encour2=True
+    arg=random.randint(10,30)
+    tro=0
+    j1.argent+=arg
+if carts2==[] or j1ga or j1.nbtour>j2.nbtour:
     img="images/gagné.png"
     encour2=True
     arg=random.randint(20,60)
@@ -644,7 +675,7 @@ if carts2==[] or j1ga:
     j1.argent+=arg
     j1.trophes+=tro
     fenetre.blit(font.render("vous avez gagné "+str(tro)+" trophés",20,(10,10,10)),[tex/1.5,tey/1.2])
-elif carts1==[] or j2ga:
+if carts1==[] or j2ga or j1.nbtour<j2.nbtour:
     img="images/perdu.png"
     encour2=True
     arg=random.randint(0,10)
