@@ -258,7 +258,7 @@ class Carte:
             if  self.tpatt == 1:
                 lpp=tchs[0]
                 for c in tchs:
-                    if lpp.px-self.px < c.px-self.px and lpp.py-self.py < c.py-self.py and c.endroit in self.att_endroit: lpp=c
+                    if math.sqrt((self.px-c.px)*(self.px-c.px)+(self.py-c.py)*(self.py-c.py)) < math.sqrt((self.px-lpp.px)*(self.px-lpp.px)+(self.py-lpp.py)*(self.py-lpp.py)) and c.endroit in self.att_endroit: lpp=c
                 self.atta(lpp)
                 affattack(self,lpp)
                 if self.tp==13:
@@ -509,7 +509,14 @@ def bb():
         if not "gelé" in c1.etat:
             c1.bouger()
         if "empoisoné" in c1.etat: c1.vie-=1
-        if c1.vie<=0: del(carts1[carts1.index(c1)])
+        if c1.vie<=0:
+            if c1.tp==41:
+                porte=125
+                fenetre.blit(pygame.transform.scale(pygame.image.load("images/explose.png"),[int(2*porte/1200*tex),int(2*porte/1000*tey)]),[int(c1.px-porte/2),int(c1.py-porte/2)])
+                pygame.display.update()
+                for c in carts2:
+                    if math.sqrt((c1.px-c.px)*(c1.px-c.px)+(c1.py-c.py)*(c1.py-c.py)) < porte: c.vie-=c1.att
+            del(carts1[carts1.index(c1)])
         if c1.px>800/1200*tex:c1.px=800/1200*tex-c1.tx-1
         if c1.px<0  :c1.px=1
         if c1.py>tex:c1.py=tey-c1.ty-1
@@ -520,7 +527,14 @@ def bb():
         if not "gelé" in c2.etat:
             c2.bouger()
         if "empoisoné" in c2.etat: c2.vie-=1
-        if c2.vie<=0: del(carts2[carts2.index(c2)])
+        if c2.vie<=0:
+            if c2.tp==41:
+                porte=125
+                fenetre.blit(pygame.transform.scale(pygame.image.load("images/explose.png"),[int(2*porte/1200*tex),int(2*porte/1000*tey)]),[int(c1.px-porte/2),int(c1.py-porte/2)])
+                pygame.display.update()
+                for c in carts1:
+                    if math.sqrt((c2.px-c.px)*(c2.px-c.px)+(c2.py-c.py)*(c2.py-c.py)) < porte: c.vie-=c2.att
+            del(carts2[carts2.index(c2)])
         if c2.px>800/1200*tex:c2.px=800/1200*tex-c2.tx-1
         if c2.px<0  :c2.px=1
         if c2.py>tex:c2.py=tey-c2.ty-1
