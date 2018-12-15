@@ -234,6 +234,7 @@ class Carte:
                     carts2.append( Carte(self.px-self.tx,self.py,self.tp,self.camp) )
             if self.tipeatt==5:
                 self.vie+=self.att
+                if "empoisoné" in self.etat: del(self.etat[self.etat.index("empoisoné")])
                 if self.vie>=self.vie_tot:
                     cible.vie-=self.vie_tot-self.vie
                     self.vie=self.vie_tot
@@ -291,6 +292,7 @@ class Carte:
                 for c in tchs:
                     if c.vie < c.vie_tot:
                         c.vie+=self.att
+                        if "empoisoné" in c.etat: del(c.etat[c.etat.index("empoisoné")])
                         if c.vie > c.vie_tot: c.vie=c.vie_tot
             if self.tipeatt==7:
                 if self.camp==1: cc=carts1
@@ -382,6 +384,8 @@ class Carte:
 pause=False
 
 def botpc(j):
+    if j.cartselec!=0 and j.cartselec!=1 and j.cartselec!=2 and j.cartselec!=3:
+        j.cartselec=random.randint(0,3)
     jcs=j.cartactu[j.cartselec]
     if j.elixir>celi[jcs]:
         if j.camp==2:
@@ -437,7 +441,7 @@ def aff():
             if c.camp==1: pygame.draw.circle(fenetre,(0,0,150),(int(c.px+c.tx/2),int(c.py+c.ty/1.5)),int(c.tx/2),1)
             else        : pygame.draw.circle(fenetre,(150,0,0),(int(c.px+c.tx/2),int(c.py+c.ty/1.5)),int(c.tx/2),1)
             c.recte=fenetre.blit(c.img,[c.px,c.py])
-            if c.vie<c.vie_tot and c.vie_tot>0:
+            if c.vie<c.vie_tot and c.vie_tot>0 and c.vie >= 0:
                 pygame.draw.rect(fenetre,(250,0,0),(c.px,c.py-10,int(c.vie/c.vie_tot*c.tx),5),0)
                 pygame.draw.rect(fenetre,(50,0,0),(c.px,c.py-10,c.tx,5),1)
                 if c.tp==0 or c.tp==1 : fenetre.blit(fon.render(str(c.vie)+" / "+str(c.vie_tot),20,cltxt),[c.px,c.py-20])
