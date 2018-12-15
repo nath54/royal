@@ -498,6 +498,12 @@ def bb():
                         c.vie-=s.att
                         if s.tipeatt==8 and c.tpcarte==1:c.etat.append("empoisoné")
                         elif s.tipeatt==9 and c.tpcarte==1: c.etat.append("gelé")
+            else:
+                for c in carts1:
+                    if dtouch(s,c):
+                        c.vie-=s.att
+                        if s.tipeatt==8 and c.tpcarte==1:c.etat.append("empoisoné")
+                        elif s.tipeatt==9 and c.tpcarte==1: c.etat.append("gelé")
             del(sorts[sorts.index(ss)])
     for c1 in carts1:
         if not "gelé" in c1.etat:
