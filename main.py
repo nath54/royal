@@ -212,8 +212,8 @@ def aff():
                     ttx+=t
                     w+=1
                 fenetre.blit(font.render(str(ttx),20,(50,50,50)),[xi+5,yty])
-        pygame.draw.rect(fenetre,(100,50,25),(0,(100/1000*tey),tex,200),0)
-        pygame.draw.rect(fenetre,(150,150,5),(20,(120/1000*tey),tex-40,160),5)
+        pygame.draw.rect(fenetre,(100,50,25),(0,(130/1000*tey),tex,200),0)
+        pygame.draw.rect(fenetre,(150,150,5),(20,(150/1000*tey),tex-40,160),5)
         xx,yy,tx,ty=50,120,int(60/1200*tex),int(85/1000*tey)
         for ca in j.deck:
             rcd.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/fc.png"),[tx+30,ty+30]),[xx-15,yy]) )
@@ -222,8 +222,8 @@ def aff():
         if len(j.deck)==8: cl=(0,200,0)
         else: cl=(200,0,0)
         fenetre.blit(pygame.font.SysFont("Sans",40).render(str(len(j.deck))+"/ 8",20,cl),[tex-150,150])
-        bale=pygame.Rect(int(tex-90/1200*tex),int(125/1000*tey),int(65/1200*tex),int(45/1000*tey))
-        fenetre.blit(pygame.transform.scale(pygame.image.load("images/bale.png"),[int(65/1200*tex),int(45/1000*tey)]),[int(tex-90/1200*tex),int(125/1000*tey)])
+        bale=pygame.Rect(int(tex-90/1200*tex),int(150/1000*tey),int(65/1200*tex),int(45/1000*tey))
+        fenetre.blit(pygame.transform.scale(pygame.image.load("images/bale.png"),[int(65/1200*tex),int(45/1000*tey)]),[int(tex-90/1200*tex),int(150/1000*tey)])
     elif smenu==3:
         xx,yy=50,100
         tx,ty=150,150
@@ -412,6 +412,8 @@ if version < dv and dv != 0.0:
 encour=True
 while encour:
     bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale=aff()
+    for cc in j.deck:
+        if j.cartpos[cc]==0: del(j.deck[j.deck.index(cc)])
     for event in pygame.event.get():
         if event.type==QUIT: encour=False
         elif event.type==KEYDOWN:
