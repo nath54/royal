@@ -135,10 +135,13 @@ def aff():
     else       :  imgm2="images/m2sel.png"
     if smenu!=3:  imgm3="images/m4.png"
     else       :  imgm3="images/m4sel.png"
-    bm1=fenetre.blit(pygame.transform.scale(pygame.image.load(imgm1),[int(tex/3),75]),[tex/3*0,0])
-    bm2=fenetre.blit(pygame.transform.scale(pygame.image.load(imgm2),[int(tex/3),75]),[tex/3*1,0])
-    bm3=fenetre.blit(pygame.transform.scale(pygame.image.load(imgm3),[int(tex/3),75]),[tex/3*2,0])
-    fenetre.blit(font.render(j.nom+" : "+str(j.argent)+" or  ,  "+str(j.trophes)+" trophés  ,  arene : "+str(j.arene),20,(150,145,15)),[50,tey-20])
+    bm1=fenetre.blit(pygame.transform.scale(pygame.image.load(imgm1),[int(tex/3),int(75/1000*tey)]),[tex/3*0,0])
+    bm2=fenetre.blit(pygame.transform.scale(pygame.image.load(imgm2),[int(tex/3),int(75/1000*tey)]),[tex/3*1,0])
+    bm3=fenetre.blit(pygame.transform.scale(pygame.image.load(imgm3),[int(tex/3),int(75/1000*tey)]),[tex/3*2,0])
+    fenetre.blit(font.render(j.nom+" : "+str(j.argent)+" or  ,  "+str(j.trophes)+" trophés  ,  arene : "+str(j.arene),20,(150,145,15)),[50/1200*tex,85/1000*tey])
+    if version < dv: cl=(150,0,0)
+    else: cl=(0,150,0)
+    fenetre.blit(font.render("votre version : "+str(version)+" , derniere version : "+str(dv),20,cl),[int(tex-500/1200*tex),int(85/1000*tey)])
     rcs=[]
     rcf=[]
     rcd=[]
