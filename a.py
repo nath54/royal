@@ -373,6 +373,10 @@ class Carte:
                     else       : self.py-=vitt
                     self.recte=pygame.Rect(self.px,self.py,self.tx,self.ty)
                     az+=1
+                    if self.px>800/1200*tex:self.px=800/1200*tex-self.tx-1
+                    if self.px<0  :self.px=1
+                    if self.py>tex:self.py=tey-self.ty-1
+                    if self.py<0  :self.py=1
                     if az >= 50: break
         if self.px>800/1200*tex:self.px=800/1200*tex-self.tx-1
         if self.px<0  :self.px=1
@@ -580,11 +584,21 @@ def deb():
         pygame.display.update()
         tt=time.time()
 
-def countr(crts):
-    nb=0
-    for c in crts:
-        if c.tp==0 or c.tp==1: nb+=1
-    return nb
+#def countr(crts):
+#    nb=0
+#    for c in crts:
+#        if c.tp==0 or c.tp==1: nb+=1
+#    return nb
+
+def countr():
+    nbt1=0
+    nbt2=0
+    for c in carts1+carts2:
+        if c.tp==0 or c.tp==1:
+            if c.camp==1: nbt1+=1
+            else: nbt2+=1
+    return nbt1,nbt2
+        
 
 def vcp(x,y,tx,ty):
     re=pygame.Rect(x,y,tx,ty)
@@ -606,6 +620,7 @@ while encour:
     if carts2==[] or carts1==[]:
         encour=False
         encour2=True
+    j1.nbtr,j2.nbtr=countr()
     aff()
     bb()
     bot(j2)
@@ -644,8 +659,7 @@ while encour:
             if event.key==K_q:
                 encour=False
             elif event.key==K_SPACE: modj=not modj
-    j1.nbtr=countr(carts1)
-    j2.nbtr=countr(carts2)
+            elif event.key==K_p: print(countr(),j1.nbtr,j2.nbtr)
     atp=0.8
     if j1.nbtr == 0 or carts1==[]:
         encour=False
@@ -685,13 +699,13 @@ fenetre.fill((0,0,0))
 img="images/perdu.png"
 encour2=False
 arg,tro=0,0
-if jegal or countr(carts1)==countr(carts2):
+if jegal or countr()[0]==countr()[1]:
     img="images/egal.png"
     encour2=True
     arg=random.randint(10,30)
     tro=0
     j1.argent+=arg
-if carts2==[] or j1ga or j1.nbtour>j2.nbtour:
+if carts2==[] or j1ga or j1.nbtour>j2.nbtour or countr()[0]>countr()[1]:
     img="images/gagné.png"
     encour2=True
     arg=random.randint(20,60)
@@ -699,7 +713,7 @@ if carts2==[] or j1ga or j1.nbtour>j2.nbtour:
     j1.argent+=arg
     j1.trophes+=tro
     fenetre.blit(font.render("vous avez gagné "+str(tro)+" trophés",20,(10,10,10)),[tex/1.5,tey/1.2])
-if carts1==[] or j2ga or j1.nbtour<j2.nbtour:
+if carts1==[] or j2ga or j1.nbtour<j2.nbtour or countr()[0]<countr()[1]:
     img="images/perdu.png"
     encour2=True
     arg=random.randint(0,10)
