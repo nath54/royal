@@ -30,6 +30,7 @@ tex,tey=1000,750
 smenu=2
 cselec=None
 
+version=float(open("version","r").read())
 
 font=pygame.font.SysFont("Serif",20)
 
