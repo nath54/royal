@@ -318,12 +318,12 @@ class Carte:
             for c in cc:
                 if c.tpcarte==2 and c.vie<c.vie_tot: dc.append(c)
             for c in dc:
-                if lpp==None or ( c!=lpp and math.sqrt((self.px-c.px)*(self.px-c.px)+(self.py-c.py)*(self.py-c.py)) < math.sqrt((self.px-lpp.px)*(self.px-lpp.px)+(self.py-lpp.py)*(self.py-lpp.py)) ):
+                if lpp==None or ( c!=lpp and math.sqrt((self.px-c.px)*(self.px-c.px)+(self.py-c.py)*(self.py-c.py)) < math.sqrt((self.px-lpp.px)*(self.px-lpp.px)+(self.py-lpp.py)*(self.py-lpp.py)) and c.endroit in self.att_endroit ):
                     lpp=c
         if self.tp != 29 or lpp==None:
             cc=carts1+carts2
             for c in cc:
-                if lpp==None or ( c!=lpp and math.sqrt((self.px-c.px)*(self.px-c.px)+(self.py-c.py)*(self.py-c.py)) < math.sqrt((self.px-lpp.px)*(self.px-lpp.px)+(self.py-lpp.py)*(self.py-lpp.py)) ):
+                if lpp==None or ( c!=lpp and math.sqrt((self.px-c.px)*(self.px-c.px)+(self.py-c.py)*(self.py-c.py)) < math.sqrt((self.px-lpp.px)*(self.px-lpp.px)+(self.py-lpp.py)*(self.py-lpp.py)) and c.endroit in self.att_endroit ):
                     if self.camp!=c.camp : lpp=c
         if lpp != None : self.cible=lpp
         
