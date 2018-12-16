@@ -437,9 +437,7 @@ def aff():
         fenetre.blit(imgsol2,[is1x,is2y])
         fenetre.blit(imgpon1,[ip1x,ip1y])
         fenetre.blit(imgpon1,[ip2x,ip2y])
-        fenetre.blit(font.render(j1.nom+" : "+str(3-j2.nbtour),20,(0,0,250)),[20,20])
-        fenetre.blit(font.render(j2.nom+" : "+str(3-j1.nbtour),20,(250,0,0)),[220,20])
-        fenetre.blit(font.render(str(temps)+" sec restantes",20,(250,0,250)),[420,20])
+        
         pygame.draw.rect(fenetre,(0,0,0),(int(800/1200*tex),0,int(400/1200*tex),tey),0)
         for c in carts1+carts2:
             if c.camp==1: pygame.draw.circle(fenetre,(0,0,150),(int(c.px+c.tx/2),int(c.py+c.ty/1.5)),int(c.tx/2),1)
@@ -473,6 +471,10 @@ def aff():
         pygame.draw.rect(fenetre,(120,10,120),(1100/1200*tex,50/1000*tey,50/1200*tex,j1.elixir/maxelixir*750/1000*tey),0)
         pygame.draw.rect(fenetre,(250,250,250),(1100/1200*tex,50/1000*tey,50/1200*tex,750/1000*tey),5)
         fenetre.blit(font.render(str(j1.elixir)+"/"+str(maxelixir),20,(150,20,150)),[1100/1200*tex,800/1000*tey])
+        #statsgame
+        fenetre.blit(font.render(j1.nom+" : "+str(3-j2.nbtr),20,(0,0,250)),[20,20])
+        fenetre.blit(font.render(j2.nom+" : "+str(3-j1.nbtr),20,(250,0,0)),[220,20])
+        fenetre.blit(font.render(str(temps)+" sec restantes",20,(250,0,250)),[420,20])
     pygame.display.update()
 
 
