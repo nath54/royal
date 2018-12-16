@@ -17,6 +17,11 @@ def test():
         print("La librairie pygame va etre installée sur votre ordinateur...")
         os.system("pip install pygame")
         print("La librairie pygame devrait etre installée sur votre ordinateur.")
+    try: import requests
+    except:
+        print("La librairie requests va etre installée sur votre ordinateur...")
+        os.system("pip install requests")
+        print("La librairie requests devrait etre installée sur votre ordinateur.")
 
 test()
 
@@ -30,7 +35,23 @@ tex,tey=1000,750
 smenu=2
 cselec=None
 
+####text de version#####
+
 version=float(open("version","r").read())
+try:
+    url="https://raw.githubusercontent.com/nath54/royal/master/version"
+    import requests
+    req = requests.get(url)
+    txxt=""
+    for chunk in req.iter_content(1000):
+        txxt+=str(chunk)
+    #print(txxt)
+    dv=float(txxt[2:-3])
+except:
+    dv=0.0
+#print(dv)
+
+##############
 
 font=pygame.font.SysFont("Serif",20)
 
@@ -341,6 +362,37 @@ def deckale(j):
             deck=list(set(deck))
     return deck
 
+def alertbox(txt):
+    bx,by,btx,bty=int(tex/3),int(tey/3),int(400/1200*tex),int(350/1000*tey)
+    pygame.draw.rect(fenetre,(50,10,100),(bx,by,btx,bty),0)
+    pygame.draw.rect(fenetre,(10,10,10),(bx,by,btx,bty),5)
+    fenetre.blit(font.render(txt,20,(200,200,200)),[bx+15,by+15])
+    bb=pygame.draw.rect(fenetre,(125,125,10),(int(bx+btx/4*2),int(by+bty/5*3),int(btx/4),int(bty/5)),0)
+    pygame.draw.rect(fenetre,(125,125,120),(int(bx+btx/4*2),int(by+bty/5*3),int(btx/4),int(bty/5)),5)
+    fenetre.blit(font.render("ok",20,(200,200,200)),[int(5+bx+btx/4*2),int(5+by+bty/5*3)])
+    pygame.display.update()
+    boucle=True
+    while boucle:
+        for event in pygame.event.get():
+            if event.type==QUIT:
+                encour=False
+                boucle=False
+                break
+            elif event.type==KEYDOWN:
+                if event.key==K_q:
+                    encour=False
+                    boucle=False
+                    break
+            elif event.type==MOUSEBUTTONUP:
+                pos=pygame.mouse.get_pos()
+                rpos=pygame.Rect(pos[0],pos[1],0,0)
+                if rpos.colliderect(bb):
+                    boucle=False
+                    break
+            
+def maj():
+    url="https://raw.githubusercontent.com/nath54/royal"
+
 ##################################################
 
 fenetre=pygame.display.set_mode([tex,tey])
@@ -350,6 +402,9 @@ pygame.display.update()
 time.sleep(1)
 dc=time.time()
 tdc=0.5
+
+if version < dv and dv != 0.0:
+    alertbox("Une mise à jour est disponible")
 
 encour=True
 while encour:
