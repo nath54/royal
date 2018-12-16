@@ -722,6 +722,7 @@ if carts1==[] or j2ga or j1.nbtour<j2.nbtour or countr()[0]<countr()[1]:
     tro=random.randint(20,30)
     j1.argent+=arg
     j1.trophes-=tro
+    if j1.trophes < 0: j1.trophes=0
     fenetre.blit(font.render("vous avez perdu "+str(abs(tro))+" trophés",20,(10,10,10)),[tex/1.5,tey/1.2])
 
 
