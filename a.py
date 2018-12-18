@@ -64,8 +64,8 @@ j2=Joueur(2)
 
 if j1.arene==4: cltxt=(0,0,0)
 
-imgfond1=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_3.png") ,[int(800/1200*tex),tey] )
-imgfond2=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_3.png") ,[int(800/1200*tex),tey] )
+imgfond1=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_3.png") ,[int(805/1200*tex),tey] )
+imgfond2=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_3.png") ,[int(805/1200*tex),tey] )
 if1x,if1y,if2x,if2y=0,0,int(800/1200*tex),0
 imgsol1=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_1.png") ,[int(700/1200*tex),int(450/1000*tey)] )
 is1x,is1y=(50)/1200*tex,(50)/1000*tey
@@ -110,6 +110,8 @@ class Mis:
     def __init__(self,pos,cible,tp):
         self.tp=tp
         self.pos=pos
+        self.camp=self.pos.camp
+        self.tppos=self.pos.tp
         self.px=int(self.pos.px+self.pos.tx/2)
         self.py=int(self.pos.py+self.pos.ty/2)
         self.tx=mtxx[tp]
@@ -156,6 +158,10 @@ class Mis:
             elif self.tp==4:
                 self.cible.etat.append("gelé")
                 self.cible.etat=list(set(self.cible.etat))
+            elif self.tp==7 and self.tppos==42 and self.cible.tpcarte!=2:
+                if self.camp==1: dist=-55
+                else: dist=55
+                self.cible.py+=dist
 
 def tcs(p):
     for m in lms:
@@ -309,6 +315,8 @@ class Carte:
             if self.tipeatt==8 or self.tp==38:
                 if c.tpcarte == 1 and not "empoisoné" in c.etat:
                     c.etat.append("empoisoné")
+            if self.tipeatt==9:
+                self.vie=0
     def dcibl(self):
         lpp=None
         if self.tp==29:
