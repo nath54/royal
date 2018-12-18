@@ -619,7 +619,7 @@ def vcp(x,y,tx,ty):
 #######################################################
 
 fenetre=pygame.display.set_mode([tex,tey])
-pygame.display.set_caption("THE FUN FIGHTING")
+pygame.display.set_caption("THE CLASH OF FIGHTERS")
 
 deb()
 cm()
