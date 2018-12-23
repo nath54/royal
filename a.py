@@ -12,6 +12,8 @@ carts2=[]
 maxelixir=10
 miss=[]
 sorts=[]
+sorps=[]
+dtsp=time.time()
 cltxt=(215,215,215)
 temps=300
 dtps=time.time()
@@ -216,6 +218,7 @@ class Carte:
         self.att_endroit=caen[tp]
         self.tpcarte=ctpc[tp]
         self.apcarte=cact[tp]
+        self.crcrtdead=cccd[tp]
         self.dbg=time.time()
         self.tbg=0.03
         self.mtp=cims[tp]
@@ -229,6 +232,7 @@ class Carte:
             miss.append(Mis(self,cible,self.mtp))
         else:
             cible.vie-=self.att
+            #if "énervé" in self.etat: cible.vie-=self.att
             if cible.tpcarte==2 and self.tipeatt==7: cible.vie-=self.att
             if self.tipeatt==2 and self.cible.vie<=0:
                 carts1.append( Carte(self.px-self.tx,self.py-self.ty/2,self.tp,self.camp) )
@@ -240,12 +244,15 @@ class Carte:
                     carts2.append( Carte(self.px-self.tx,self.py,self.tp,self.camp) )
             if self.tipeatt==5:
                 self.vie+=self.att
+                if "énervé" in self.etat: self.vie+=self.att
                 if "empoisoné" in self.etat: del(self.etat[self.etat.index("empoisoné")])
                 if self.vie>=self.vie_tot:
                     cible.vie-=self.vie_tot-self.vie
                     self.vie=self.vie_tot
     def attack(self):
-        if time.time()-self.dnat > self.vitatt:
+        if "énervé" in self.etat: tap=self.vitatt/2
+        else: tap=self.vitatt
+        if time.time()-self.dnat > tap:
             self.dnat=time.time()
             if self.camp==1: cc=carts2
             else: cc=carts1
@@ -289,6 +296,7 @@ class Carte:
                                 if self.camp==1: carts1.append(Carte(c.px+c.tx,c.py,c.tp,1))
                                 else           : carts2.append(Carte(c.px+c.tx,c.py,c.tp,2))
             #tipeatt
+            
             if self.tipeatt==6:
                 if self.camp==1: cc=carts1
                 else: cc=carts2
@@ -306,17 +314,15 @@ class Carte:
                 tchs=[]
                 for c in cc:
                     if dtouch(self,c):
-                        if c.tpcarte == 2:
-                            tchs.append(c)
+                        if c.tpcarte == 2: tchs.append(c)
                 for c in tchs:
                     if c.vie < c.vie_tot:
                         c.vie+=self.att
                         if c.vie > c.vie_tot: c.vie=c.vie_tot
             if self.tipeatt==8 or self.tp==38:
-                if c.tpcarte == 1 and not "empoisoné" in c.etat:
-                    c.etat.append("empoisoné")
-            if self.tipeatt==9:
-                self.vie=0
+                if c.tpcarte == 1 and not "empoisoné" in c.etat: c.etat.append("empoisoné")
+            if self.tipeatt==9:  self.vie=0
+            if self.tipeatt==10: self.vie=0
     def dcibl(self):
         lpp=None
         if self.tp==29:
@@ -334,15 +340,16 @@ class Carte:
                 if lpp==None or ( c!=lpp and math.sqrt((self.px-c.px)*(self.px-c.px)+(self.py-c.py)*(self.py-c.py)) < math.sqrt((self.px-lpp.px)*(self.px-lpp.px)+(self.py-lpp.py)*(self.py-lpp.py)) and c.endroit in self.att_endroit ):
                     if self.camp!=c.camp : lpp=c
         if lpp != None : self.cible=lpp
-        
     def bouger(self):
         if True or self.cible==None: self.dcibl()
         if time.time()-self.dbg>=self.tbg:
           self.dbg=time.time()
           if self.vit!=0 and math.sqrt((self.cible.px-self.px)*(self.cible.px-self.px)+(self.cible.py-self.py)*(self.cible.py-self.py)) > self.portee:
+            if "énervé" in self.etat: vitt=self.vit*2
+            else: vitt=self.vit
             a=-abs(self.cible.px-self.px)
             b=-abs(self.cible.py-self.py)
-            c,f=int(math.sqrt(a*a+b*b)),self.vit
+            c,f=int(math.sqrt(a*a+b*b)),vitt
             #self.px,self.py=self.px+int(a*f/c),self.py+int(b*f/c)
             if f<c and f > 1.05:
                 e=int(b*f/c)
@@ -375,21 +382,78 @@ class Carte:
             while self.endroit == c.endroit and self.recte.colliderect(c.recte):
                 if self.tpcarte!=1: break
                 else:
-                    if self.aaa: self.px+=vitt
-                    else       : self.px-=vitt
-                    if self.bbb: self.py+=vitt
-                    else       : self.py-=vitt
+                    #if self.aaa: self.px+=1
+                    #else       : self.px-=1
+                    #if self.bbb: self.py+=1
+                    #else       : self.py-=1
+                    az=0
+                    while c.recte.collidepoint(self.px,self.py) and c.recte.collidepoint(self.px,self.py+self.ty): #côté gauche
+                        self.px+=self.vit
+                        if self.bbb: self.py-=1
+                        else: self.py+=1
+                        az+=1
+                        if az>=1000:break
+                    az=0
+                    while c.recte.collidepoint(self.px+self.tx,self.py) and c.recte.collidepoint(self.px+self.tx,self.py+self.ty): #côté droit
+                        self.px-=self.vit
+                        if self.bbb: self.py-=1
+                        else: self.py+=1
+                        az+=1
+                        if az>=1000:break
+                    az=0
+                    while c.recte.collidepoint(self.px,self.py) and c.recte.collidepoint(self.px+self.tx,self.py): #côté haut
+                        self.py+=self.vit
+                        if self.aaa: self.px-=1
+                        else: self.px+=1
+                        az+=1
+                        if az>=1000:break
+                    az=0
+                    while c.recte.collidepoint(self.px,self.py+self.ty) and c.recte.collidepoint(self.px+self.tx,self.py+self.ty): #côté bas
+                        self.py-=self.vit
+                        if self.aaa: self.px-=1
+                        else: self.px+=1
+                        az+=1
+                        if az>=1000:break
+                    az=0
+                    while (self.px==c.px and self.py==c.py) or self.recte.colliderect(c.recte):
+                        if self.aaa: self.px+=self.tx+1
+                        else: self.px-=self.tx+1
+                        if self.bbb: self.py+=self.ty+1
+                        else: self.py-=self.ty+1
+                        self.recte=pygame.Rect(self.px,self.py,self.tx,self.ty)
+                        az+=1
+                        if az>=1000:break
                     self.recte=pygame.Rect(self.px,self.py,self.tx,self.ty)
                     az+=1
                     if self.px>800/1200*tex:self.px=800/1200*tex-self.tx-1
                     if self.px<0  :self.px=1
                     if self.py>tex:self.py=tey-self.ty-1
                     if self.py<0  :self.py=1
-                    if az >= 50: break
+                    if az >= 1000: break
         if self.px>800/1200*tex:self.px=800/1200*tex-self.tx-1
         if self.px<0  :self.px=1
         if self.py>tex:self.py=tey-self.ty-1
         if self.py<0  :self.py=1
+        if self.tipeatt==11:
+            if self.camp==1: cc=carts1
+            else: cc=carts2
+            tchs=[]
+            for c in cc:
+                if dtouch(self,c) and c!=self: tchs.append(c)
+            for c in tchs:
+                if not "énervé" in c.etat: c.etat.append("énervé")
+        if self.tp==44:
+            tchs=[]
+            for c in carts1+carts2:    
+                if c.camp==self.camp and dtouch(self,c) and c.tpcarte==1:
+                    tchs.append(c)
+            for c in tchs:
+                if not "cloné" in c.etat:
+                    c.etat.append("cloné")
+                    cart=Carte(c.px,c.py,c.tp,self.camp)
+                    cart.etat.append("cloné")
+                    if self.camp==2: carts2.append( cart )
+                    else: carts1.append( cart )
         self.attack()
         
 
@@ -408,7 +472,8 @@ def botpc(j):
                     cc=random.choice(carts1)
                     xx,yy=cc.px,cc.py
             for x in range(cnbp[jcs]):
-                if ctpc[jcs]!=3: carts2.append(Carte(xx,yy,jcs,j.camp))
+                if ctpc[jcs]==4: sorps.append(Carte(xx,yy,jcs,j.camp))
+                elif ctpc[jcs]!=3: carts2.append(Carte(xx,yy,jcs,j.camp))
                 else: sorts.append( [Carte(xx-30,yy-30,jcs,j.camp),30] )
             j.elixir-=celi[jcs]
             j.cartselec=random.randint(0,3)
@@ -421,7 +486,8 @@ def botpc(j):
                     cc=random.choice(carts2)
                     xx,yy=cc.px,cc.py
             for x in range(cnbp[jcs]):
-                if ctpc[jcs]!=3: carts1.append(Carte(xx,yy,jcs,j.camp))
+                if ctpc[jcs]==4: sorps.append(Carte(xx,yy,jcs,j.camp))
+                elif ctpc[jcs]!=3: carts1.append(Carte(xx,yy,jcs,j.camp))
                 else: sorts.append( [Carte(xx-30,yy-30,jcs,j.camp),30] )
             j.elixir-=celi[jcs]
             j.cartselec=random.randint(0,3)
@@ -447,6 +513,16 @@ def aff():
         fenetre.blit(imgpon1,[ip2x,ip2y])
         
         pygame.draw.rect(fenetre,(0,0,0),(int(800/1200*tex),0,int(400/1200*tex),tey),0)
+        
+        for c in sorps:
+            if c.camp==1: cl=(0,0,250)
+            else: cl=(250,0,0)
+            pygame.draw.circle(fenetre,cl,(int(c.px+c.tx/2),int(c.py+s.ty/2)),int(c.tx/2),1)
+            fenetre.blit(c.img,[c.px,c.py])
+            if c.vie<c.vie_tot and c.vie_tot>0 and c.vie >= 0:
+                pygame.draw.rect(fenetre,(0,150,150),(c.px,c.py-10,int(c.vie/c.vie_tot*c.tx),5),0)
+                pygame.draw.rect(fenetre,(0,50,50),(c.px,c.py-10,c.tx,5),1)
+        
         for c in carts1+carts2:
             if c.camp==1: pygame.draw.circle(fenetre,(0,0,150),(int(c.px+c.tx/2),int(c.py+c.ty/1.5)),int(c.tx/2),1)
             else        : pygame.draw.circle(fenetre,(150,0,0),(int(c.px+c.tx/2),int(c.py+c.ty/1.5)),int(c.tx/2),1)
@@ -457,13 +533,15 @@ def aff():
                 if c.tp==0 or c.tp==1 : fenetre.blit(fon.render(str(c.vie)+" / "+str(c.vie_tot),20,cltxt),[c.px,c.py-20])
             if "gelé" in c.etat: fenetre.blit(pygame.transform.scale(pygame.image.load("images/glace.png"),[c.tx,c.ty]),[c.px,c.py])
             if "empoisoné" in c.etat: fenetre.blit(pygame.transform.scale(pygame.image.load("images/emp.png"),[c.tx,c.ty]),[c.px,c.py])
+            if "énervé" in c.etat: fenetre.blit(pygame.transform.scale(pygame.image.load("images/rage.png"),[c.tx,c.ty]),[c.px,c.py])
         for m in miss: m.rect=fenetre.blit(m.img,[m.px,m.py])
         for ss in sorts:
             s=ss[0]
             if s.camp==1: cl=(0,0,250)
             else: cl=(250,0,0)
-            pygame.draw.circle(fenetre,cl,(int(c.px+c.tx/2),int(c.ty)),int(c.tx/2),1)
+            pygame.draw.circle(fenetre,cl,(int(s.px+s.tx/2),int(s.py+s.ty/2)),int(s.tx/2),1)
             fenetre.blit(s.img,[s.px,s.py])
+        
         #interface
         ky=50
         dd=0
@@ -495,7 +573,7 @@ def cm():
     carts2.append( Carte(350/1200*tex,100/1000*tey,1,2) )
 
 def bb():
-    global if1x,if2x,dtps,temps
+    global if1x,if2x,dtps,temps,dtsp
     if1x+=1
     if2x+=1
     if if1x >= 800/1200*tex: if1x=-800/1200*tex
@@ -523,11 +601,20 @@ def bb():
                         if s.tipeatt==8 and c.tpcarte==1:c.etat.append("empoisoné")
                         elif s.tipeatt==9 and c.tpcarte==1: c.etat.append("gelé")
             del(sorts[sorts.index(ss)])
+    for sp in sorps:
+        if sp.vie <= 0:
+            del(sorps[sorps.index(sp)])
+        if time.time()-dtsp >= 1:
+            dtsp=time.time()
+            sp.vie-=1
+        sp.bouger()
     for c1 in carts1:
         if not "gelé" in c1.etat:
             c1.bouger()
         if "empoisoné" in c1.etat: c1.vie-=1
         if c1.vie<=0:
+            if c1.crcrtdead != None:
+                for x in range(c1.crcrtdead[0]): carts1.append( Carte(c1.px,c1.py,c1.crcrtdead[1],c1.camp) )
             if c1.tp==41:
                 porte=125
                 fenetre.blit(pygame.transform.scale(pygame.image.load("images/explose.png"),[int(2*porte/1200*tex),int(2*porte/1000*tey)]),[int(c1.px-porte/2),int(c1.py-porte/2)])
@@ -546,6 +633,8 @@ def bb():
             c2.bouger()
         if "empoisoné" in c2.etat: c2.vie-=1
         if c2.vie<=0:
+            if c2.crcrtdead != None:
+                for x in range(c2.crcrtdead[0]): carts2.append( Carte(c2.px,c2.py,c2.crcrtdead[1],c2.camp) )
             if c2.tp==41:
                 porte=125
                 fenetre.blit(pygame.transform.scale(pygame.image.load("images/explose.png"),[int(2*porte/1200*tex),int(2*porte/1000*tey)]),[int(c1.px-porte/2),int(c1.py-porte/2)])
@@ -653,6 +742,11 @@ while encour:
                             if ctpc[jcs]==3:
                                 sa=40
                                 sorts.append( [Carte(pos[0]-sa,pos[1]-sa,jcs,1),sa] )
+                                j1.elixir-=celi[jcs]
+                                del(j1.cartactu[j1.cartselec])
+                                j1.cartselec=None
+                            elif ctpc[jcs]==4:
+                                sorps.append( Carte(pos[0],pos[1],jcs,1) )
                                 j1.elixir-=celi[jcs]
                                 del(j1.cartactu[j1.cartselec])
                                 j1.cartselec=None

@@ -33,6 +33,7 @@ import subprocess
 pygame.init()
 tex,tey=1000,750
 smenu=2
+scrtm=0
 cselec=None
 
 ####text de version#####
@@ -47,8 +48,14 @@ try:
         txxt+=str(chunk)
     #print(txxt)
     dv=float(txxt[2:-3])
+    ff=open("dernier_version","w")
+    ff.write(str(dv))
+    ff.close()
 except:
-    dv=0.0
+    if not "dernier_version" in os.listdir():
+        dv=0.0
+    else:
+        dv=float(open("dernier_version","r").read())
 #print(dv)
 
 ##############
@@ -129,6 +136,8 @@ def aff():
     fenetre.fill((50,20,100))
     bplay=pygame.Rect(0,0,0,0)
     bale=pygame.Rect(0,0,0,0)
+    bf1=pygame.Rect(0,0,0,0)
+    bf2=pygame.Rect(0,0,0,0)
     if smenu!=1:  imgm1="images/m1.png"
     else       :  imgm1="images/m1sel.png"
     if smenu!=2:  imgm2="images/m2.png"
@@ -161,12 +170,18 @@ def aff():
             ars=atpp[j.arene+1]
             fenetre.blit(font.render("Arène suivante : "+str(atro[ars])+" , "+str(atro[ars]-j.trophes)+" trophés restants",20,(215,210,230)),[50/1200*tex,800/1000*tey])
     elif smenu==1:
+        if scrtm+44 > len(ctpp): ac=len(ctpp)
+        else:
+            ac=scrtm+44
+            bf2=fenetre.blit(pygame.transform.scale(pygame.image.load("images/flch.png"),[int(20/1200*tex),int(100/1000*tey)]),[tex-1-int(20/1200*tex),tey/2])
+        if scrtm>0: bf1=fenetre.blit(pygame.transform.flip(pygame.transform.scale(pygame.image.load("images/flch.png"),[int(20/1200*tex),int(100/1000*tey)]),1,0),[1,tey/2])
+        lscrt=range(scrtm,ac)
         for cc in j.deck:
             if j.cartpos[cc]==0: del(j.deck[j.deck.index(cc)])
         xx,yy=50,350
         tx,ty=int(60/1200*tex),int(85/1000*tey)
         xxx=None
-        for g in ctpp:
+        for g in lscrt:
             if g == cselec:
                 iii="images/fcs.png"
                 xxx=xx
@@ -184,8 +199,9 @@ def aff():
                 xx=50
                 yy+=ty+35
         if cselec!=None:
-                g=cselec
+                g=cselec+scrtm
                 txi,tyi=400,400
+                xi,yi=tex-txi,tey-tyi
                 if xxx != None:
                     if xxx <= tex/2:  xi,yi=tex-txi,tey-tyi
                     else: xi,yi=0,tey-tyi
@@ -238,7 +254,7 @@ def aff():
                 xx=50
                 yy+=ty+50
     pygame.display.update()
-    return bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale
+    return bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2
 
 def get_card(rar,aren):
     ll=[]
@@ -312,6 +328,7 @@ def coffre(c,aren):
     fenetre.fill((10,0,50))
     fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cfimg[c]),[int(cftxx[c]/1200*tex),int(cftyy[c]/1000*tey)]),[tex/4,tey/4])
     pygame.display.update()
+    njk=0
     for x in range(100):
             fenetre.fill((10,0,50))
             fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cfimg[c]),[int(cftxx[c]/1200*tex),int(cftyy[c]/1000*tey)]),[tex/4,tey/4])
@@ -319,9 +336,15 @@ def coffre(c,aren):
             fenetre.blit(pygame.transform.scale(font.render("or : "+str(ore),20,(150,150,20)),[x*2,int(x*2.5)]),[tex/3,tey/3])
             pygame.display.update()
             time.sleep(0.01)
-    ac()
-    time.sleep(0.5)
+            for event in pygame.event.get():
+                if event.type==MOUSEBUTTONUP: njk=1
+            if njk==1:
+                break
+    if njk!=1:
+        ac()
+        time.sleep(0.5)
     for cc in crts:
+        njk=0
         for x in range(100):
             fenetre.fill((10,0,50))
             fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cfimg[c]),[int(cftxx[c]/1200*tex),int(cftyy[c]/1000*tey)]),[tex/4,tey/4])
@@ -330,8 +353,15 @@ def coffre(c,aren):
             fenetre.blit(pygame.transform.scale(font.render(cnom[cc]+"  ("+str(nbcr[crts.index(cc)])+")",20,(200,200,200)),[x*2,int(x*1.001)]),[tex/3,tey/3.5])
             pygame.display.update()
             time.sleep(0.01)
-        ac()
-        time.sleep(0.5)
+            for event in pygame.event.get():
+                if event.type==MOUSEBUTTONUP:
+                    njk=1
+            if njk==1:
+                break
+        if njk!=1:
+            ac()
+            time.sleep(0.5)
+    time.sleep(0.6)
     fenetre.fill((10,0,50))
     fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cfimg[c]),[int(cftxx[c]/1200*tex),int(cftyy[c]/1000*tey)]),[tex/4,tey/4])
     xx,yy=int(50/1200*tex),int(50/1000*tey)
@@ -366,7 +396,7 @@ def deckale(j):
     return deck
 
 def alertbox(txt):
-    bx,by,btx,bty=int(tex/3),int(tey/3),int(400/1200*tex),int(350/1000*tey)
+    bx,by,btx,bty=int(tex/3),int(tey/3),int(500/1200*tex),int(350/1000*tey)
     pygame.draw.rect(fenetre,(50,10,100),(bx,by,btx,bty),0)
     pygame.draw.rect(fenetre,(10,10,10),(bx,by,btx,bty),5)
     fenetre.blit(font.render(txt,20,(200,200,200)),[bx+15,by+15])
@@ -394,12 +424,42 @@ def alertbox(txt):
                     break
             
 def maj():
-    url="https://raw.githubusercontent.com/nath54/royal"
+    #TODO
+    pass
+
+def vdate():
+    date=time.localtime()
+    if date.tm_mon==12 and date.tm_mday==25:
+        cond=True
+        nvf=False
+        if not "recompget.nath" in os.listdir():
+            cond=True
+            nvf=True
+        else:
+            ff=open("recompget.nath","r").read()
+            df=ff.split("#")
+            for dd in df:
+              if len(dd)>4:
+                d=dd.split("|") #0=jour,1=mois,2=année
+                if d[0]==str(date.tm_mday) and d[1]==str(date.tm_mon) and d[2]==str(date.tm_year):
+                    cond=False
+        if cond:
+            alertbox("Joyeux Noël !")
+            alertbox("Voici un petit cadeau : 10.000 or !")
+            j.argent+=10000
+            if nvf: txt=""
+            else: txt="#"
+            txt+=str(date.tm_mday)+"|"+str(date.tm_mon)+"|"+str(date.tm_year)
+            ff=open("recompget.nath","a")
+            ff.write(txt)
+            ff.close()
+            
+            
 
 ##################################################
 
 fenetre=pygame.display.set_mode([tex,tey])
-pygame.display.set_caption("ROYAL")
+pygame.display.set_caption("THE CLASH OF FIGHTERS")
 fenetre.blit(pygame.transform.scale(pygame.image.load("images/fmenu.png"),[tex,tey]),[0,0])
 pygame.display.update()
 time.sleep(1)
@@ -408,10 +468,12 @@ tdc=0.5
 
 if version < dv and dv != 0.0:
     alertbox("Une mise à jour est disponible")
+    
+vdate()
 
 encour=True
 while encour:
-    bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale=aff()
+    bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2=aff()
     for cc in j.deck:
         if j.cartpos[cc]==0: del(j.deck[j.deck.index(cc)])
     for event in pygame.event.get():
@@ -433,20 +495,21 @@ while encour:
                     ac()
                     j=load(j)
                 else:
-                    fenetre.blit(pygame.font.SysFont("Serif",40).render("Votre deck n'est pas composé de 8 cartes !!!",20,(200,0,0)),[250,250])
-                    time.sleep(0.5)
-                    pygame.display.update()
+                    alertbox("votre deck n'est pas composé de 8 cartes !")
             elif rpos.colliderect(bm1): smenu=1
             elif rpos.colliderect(bm2): smenu=2
             elif rpos.colliderect(bm3): smenu=3
+            elif rpos.colliderect(bf1): scrtm-=44
+            elif rpos.colliderect(bf2): scrtm+=44
             elif rpos.colliderect(bale): j.deck=deckale(j)
             for c in rcs:
                 if rpos.colliderect(c):
                     if cselec!=rcs.index(c): cselec=rcs.index(c)
                     else: cselec=None
                     if time.time()-dc < tdc:
-                        if len(j.deck) < 8 and j.cartpos[rcs.index(c)]>=1 and ctpp[rcs.index(c)]!=0 and ctpp[rcs.index(c)]!=1:
-                            j.deck.append(rcs.index(c))
+                        crtg=rcs.index(c)+scrtm
+                        if len(j.deck) < 8 and j.cartpos[crtg]>=1 and ctpp[crtg]!=0 and ctpp[crtg]!=1:
+                            j.deck.append(crtg)
                             j.deck=list(set(j.deck))
                     dc=time.time()
             for c in rcd:
