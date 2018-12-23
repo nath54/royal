@@ -517,7 +517,7 @@ def aff():
         for c in sorps:
             if c.camp==1: cl=(0,0,250)
             else: cl=(250,0,0)
-            pygame.draw.circle(fenetre,cl,(int(c.px+c.tx/2),int(c.py+s.ty/2)),int(c.tx/2),1)
+            pygame.draw.circle(fenetre,cl,(int(c.px+c.tx/2),int(c.py+c.ty/2)),int(c.tx/2),1)
             fenetre.blit(c.img,[c.px,c.py])
             if c.vie<c.vie_tot and c.vie_tot>0 and c.vie >= 0:
                 pygame.draw.rect(fenetre,(0,150,150),(c.px,c.py-10,int(c.vie/c.vie_tot*c.tx),5),0)
