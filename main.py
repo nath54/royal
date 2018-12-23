@@ -490,8 +490,8 @@ while encour:
                     for cc in j.deck:
                         if j.cartpos[cc] >= 1: j.cartpos[cc]-=1
                     save() 
-                    try: subprocess.call("python3 a.py")
-                    except: subprocess.call("python a.py", shell=True)
+                    try: os.system("python3 a.py")
+                    except: os.system("python a.py")
                     fenetre.blit(pygame.font.SysFont("Serif",50).render("si votre partie est finie, cliquez",0,(0,200,150)),[20,tey/2])
                     pygame.display.update()
                     ac()
