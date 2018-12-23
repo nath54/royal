@@ -11,11 +11,13 @@ def test():
     except:
         print("La librairie subprocess va etre installée sur votre ordinateur...")
         os.system("pip install subprocess")
+        os.system("pip3 install subprocess")
         print("La librairie subprocess devrait etre installée sur votre ordinateur.")
     try: import pygame
     except:
         print("La librairie pygame va etre installée sur votre ordinateur...")
         os.system("pip install pygame")
+        os.system("pip3 install pygame")
         print("La librairie pygame devrait etre installée sur votre ordinateur.")
     try: import requests
     except:
