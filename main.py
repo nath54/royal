@@ -71,7 +71,7 @@ if not "stats.nath" in os.listdir("./"):
     txt=""
     import textbox
     tc=""
-    for x in ctpp:
+    for x in ctpp+[0,0,0]:
         if x==0 or x==1: tc+="0"
         else: tc+="2"
         tc+="|"
@@ -487,11 +487,15 @@ while encour:
             rpos=pygame.Rect(pos[0],pos[1],1,1)
             if rpos.colliderect(bplay):
                 if len(j.deck)==8:
-                    for cc in j.deck:
-                        if j.cartpos[cc] >= 1: j.cartpos[cc]-=1
-                    save() 
-                    try: os.system("python3 a.py")
-                    except: os.system("python a.py")
+                    try:
+                        subprocess.call("python a.py")
+                    except:
+                        try:
+                            subprocess("python3 a.py")
+                        except:
+                            try:os.system("python a.py")
+                            except: os.system("python3 a.py")
+                        
                     fenetre.blit(pygame.font.SysFont("Serif",50).render("si votre partie est finie, cliquez",0,(0,200,150)),[20,tey/2])
                     pygame.display.update()
                     ac()

@@ -827,7 +827,8 @@ if carts1==[] or j2ga or j1.nbtour<j2.nbtour or countr()[0]<countr()[1]:
     if j1.trophes < 0: j1.trophes=0
     fenetre.blit(font.render("vous avez perdu "+str(abs(tro))+" trophés",20,(10,10,10)),[tex/1.5,tey/1.2])
 
-
+for cc in j1.deck:
+    if j1.cartpos[cc] >= 1: j1.cartpos[cc]-=1
 
 save(j1)
 
