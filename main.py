@@ -34,9 +34,12 @@ import subprocess
 
 pygame.init()
 tex,tey=1000,750
+teex,teey=1000,750
 smenu=2
 scrtm=0
 cselec=None
+sos=1
+modlp=1
 
 ####text de version#####
 
@@ -77,10 +80,14 @@ if not "stats.nath" in os.listdir("./"):
         tc+="|"
     tc=tc[:-1]
     print(tc)
-    txt+=textbox.main()+"##2000#0#"+tc+"#0"
+    txt+=textbox.main("pseudo",tex,tey)+"##2000#0#"+tc+"#0"
     f=open("stats.nath","w")
     f.write(txt)
     f.close()
+    txt="1000#750#1#1"
+    g=open("params.nath","w")
+    g.write(txt)
+    g.close()
 
 
 
@@ -111,13 +118,19 @@ def load(j):
     j.arene=1
     for ar in atpp:
         if j.trophes >= atro[ar]: j.arene=ar
-    return j
+    spr=open("params.nath","r").read().split("#")
+    tex=int(spr[0])
+    tey=int(spr[1])
+    teex=tex
+    teey=tey
+    sos=int(spr[2])
+    modlp=int(spr[3])
+    return j,tex,tey,teex,teey,sos,modlp
     
 j=Joueur()
-j=load(j)
+j,tex,tey,teex,teey,sos,modlp=load(j)
 
-def save():
-    ff=open("stats.nath","w")
+def save(j):
     t1=str(j.nom)
     t2=""
     for jj in j.deck:
@@ -131,6 +144,11 @@ def save():
         t5+=str(jj)+"|"
     t5=t5[:-1]
     txt=t1+"#"+t2+"#"+t3+"#"+t4+"#"+t5+"#"+t6+"#"
+    ff=open("stats.nath","w")
+    ff.write(txt)
+    ff.close()
+    txt=str(teex)+"#"+str(teey)+"#"+str(sos)+"#"+str(modlp)
+    ff=open("params.nath","w")
     ff.write(txt)
     ff.close()
 
@@ -140,6 +158,10 @@ def aff():
     bale=pygame.Rect(0,0,0,0)
     bf1=pygame.Rect(0,0,0,0)
     bf2=pygame.Rect(0,0,0,0)
+    bpr=pygame.Rect(0,0,0,0)
+    brac=pygame.Rect(0,0,0,0)
+    bchsos=pygame.Rect(0,0,0,0)
+    bchlp=pygame.Rect(0,0,0,0)
     if smenu!=1:  imgm1="images/m1.png"
     else       :  imgm1="images/m1sel.png"
     if smenu!=2:  imgm2="images/m2.png"
@@ -156,10 +178,11 @@ def aff():
     rcs=[]
     rcf=[]
     rcd=[]
+    lbpr=[]
     if smenu==2:
         bplay=fenetre.blit(pygame.transform.scale(pygame.image.load("images/bplay.png"),[int(200/1200*tex),int(150/1000*tey)]),[tex/2,tey/2,])
-        xxx,yyy=50,200
-        txx,tyy=300,400
+        xxx,yyy=int(50/1200*tex),int(200/1000*tey)
+        txx,tyy=int(300/1200*tex),int(400/1000*tey)
         fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[j.arene])+"_3.png"),[txx,tyy]),[xxx,yyy])
         fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[j.arene])+"_1.png"),[txx-10,int(tyy/2-10)]),[xxx+5,yyy+5])
         fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[j.arene])+"_1.png"),[txx-10,int(tyy/2-10)]),[xxx+5,yyy+tyy/2+5])
@@ -167,10 +190,11 @@ def aff():
         fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[j.arene])+"_2.png"),[int(70/1200*txx),int(100/1000*tyy)]),[xxx+txx-60,yyy+tyy/2-20])
         fenetre.blit(font.render(anom[j.arene],20,(150,150,150)),[xxx,yyy+tyy+50])
         if j.arene>=len(atpp)-1:
-            fenetre.blit(font.render("Vous etes à l'arène maximale",20,(215,210,230)),[50/1200*tex,800/1000*tey])
+            fenetre.blit(font.render("Vous etes à l'arène maximale",20,(215,210,230)),[50/1200*tex,750/1000*tey])
         else:
             ars=atpp[j.arene+1]
-            fenetre.blit(font.render("Arène suivante : "+str(atro[ars])+" , "+str(atro[ars]-j.trophes)+" trophés restants",20,(215,210,230)),[50/1200*tex,800/1000*tey])
+            fenetre.blit(font.render("Arène suivante : "+str(atro[ars])+" , "+str(atro[ars]-j.trophes)+" trophés restants",20,(215,210,230)),[50/1200*tex,750/1000*tey])
+        bpr=fenetre.blit(pygame.transform.scale(pygame.image.load("images/para.png"),[int(100/1200*tex),int(100/1000*tey)]),[tex-int(150/1200*tex),int(150/1000*tey)])
     elif smenu==1:
         if scrtm+44 > len(ctpp): ac=len(ctpp)
         else:
@@ -255,8 +279,30 @@ def aff():
             if xx >= tex-tx+1:
                 xx=50
                 yy+=ty+50
+    elif smenu==4:
+        fenetre.blit(font.render("résolution de l'écran : ",0,(250,250,250)),[250,120])
+        lbpr.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/fl.png"),[int(40/1200*tex),int(30/1000*tey)]),[int(355/1200*tex),int(250/1000*tey)])                             )
+        lbpr.append( fenetre.blit(pygame.transform.flip(pygame.transform.scale(pygame.image.load("images/fl.png"),[int(40/1200*tex),int(30/1000*tey)]),1,0),[int(80/1200*tex),int(250/1000*tey)])   )
+        lbpr.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/fl.png"),[int(40/1200*tex),int(30/1000*tey)]),[int(755/1200*tex),int(250/1000*tey)])                             )
+        lbpr.append( fenetre.blit(pygame.transform.flip(pygame.transform.scale(pygame.image.load("images/fl.png"),[int(40/1200*tex),int(30/1000*tey)]),1,0),[int(480/1200*tex),int(250/1000*tey)])  )
+        lbpr.append( pygame.draw.rect(fenetre,(0,0,0),(int(140/1200*tex),int(240/1000*tey),int(200/1200*tex),int(50/1000*tey)),5)                                                                   )
+        lbpr.append( pygame.draw.rect(fenetre,(0,0,0),(int(540/1200*tex),int(240/1000*tey),int(200/1200*tex),int(50/1000*tey)),5)                                                                   )
+        lbpr.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/apl.png"),[int(150/1200*tex),int(100/1000*tey)]),[tex/2,tey-int(170/1000*tey)])                                  )
+        fenetre.blit(font.render(str(teex),0,(250,250,250)),[int(150/1200*tex),int(250/1000*tey)])
+        fenetre.blit(font.render(str(teey),0,(250,250,250)),[int(550/1200*tex),int(250/1000*tey)])
+        brac=fenetre.blit( pygame.transform.scale(pygame.image.load("images/brac.png"),[int(200/1200*tex),int(100/1000*tey)]) , [int(100/1200*tex),int(600/1000*tey)] )
+        if sos==1: fenetre.blit(font.render("systeme d'exploitation : windows",20,(200,200,200)),[int(500/1200*tex),int(400/1000*tey)])
+        else: fenetre.blit(font.render("systeme d'exploitation : linux",20,(200,200,200)),[int(500/1200*tex),int(400/1000*tey)])
+        bchsos=pygame.draw.rect(fenetre,(0,100,150),(int(850/1200*tex),int(370/1000*tey),int(150/1200*tex),int(70/1000*tey)),0)
+        pygame.draw.rect(fenetre,(0,0,0),(int(850/1200*tex),int(370/1000*tey),int(150/1200*tex),int(70/1000*tey)),5)
+        fenetre.blit(font.render("changer",20,(140,160,160)),[int(880/1200*tex),int(400/1000*tey)])
+        if modlp==1: fenetre.blit(font.render("commande pour lancer : python3",20,(200,200,200)),[int(500/1200*tex),int(550/1000*tey)])
+        else: fenetre.blit(font.render("commande pour lancer : python",20,(200,200,200)),[int(500/1200*tex),int(550/1000*tey)])
+        bchlp=pygame.draw.rect(fenetre,(0,100,150),(int(850/1200*tex),int(530/1000*tey),int(150/1200*tex),int(70/1000*tey)),0)
+        pygame.draw.rect(fenetre,(0,0,0),(int(850/1200*tex),int(530/1000*tey),int(150/1200*tex),int(70/1000*tey)),5)
+        fenetre.blit(font.render("changer",20,(140,160,160)),[int(880/1200*tex),int(550/1000*tey)])
     pygame.display.update()
-    return bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2
+    return bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp
 
 def get_card(rar,aren):
     ll=[]
@@ -456,7 +502,21 @@ def vdate():
             ff.write(txt)
             ff.close()
             
-            
+def cracourcis():
+    if sos==1:
+        rac=open("/Users/UserPC/Desktop/clash_of_fighters.cmd","w")
+        dire=os.getcwd()
+        ###
+        if modlp==1: coml="python3 main.py"
+        else: coml="python main.py"
+        txt="cd "+dire+"\n"+coml
+        rac.write(txt)
+        rac.close()
+    else:
+        alertbox("désolé, le racourcis n'a pas pus etre créé")
+        #TODO
+        #rac=open("/home/Desktop/clash_of_fighters.bin","w")
+    
 
 ##################################################
 
@@ -475,7 +535,7 @@ vdate()
 
 encour=True
 while encour:
-    bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2=aff()
+    bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp=aff()
     for cc in j.deck:
         if j.cartpos[cc]==0: del(j.deck[j.deck.index(cc)])
     for event in pygame.event.get():
@@ -487,27 +547,32 @@ while encour:
             rpos=pygame.Rect(pos[0],pos[1],1,1)
             if rpos.colliderect(bplay):
                 if len(j.deck)==8:
-                    try:
-                        subprocess.call("python a.py")
-                    except:
-                        try:
-                            subprocess("python3 a.py")
-                        except:
-                            try:os.system("python a.py")
-                            except: os.system("python3 a.py")
-                        
+                    if modlp==1:
+                        try: subprocess.call("python3 a.py")
+                        except: os.system("python3 a.py")
+                    else:
+                        try: subprocess.call("python a.py")
+                        except: os.system("python a.py")
                     fenetre.blit(pygame.font.SysFont("Serif",50).render("si votre partie est finie, cliquez",0,(0,200,150)),[20,tey/2])
                     pygame.display.update()
                     ac()
-                    j=load(j)
+                    j,tex,tey,teex,teey,sos,modlp=load(j)
                 else:
                     alertbox("votre deck n'est pas composé de 8 cartes !")
             elif rpos.colliderect(bm1): smenu=1
             elif rpos.colliderect(bm2): smenu=2
             elif rpos.colliderect(bm3): smenu=3
+            elif rpos.colliderect(bpr): smenu=4
             elif rpos.colliderect(bf1): scrtm-=44
             elif rpos.colliderect(bf2): scrtm+=44
             elif rpos.colliderect(bale): j.deck=deckale(j)
+            elif rpos.colliderect(brac): cracourcis()
+            elif rpos.colliderect(bchsos):
+                if sos==1: sos=2
+                else: sos=1
+            elif rpos.colliderect(bchlp):
+                if modlp==1: modlp=2
+                else: modlp=1
             for c in rcs:
                 if rpos.colliderect(c):
                     if cselec!=rcs.index(c): cselec=rcs.index(c)
@@ -528,7 +593,34 @@ while encour:
                     if j.argent >= cfarg[rcf.index(c)]:
                         coffre(rcf.index(c),j.arene)
                         j.argent-=cfarg[rcf.index(c)]
-            save()
+            #params
+            if len(lbpr)>=7:
+                dt=50
+                if rpos.colliderect(lbpr[0]): teex+=dt
+                elif rpos.colliderect(lbpr[1]): teex-=dt
+                elif rpos.colliderect(lbpr[2]): teey+=dt
+                elif rpos.colliderect(lbpr[3]): teey-=dt
+                elif rpos.colliderect(lbpr[4]): 
+                    import textbox
+                    xet=textbox.main(str(tex),tex,tey)
+                    try:
+                        xet=int(xet)
+                        if xet >= 500 and xet <= 2100: teex=xet
+                        else: alertbox("Vous devez rentrer un nombre compris entre 500 et 2100")
+                    except: alertbox("Vous n'avez pas écrit un nombre !")
+                elif rpos.colliderect(lbpr[5]): 
+                    import textbox
+                    yet=textbox.main(str(tey),tex,tey)
+                    try:
+                        yet=int(yet)
+                        if yet >= 400 and yet <= 2000: teey=yet
+                        else: alertbox("Vous devez rentrer un nombre compris entre 400 et 2000")
+                    except: alertbox("Vous n'avez pas écrit un nombre !")
+                elif rpos.colliderect(lbpr[6]):
+                    save(j)
+                    alertbox("Veuillez relancer le jeu pour appliquer les parametres")
+                    encour=False
+            save(j)
     
 
 

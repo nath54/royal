@@ -3,7 +3,8 @@ import random,pygame,math,time
 from pygame.locals import *
 from cartes import *
 
-tex,tey=1000,800
+spr=open("params.nath","r").read().split("#")
+tex,tey=int(spr[0]),int(spr[1])
 
 tpx,tpy=int(tex/1.5),tey
 
@@ -61,22 +62,24 @@ ara=jjr[4].split("|")
 nar=[]
 for a in ara: nar.append(int(a))
 j1.cartpos=nar
+spr=open("params.nath","r").read().split("#")
+tex,tey=int(spr[0]),int(spr[1])
 
 j2=Joueur(2)
 
 if j1.arene==4: cltxt=(0,0,0)
 
-imgfond1=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_3.png") ,[int(805/1200*tex),tey] )
-imgfond2=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_3.png") ,[int(805/1200*tex),tey] )
+imgfond1=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_3.png") ,[int(tex/1.5)+5,tey+50] )
+imgfond2=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_3.png") ,[int(tex/1.5)+5,tey+50] )
 if1x,if1y,if2x,if2y=0,0,int(800/1200*tex),0
 imgsol1=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_1.png") ,[int(700/1200*tex),int(450/1000*tey)] )
-is1x,is1y=(50)/1200*tex,(50)/1000*tey
+is1x,is1y=int(50/1200*tex),int(50/1000*tey)
 imgsol2=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_1.png") ,[int(700/1200*tex),int(450/1000*tey)] )
-is2x,is2y=(50)/1200*tex,(550)/1000*tey
+is2x,is2y=int(50/1200*tex),int(550/1000*tey)
 imgpon1=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_2.png") ,[int(75/1200*tex),int(100/1000*tey)] )
-ip1x,ip1y=(100)/1200*tex,(460)/1000*tey
+ip1x,ip1y=int(100/1200*tex),int(460/1000*tey)
 imgpon2=pygame.transform.scale( pygame.image.load("images/mape_"+str(aimg[j1.arene])+"_2.png") ,[int(75/1200*tex),int(100/1000*tey)] )
-ip2x,ip2y=(600)/1200*tex,(460)/1000*tey
+ip2x,ip2y=int(600/1200*tex),int(460/1000*tey)
 
 lms=[pygame.Rect(is1x,is1y,700/1200*tex,350/1000*tey),pygame.Rect(is2x,is2y,700/1200*tex,350/1000*tey),pygame.Rect(ip1x,ip1y,75/1200*tex,100/1000*tey),pygame.Rect(ip2x,ip2y,75/1200*tex,100/1000*tey)]
 
@@ -565,12 +568,12 @@ def aff():
 
 
 def cm():
-    carts1.append( Carte(105/1200*tex,750/1000*tey,0,1) )
-    carts1.append( Carte(575/1200*tex,750/1000*tey,0,1) )
-    carts1.append( Carte(350/1200*tex,850/1000*tey,1,1) )
-    carts2.append( Carte(105/1200*tex,250/1000*tey,0,2) )
-    carts2.append( Carte(575/1200*tex,250/1000*tey,0,2) )
-    carts2.append( Carte(350/1200*tex,100/1000*tey,1,2) )
+    carts1.append( Carte(int(105/1200*tex),int(750/1000*tey),0,1) )
+    carts1.append( Carte(int(575/1200*tex),int(750/1000*tey),0,1) )
+    carts1.append( Carte(int(350/1200*tex),int(850/1000*tey),1,1) )
+    carts2.append( Carte(int(105/1200*tex),int(250/1000*tey),0,2) )
+    carts2.append( Carte(int(575/1200*tex),int(250/1000*tey),0,2) )
+    carts2.append( Carte(int(350/1200*tex),int(100/1000*tey),1,2) )
 
 def bb():
     global if1x,if2x,dtps,temps,dtsp
@@ -594,12 +597,16 @@ def bb():
                         c.vie-=s.att
                         if s.tipeatt==8 and c.tpcarte==1:c.etat.append("empoisoné")
                         elif s.tipeatt==9 and c.tpcarte==1: c.etat.append("gelé")
+                if s.crcrtdead != None:
+                    for x in range(s.crcrtdead[0]): carts1.append( Carte(s.px,s.py,s.crcrtdead[1],s.camp) )
             else:
                 for c in carts1:
                     if dtouch(s,c):
                         c.vie-=s.att
                         if s.tipeatt==8 and c.tpcarte==1:c.etat.append("empoisoné")
                         elif s.tipeatt==9 and c.tpcarte==1: c.etat.append("gelé")
+                if s.crcrtdead != None:
+                    for x in range(s.crcrtdead[0]): carts2.append( Carte(s.px,s.py,s.crcrtdead[1],s.camp) )
             del(sorts[sorts.index(ss)])
     for sp in sorps:
         if sp.vie <= 0:
