@@ -568,9 +568,9 @@ def aff():
 
 
 def cm():
-    carts1.append( Carte(int(105/1200*tex),int(750/1000*tey),0,1) )
-    carts1.append( Carte(int(575/1200*tex),int(750/1000*tey),0,1) )
-    carts1.append( Carte(int(350/1200*tex),int(850/1000*tey),1,1) )
+    carts1.append( Carte(int(105/1200*tex),int(700/1000*tey),0,1) )
+    carts1.append( Carte(int(575/1200*tex),int(700/1000*tey),0,1) )
+    carts1.append( Carte(int(350/1200*tex),int(800/1000*tey),1,1) )
     carts2.append( Carte(int(105/1200*tex),int(250/1000*tey),0,2) )
     carts2.append( Carte(int(575/1200*tex),int(250/1000*tey),0,2) )
     carts2.append( Carte(int(350/1200*tex),int(100/1000*tey),1,2) )
