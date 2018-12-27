@@ -41,10 +41,7 @@ cselec=None
 sos=1
 modlp=1
 arsel=0
-
-mus=["Music/Dream.mp3","Music/Harp.mp3"]
-musmenu=pygame.mixer.music.load(random.choice(mus))
-pygame.mixer.music.play(0)
+mpar=1
 
 ####text de version#####
 
@@ -89,7 +86,7 @@ if not "stats.nath" in os.listdir("./"):
     f=open("stats.nath","w")
     f.write(txt)
     f.close()
-    txt="1000#750#1#1"
+    txt="1000#750#1#1#1"
     g=open("params.nath","w")
     g.write(txt)
     g.close()
@@ -131,10 +128,11 @@ def load(j):
     teey=tey
     sos=int(spr[2])
     modlp=int(spr[3])
-    return j,tex,tey,teex,teey,sos,modlp
+    mpar=int(spr[4])
+    return j,tex,tey,teex,teey,sos,modlp,mpar
     
 j=Joueur()
-j,tex,tey,teex,teey,sos,modlp=load(j)
+j,tex,tey,teex,teey,sos,modlp,mpar=load(j)
 
 def save(j):
     t1=str(j.nom)
@@ -153,7 +151,7 @@ def save(j):
     ff=open("stats.nath","w")
     ff.write(txt)
     ff.close()
-    txt=str(teex)+"#"+str(teey)+"#"+str(sos)+"#"+str(modlp)
+    txt=str(teex)+"#"+str(teey)+"#"+str(sos)+"#"+str(modlp)+"#"+str(mpar)
     ff=open("params.nath","w")
     ff.write(txt)
     ff.close()
@@ -171,6 +169,7 @@ def aff():
     bchlp=pygame.Rect(0,0,0,0)
     bcred=pygame.Rect(0,0,0,0)
     barem=pygame.Rect(0,0,0,0)
+    bmus=pygame.Rect(0,0,0,0)
     bafl1,bafl2=pygame.Rect(0,0,0,0),pygame.Rect(0,0,0,0)
     if smenu!=1:  imgm1="images/m1.png"
     else       :  imgm1="images/m1sel.png"
@@ -312,6 +311,11 @@ def aff():
         bchlp=pygame.draw.rect(fenetre,(0,100,150),(int(850/1200*tex),int(530/1000*tey),int(150/1200*tex),int(70/1000*tey)),0)
         pygame.draw.rect(fenetre,(0,0,0),(int(850/1200*tex),int(530/1000*tey),int(150/1200*tex),int(70/1000*tey)),5)
         fenetre.blit(font.render("changer",20,(140,160,160)),[int(880/1200*tex),int(550/1000*tey)])
+        if mpar==1: col=(0,250,0)
+        else: col=(250,0,0)
+        bmus=pygame.draw.rect(fenetre,col,(int(800/1200*tex),int(700/1000*tey),int(150/1200*tex),int(75/1000*tey)),0)
+        pygame.draw.rect(fenetre,(0,0,0),(int(800/1200*tex),int(700/1000*tey),int(150/1200*tex),int(75/1000*tey)),5)
+        fenetre.blit(font.render("musique",20,(0,0,0)),[int(810/1200*tex),int(710/1000*tey)])
     elif smenu==5:
         clt=(215,215,215)
         fenetre.blit(font.render("Développeur : ",20,clt),[int(100/1200*tex),int(200/1000*tey)])
@@ -320,8 +324,8 @@ def aff():
         fenetre.blit(font.render("-Nathan Cerisara",20,clt),[int(120/1200*tex),int(300/1000*tey)])
         fenetre.blit(font.render("Musiques : ",20,clt),[int(100/1200*tex),int(350/1000*tey)])
         fenetre.blit(font.render("-menu : ",20,clt),[int(120/1200*tex),int(380/1000*tey)])
-        fenetre.blit(font.render("-'https://opengameart.org/content/soft-mysterious-harp-loop'",20,clt),[int(140/1200*tex),int(410/1000*tey)])
-        fenetre.blit(font.render("-'https://opengameart.org/content/titlemenu-screen-bgm'",20,clt),[int(140/1200*tex),int(440/1000*tey)])
+        fenetre.blit(font.render("-'https://opengameart.org/content/soft-mysterious-harp-loop', license:CC-BY 3.0",20,clt),[int(140/1200*tex),int(410/1000*tey)])
+        fenetre.blit(font.render("-'https://opengameart.org/content/titlemenu-screen-bgm', license:CC-BY-SA 3.0",20,clt),[int(140/1200*tex),int(440/1000*tey)])
     elif smenu==6:
         xxx,yyy=int(150/1200*tex),int(150/1000*tey)
         txx,tyy=int(300/1200*tex),int(400/1000*tey)
@@ -338,7 +342,7 @@ def aff():
         txx,tyy=int(70/1200*tex),int(110/1000*tey)
         acrts=[]
         for c in ctpp:
-            if care[c]==arsel: acrts.append(c)
+            if c!=0 and c!=1 and care[c]==arsel: acrts.append(c)
         for c in acrts:
             fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cimg[c]),[txx,tyy]),[xxx,yyy])
             pygame.draw.rect(fenetre,craret[crar[c]],(xxx,yyy,txx,tyy),2)
@@ -348,7 +352,7 @@ def aff():
                 xxx=int(480/1200*tex)
                 yyy+=tyy+30
     pygame.display.update()
-    return bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp,bcred,barem,bafl1,bafl2
+    return bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp,bcred,barem,bafl1,bafl2,bmus
 
 def get_card(rar,aren):
     ll=[]
@@ -597,6 +601,10 @@ time.sleep(1)
 dc=time.time()
 tdc=0.5
 
+mus=["Music/Dream.mp3","Music/Harp.mp3"]
+musmenu=pygame.mixer.music.load(random.choice(mus))
+if mpar==1: pygame.mixer.music.play()
+
 if version < dv and dv != 0.0:
     alertbox("Une mise à jour est disponible")
     
@@ -607,7 +615,7 @@ needtoaff=True
 encour=True
 while encour:
     if needtoaff:
-        bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp,bcred,barem,bafl1,bafl2=aff()
+        bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp,bcred,barem,bafl1,bafl2,bmus=aff()
         needtoaff=False
     for cc in j.deck:
         if j.cartpos[cc]==0: del(j.deck[j.deck.index(cc)])
@@ -630,7 +638,7 @@ while encour:
                     fenetre.blit(pygame.font.SysFont("Serif",50).render("si votre partie est finie, cliquez",0,(0,200,150)),[20,tey/2])
                     pygame.display.update()
                     ac()
-                    j,tex,tey,teex,teey,sos,modlp=load(j)
+                    j,tex,tey,teex,teey,sos,modlp,mpar=load(j)
                 else:
                     alertbox("votre deck n'est pas composé de 8 cartes !")
             elif rpos.colliderect(bm1): smenu=1
@@ -641,6 +649,9 @@ while encour:
             elif rpos.colliderect(barem): smenu,arsel=6,j.arene
             elif rpos.colliderect(bf1): scrtm-=44
             elif rpos.colliderect(bf2): scrtm+=44
+            elif rpos.colliderect(bmus):
+                if mpar==1: mpar=2
+                else: mpar=1
             elif rpos.colliderect(bafl1):
                 if arsel > 0: arsel-=1
             elif rpos.colliderect(bafl2):

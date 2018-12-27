@@ -18,6 +18,7 @@ dtsp=time.time()
 cltxt=(215,215,215)
 temps=300
 dtps=time.time()
+etps=time.time()
 j1ga=False
 j2ga=False
 jegal=False
@@ -254,6 +255,14 @@ class Carte:
                 if self.vie>=self.vie_tot:
                     cible.vie-=self.vie_tot-self.vie
                     self.vie=self.vie_tot
+            if self.tipeatt==12:
+                if cible.tpcarte==1:
+                    dtfas=False
+                    for et in cible.etat:
+                        if type(et)==list:
+                            if et[0]=="assomé": dtfas=True
+                    if not dtfas:
+                        cible.etat.append(["assomé",50])
     def attack(self):
         if "énervé" in self.etat: tap=self.vitatt/2
         else: tap=self.vitatt
@@ -539,6 +548,11 @@ def aff():
             if "gelé" in c.etat: fenetre.blit(pygame.transform.scale(pygame.image.load("images/glace.png"),[c.tx,c.ty]),[c.px,c.py])
             if "empoisoné" in c.etat: fenetre.blit(pygame.transform.scale(pygame.image.load("images/emp.png"),[c.tx,c.ty]),[c.px,c.py])
             if "énervé" in c.etat: fenetre.blit(pygame.transform.scale(pygame.image.load("images/rage.png"),[c.tx,c.ty]),[c.px,c.py])
+            dtfas=False
+            for et in c.etat:
+                if type(et)==list:
+                    if et[0]=="assomé": dtafs=True
+            if dtfas: fenetre.blit(pygame.transform.scale(pygame.image.load("images/zzz.png"),[c.tx,c.ty]),[c.px,c.py])
         for m in miss: m.rect=fenetre.blit(m.img,[m.px,m.py])
         for ss in sorts:
             s=ss[0]
@@ -573,12 +587,12 @@ def cm():
     carts1.append( Carte(int(105/1200*tex),int(700/1000*tey),0,1) )
     carts1.append( Carte(int(575/1200*tex),int(700/1000*tey),0,1) )
     carts1.append( Carte(int(350/1200*tex),int(800/1000*tey),1,1) )
-    carts2.append( Carte(int(105/1200*tex),int(250/1000*tey),0,2) )
-    carts2.append( Carte(int(575/1200*tex),int(250/1000*tey),0,2) )
-    carts2.append( Carte(int(350/1200*tex),int(100/1000*tey),1,2) )
+    carts2.append( Carte(int(105/1200*tex),int(170/1000*tey),0,2) )
+    carts2.append( Carte(int(575/1200*tex),int(170/1000*tey),0,2) )
+    carts2.append( Carte(int(350/1200*tex),int(70/1000*tey),1,2) )
 
 def bb():
-    global if1x,if2x,dtps,temps,dtsp
+    global if1x,if2x,dtps,temps,dtsp,etps
     if1x+=1
     if2x+=1
     if if1x >= 800/1200*tex: if1x=-800/1200*tex
@@ -618,7 +632,17 @@ def bb():
             sp.vie-=1
         sp.bouger()
     for c1 in carts1:
-        if not "gelé" in c1.etat:
+        dtfas=False
+        for et in c1.etat:
+            if type(et)==list:
+                if et[0]=="assomé":
+                    dtfas=True
+                    if time.time()-etps >= 1:
+                        et[1]-=1
+                        if et[1]<=0:
+                            try: del(c1.etat[c1.etat.index(et)])
+                            except: pass
+        if not "gelé" in c1.etat and not dtfas:
             c1.bouger()
         if "empoisoné" in c1.etat: c1.vie-=1
         if c1.vie<=0:
@@ -638,7 +662,17 @@ def bb():
         if c1.tpcarte==2 and (c1.tp!=0 and c1.tp!=1):
             c1.vie-=1
     for c2 in carts2:
-        if not "gelé" in c2.etat:
+        dtfas=False
+        for et in c2.etat:
+            if type(et)==list:
+                if et[0]=="assomé":
+                    dtfas=True
+                    if time.time()-etps >= 1:
+                        et[1]-=1
+                        if et[1]<=0:
+                            try: del(c2.etat[c2.etat.index(et)])
+                            except: pass
+        if not "gelé" in c2.etat and not dtfas:
             c2.bouger()
         if "empoisoné" in c2.etat: c2.vie-=1
         if c2.vie<=0:
@@ -674,6 +708,8 @@ def bb():
     while len(j2.cartactu) < 4:
         azz=random.choice(j2.deck)
         if not azz in j2.cartactu: j2.cartactu.append(azz)
+    if time.time()-etps >= 1:
+        etps=time.time()
 
 def deb():
     t=time.time()
