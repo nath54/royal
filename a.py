@@ -210,6 +210,8 @@ class Carte:
         self.vie_tot=cvie[tp]
         self.vie=cvie[tp]
         self.portee=cpor[tp]
+        if ctap[tp]==1:
+            self.portee=self.tx+10
         self.vit=cvit[tp]
         self.img=pygame.transform.scale( pygame.image.load("images/"+cimg[tp]),[self.tx,self.ty])
         self.rarete=crar[tp]
@@ -741,10 +743,10 @@ while encour:
                 jcs=j1.cartactu[j1.cartselec]
                 cond1=pos[0] >= 0 and pos[0] <= tpx and pos[1] >= tpy/2
                 cond2=pos[0] >= 0 and pos[0] <= tpx
-                if ctpc[jcs]!=3: cond=cond1
+                if ctpc[jcs]!=3 and ctpc[jcs]!=4: cond=cond1
                 else: cond=cond2
                 if cond:
-                    if  j1.elixir >= celi[jcs]:
+                    if j1.elixir >= celi[jcs]:
                         if not vcp(pos[0],pos[1],ctxx[jcs],ctyy[jcs]) or ctpc[jcs]==1 or ctpc[jcs]==3:
                             if ctpc[jcs]==3:
                                 sa=40

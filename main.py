@@ -40,6 +40,11 @@ scrtm=0
 cselec=None
 sos=1
 modlp=1
+arsel=0
+
+mus=["Music/Dream.mp3","Music/Harp.mp3"]
+musmenu=pygame.mixer.music.load(random.choice(mus))
+pygame.mixer.music.play(0)
 
 ####text de version#####
 
@@ -115,6 +120,7 @@ def load(j):
     ara,nar=jjr[4].split("|"),[]
     for a in ara: nar.append(int(a))
     j.cartpos=nar
+    while len(ctpp)>len(j.cartpos): j.cartpos.append(0)
     j.arene=1
     for ar in atpp:
         if j.trophes >= atro[ar]: j.arene=ar
@@ -153,6 +159,7 @@ def save(j):
     ff.close()
 
 def aff():
+    global arsel
     fenetre.fill((50,20,100))
     bplay=pygame.Rect(0,0,0,0)
     bale=pygame.Rect(0,0,0,0)
@@ -162,6 +169,9 @@ def aff():
     brac=pygame.Rect(0,0,0,0)
     bchsos=pygame.Rect(0,0,0,0)
     bchlp=pygame.Rect(0,0,0,0)
+    bcred=pygame.Rect(0,0,0,0)
+    barem=pygame.Rect(0,0,0,0)
+    bafl1,bafl2=pygame.Rect(0,0,0,0),pygame.Rect(0,0,0,0)
     if smenu!=1:  imgm1="images/m1.png"
     else       :  imgm1="images/m1sel.png"
     if smenu!=2:  imgm2="images/m2.png"
@@ -183,7 +193,7 @@ def aff():
         bplay=fenetre.blit(pygame.transform.scale(pygame.image.load("images/bplay.png"),[int(200/1200*tex),int(150/1000*tey)]),[tex/2,tey/2,])
         xxx,yyy=int(50/1200*tex),int(200/1000*tey)
         txx,tyy=int(300/1200*tex),int(400/1000*tey)
-        fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[j.arene])+"_3.png"),[txx,tyy]),[xxx,yyy])
+        barem=fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[j.arene])+"_3.png"),[txx,tyy]),[xxx,yyy])
         fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[j.arene])+"_1.png"),[txx-10,int(tyy/2-10)]),[xxx+5,yyy+5])
         fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[j.arene])+"_1.png"),[txx-10,int(tyy/2-10)]),[xxx+5,yyy+tyy/2+5])
         fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[j.arene])+"_2.png"),[int(70/1200*txx),int(100/1000*tyy)]),[xxx+30,yyy+tyy/2-20])
@@ -195,6 +205,7 @@ def aff():
             ars=atpp[j.arene+1]
             fenetre.blit(font.render("Arène suivante : "+str(atro[ars])+" , "+str(atro[ars]-j.trophes)+" trophés restants",20,(215,210,230)),[50/1200*tex,750/1000*tey])
         bpr=fenetre.blit(pygame.transform.scale(pygame.image.load("images/para.png"),[int(100/1200*tex),int(100/1000*tey)]),[tex-int(150/1200*tex),int(150/1000*tey)])
+        bcred=fenetre.blit(pygame.transform.scale(pygame.image.load("images/cred.png"),[int(150/1200*tex),int(100/1000*tey)]),[tex-int(150/1200*tex),tey-int(150/1000*tey)])
     elif smenu==1:
         if scrtm+44 > len(ctpp): ac=len(ctpp)
         else:
@@ -301,8 +312,43 @@ def aff():
         bchlp=pygame.draw.rect(fenetre,(0,100,150),(int(850/1200*tex),int(530/1000*tey),int(150/1200*tex),int(70/1000*tey)),0)
         pygame.draw.rect(fenetre,(0,0,0),(int(850/1200*tex),int(530/1000*tey),int(150/1200*tex),int(70/1000*tey)),5)
         fenetre.blit(font.render("changer",20,(140,160,160)),[int(880/1200*tex),int(550/1000*tey)])
+    elif smenu==5:
+        clt=(215,215,215)
+        fenetre.blit(font.render("Développeur : ",20,clt),[int(100/1200*tex),int(200/1000*tey)])
+        fenetre.blit(font.render("-Nathan Cerisara",20,clt),[int(120/1200*tex),int(230/1000*tey)])
+        fenetre.blit(font.render("Dessinateur : ",20,clt),[int(100/1200*tex),int(270/1000*tey)])
+        fenetre.blit(font.render("-Nathan Cerisara",20,clt),[int(120/1200*tex),int(300/1000*tey)])
+        fenetre.blit(font.render("Musiques : ",20,clt),[int(100/1200*tex),int(350/1000*tey)])
+        fenetre.blit(font.render("-menu : ",20,clt),[int(120/1200*tex),int(380/1000*tey)])
+        fenetre.blit(font.render("-'https://opengameart.org/content/soft-mysterious-harp-loop'",20,clt),[int(140/1200*tex),int(410/1000*tey)])
+        fenetre.blit(font.render("-'https://opengameart.org/content/titlemenu-screen-bgm'",20,clt),[int(140/1200*tex),int(440/1000*tey)])
+    elif smenu==6:
+        xxx,yyy=int(150/1200*tex),int(150/1000*tey)
+        txx,tyy=int(300/1200*tex),int(400/1000*tey)
+        fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[arsel])+"_3.png"),[txx,tyy]),[xxx,yyy])
+        fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[arsel])+"_1.png"),[txx-10,int(tyy/2-10)]),[xxx+5,yyy+5])
+        fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[arsel])+"_1.png"),[txx-10,int(tyy/2-10)]),[xxx+5,yyy+tyy/2+5])
+        fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[arsel])+"_2.png"),[int(70/1200*txx),int(100/1000*tyy)]),[xxx+30,yyy+tyy/2-20])
+        fenetre.blit(pygame.transform.scale(pygame.image.load("images/mape_"+str(aimg[arsel])+"_2.png"),[int(70/1200*txx),int(100/1000*tyy)]),[xxx+txx-60,yyy+tyy/2-20])
+        fenetre.blit(font.render(anom[arsel],20,(150,150,150)),[int(150/1200*tex),int(720/1000*tey)])
+        fenetre.blit(font.render("trophés : "+str(atro[arsel]),20,(150,150,150)),[int(150/1200*tex),int(760/1000*tey)])
+        if arsel < len(atpp)-1 : bafl2=fenetre.blit(pygame.transform.scale(pygame.image.load("images/flch.png"),[int(50/1200*tex),int(100/1000*tey)]),[tex-int(60/1200*tex),int(450/1000*tey)])
+        if arsel > 0           : bafl1=fenetre.blit(pygame.transform.flip(pygame.transform.scale(pygame.image.load("images/flch.png"),[int(50/1200*tex),int(100/1000*tey)]),1,0),[int(60/1200*tex),int(450/1000*tey)])
+        xxx,yyy=int(480/1200*tex),int(150/1000*tey)
+        txx,tyy=int(70/1200*tex),int(110/1000*tey)
+        acrts=[]
+        for c in ctpp:
+            if care[c]==arsel: acrts.append(c)
+        for c in acrts:
+            fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cimg[c]),[txx,tyy]),[xxx,yyy])
+            pygame.draw.rect(fenetre,craret[crar[c]],(xxx,yyy,txx,tyy),2)
+            fenetre.blit(pygame.transform.scale(font.render(cnom[c],20,cl),[txx,int(20/1000*tey)]),[xxx,yyy+tyy+5])
+            xxx+=txx+10
+            if xxx >= tex-txx-40:
+                xxx=int(480/1200*tex)
+                yyy+=tyy+30
     pygame.display.update()
-    return bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp
+    return bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp,bcred,barem,bafl1,bafl2
 
 def get_card(rar,aren):
     ll=[]
@@ -349,6 +395,8 @@ def coffre(c,aren):
         cfcrt=[ [6,2],
                 [5,3],
                 [10,4] ]
+    elif c==6:
+        cfcrt=[ [1,0] ]
     for ccc in cfcrt:
         #print(ccc)
         for x in range(ccc[0]): 
@@ -366,6 +414,8 @@ def coffre(c,aren):
         #print("c>=4")
     if c==5:
         r4=[1,30]
+    if c==6:
+        r0=[1,1]
     for cc in crts:
         if crar[cc]==0: nbcr.append(random.randint(r0[0],r0[1]))
         elif crar[cc]==1: nbcr.append(random.randint(r1[0],r1[1]))
@@ -501,6 +551,25 @@ def vdate():
             ff=open("recompget.nath","a")
             ff.write(txt)
             ff.close()
+    ###
+    condd=True
+    if not "dc.nath" in os.listdir():
+            condd=True
+            nvff=True
+    else:
+        ddd=open("dc.nath","r").read().split("#")
+        for d in ddd:
+            dd=d.split("|")
+            if dd[0]==str(date.tm_mday) and dd[1]==str(date.tm_mon) and dd[2]==str(date.tm_year): condd=False
+    if condd:
+        alertbox("Cadeau : 500 or !")
+        j.argent+=500
+        if nvff: txt=""
+        else: txt="#"
+        txt+=str(date.tm_mday)+"|"+str(date.tm_mon)+"|"+str(date.tm_year)
+        ff=open("dc.nath","a")
+        ff.write(txt)
+        ff.close()
             
 def cracourcis():
     if sos==1:
@@ -533,9 +602,13 @@ if version < dv and dv != 0.0:
     
 vdate()
 
+needtoaff=True
+
 encour=True
 while encour:
-    bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp=aff()
+    if needtoaff:
+        bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp,bcred,barem,bafl1,bafl2=aff()
+        needtoaff=False
     for cc in j.deck:
         if j.cartpos[cc]==0: del(j.deck[j.deck.index(cc)])
     for event in pygame.event.get():
@@ -543,6 +616,7 @@ while encour:
         elif event.type==KEYDOWN:
             if event.key==K_q: encour=False
         elif event.type==MOUSEBUTTONUP:
+            needtoaff=True
             pos=pygame.mouse.get_pos()
             rpos=pygame.Rect(pos[0],pos[1],1,1)
             if rpos.colliderect(bplay):
@@ -563,8 +637,14 @@ while encour:
             elif rpos.colliderect(bm2): smenu=2
             elif rpos.colliderect(bm3): smenu=3
             elif rpos.colliderect(bpr): smenu=4
+            elif rpos.colliderect(bcred): smenu=5
+            elif rpos.colliderect(barem): smenu,arsel=6,j.arene
             elif rpos.colliderect(bf1): scrtm-=44
             elif rpos.colliderect(bf2): scrtm+=44
+            elif rpos.colliderect(bafl1):
+                if arsel > 0: arsel-=1
+            elif rpos.colliderect(bafl2):
+                if arsel < len(atpp): arsel+=1
             elif rpos.colliderect(bale): j.deck=deckale(j)
             elif rpos.colliderect(brac): cracourcis()
             elif rpos.colliderect(bchsos):
