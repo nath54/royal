@@ -43,6 +43,9 @@ modlp=1
 arsel=0
 mpar=1
 etren=0
+fichtps="tps.nath"
+
+t1t=time.time()
 
 ####text de version#####
 
@@ -93,8 +96,32 @@ if not "params.nath" in os.listdir():
     g.close()
 
 
+def temps():
+    if fichtps in os.listdir():
+        tps=open(fichtps,"r").read()
+        if len(tps)>0:
+            if tps[-1]=="\n": tps=tps[:-1]
+            tps=int(float(tps))
+        else: tps=0
+    else: tps=0
+    tps+=int(time.time()-t1t)
+    return tps
 
-
+def savetps():
+    t2t=time.time()
+    if not fichtps in os.listdir():
+        txt=str(int(t2t-t1t))
+    else:
+        fa=open(fichtps,"r").read()
+        if len(fa)>0:
+            if fa[-1]=="\n": fb=fa[:-1]
+            else: fb=fa
+            fc=int(fb)
+        txt=str(fc+int(t2t-t1t))
+    ff=open(fichtps,"w")
+    ff.write(txt)
+    ff.close()
+    
 
 class Joueur:
     def __init__(self):
@@ -292,7 +319,7 @@ def aff():
                 xx=50
                 yy+=ty+50
     elif smenu==4:
-        fenetre.blit(font.render("résolution de l'écran : ",0,(250,250,250)),[250,120])
+        fenetre.blit(font.render("résolution de l'écran : ",0,(250,250,250)),[int(300/1200*tex),int(180/1000*tey)])
         lbpr.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/fl.png"),[int(40/1200*tex),int(30/1000*tey)]),[int(355/1200*tex),int(250/1000*tey)])                             )
         lbpr.append( fenetre.blit(pygame.transform.flip(pygame.transform.scale(pygame.image.load("images/fl.png"),[int(40/1200*tex),int(30/1000*tey)]),1,0),[int(80/1200*tex),int(250/1000*tey)])   )
         lbpr.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/fl.png"),[int(40/1200*tex),int(30/1000*tey)]),[int(755/1200*tex),int(250/1000*tey)])                             )
@@ -634,6 +661,10 @@ while encour:
     if needtoaff:
         bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp,bcred,barem,bafl1,bafl2,bmus,bren=aff()
         needtoaff=False
+    if smenu==4:
+        pygame.draw.rect(fenetre,(50,20,100),(int(18/1200*tex),int(118/1000*tey),int(250/1200*tex),int(40/1000*tey)),0)
+        fenetre.blit(font.render("temps joué au jeu : "+str(int(temps()))+" sec",0,(250,250,250)),[int(20/1200*tex),int(120/1000*tey)])
+        pygame.display.update()
     for cc in j.deck:
         if j.cartpos[cc]==0: del(j.deck[j.deck.index(cc)])
     for event in pygame.event.get():
@@ -744,7 +775,7 @@ while encour:
     
 
 
-
+savetps()
 
 
 
