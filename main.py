@@ -73,7 +73,7 @@ font=pygame.font.SysFont("Serif",20)
 rarete=["commun","rare","epique","legendaire","divin"]
 craret=[(0,0,140),(150,105,25),(150,0,150),(20,150,20),(250,250,0)]
 
-if not "stats.nath" in os.listdir("./"):
+if not "stats.nath" in os.listdir():
     txt=""
     import textbox
     tc=""
@@ -82,11 +82,11 @@ if not "stats.nath" in os.listdir("./"):
         else: tc+="2"
         tc+="|"
     tc=tc[:-1]
-    print(tc)
     txt+=textbox.main("pseudo",tex,tey)+"##2000#0#"+tc+"#0"
     f=open("stats.nath","w")
     f.write(txt)
     f.close()
+if not "params.nath" in os.listdir():
     txt="1000#750#1#1#1"
     g=open("params.nath","w")
     g.write(txt)
@@ -515,7 +515,6 @@ def alertbox(txt):
     pygame.draw.rect(fenetre,(50,10,100),(bx,by,btx,bty),0)
     pygame.draw.rect(fenetre,(10,10,10),(bx,by,btx,bty),5)
     ky=0
-    print(ltxt,txt)
     for xt in ltxt:
         fenetre.blit(font.render(xt,20,(200,200,200)),[bx+15,by+15+ky])
         ky+=25
@@ -690,7 +689,9 @@ while encour:
                 elif etren==2:
                     alertbox("Votre compte a été rénitialisé")
                     alertbox("Veuillez relancer le jeu.")
-                    os.remove("stats.nath")
+                    if "stats.nath" in os.listdir() : os.remove("stats.nath")
+                    if "dc.nath" in os.listdir() : os.remove("dc.nath")
+                    if "recompget.nath" in os.listdir() : os.remove("recompget.nath")
                     exit()
             for c in rcs:
                 if rpos.colliderect(c):
