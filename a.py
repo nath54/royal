@@ -123,8 +123,8 @@ class Mis:
         self.tx=mtxx[tp]
         self.ty=mtyy[tp]
         self.cible=cible
-        a=abs(self.px-cible.px)
-        b=abs(self.py-cible.py)
+        a=(self.px-cible.px)
+        b=(self.py-cible.py)
         try: agl=math.degrees(math.tan(a/b))
         except: agl=0
         self.img=pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/"+mimg[self.pos.mtp]),[self.tx,self.ty]),agl)
