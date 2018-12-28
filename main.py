@@ -557,6 +557,7 @@ def vdate():
             ff.close()
     ###
     condd=True
+    nvff=False
     if not "dc.nath" in os.listdir():
             condd=True
             nvff=True

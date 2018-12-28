@@ -2,20 +2,19 @@
 import pygame
 from pygame.locals import *
 
-def main():
-    txe,tye=400,250
-    texte="pseudo"
+def main(txtaff,tx,ty):
+    txe,tye=tx,ty
+    texte=txtaff
     ncour=True
-    pygame.init()
-    fenetre=pygame.display.set_mode([txe,tye])
+    fenetre2=pygame.display.set_mode([txe,tye])
     pygame.display.set_caption("text box")
-    ztx,zty=tye/2,75
+    ztx,zty=tye/2,ty/2
     ctxt=(200,200,250)
     font=pygame.font.SysFont("Serif",50)
     fimg=pygame.transform.scale(pygame.image.load("images/fontxt.png"),[txe,tye])
     def aff():
-        fenetre.blit(fimg,[0,0])
-        fenetre.blit(font.render(texte,20,ctxt),[ztx,zty])
+        fenetre2.blit(fimg,[0,0])
+        fenetre2.blit(font.render(texte,20,ctxt),[ztx,zty])
         pygame.display.update()
     tchsa=[[K_a,"a"],
           [K_b,"b"],
@@ -42,7 +41,27 @@ def main():
           [K_w,"w"],
           [K_x,"x"],
           [K_y,"y"],
-          [K_z,"z"]]
+          [K_z,"z"],
+          [K_0,"0"],
+          [K_1,"1"],
+          [K_2,"2"],
+          [K_3,"3"],
+          [K_4,"4"],
+          [K_5,"5"],
+          [K_6,"6"],
+          [K_7,"7"],
+          [K_8,"8"],
+          [K_9,"9"],
+          [K_KP0,"0"],
+          [K_KP1,"1"],
+          [K_KP2,"2"],
+          [K_KP3,"3"],
+          [K_KP4,"4"],
+          [K_KP5,"5"],
+          [K_KP6,"6"],
+          [K_KP7,"7"],
+          [K_KP8,"8"],
+          [K_KP9,"9"]]
     tchsq=[[K_a,"q"],
           [K_b,"b"],
           [K_c,"c"],
@@ -68,7 +87,27 @@ def main():
           [K_w,"z"],
           [K_x,"x"],
           [K_y,"y"],
-          [K_z,"w"]]
+          [K_z,"w"],
+          [K_0,"0"],
+          [K_1,"1"],
+          [K_2,"2"],
+          [K_3,"3"],
+          [K_4,"4"],
+          [K_5,"5"],
+          [K_6,"6"],
+          [K_7,"7"],
+          [K_8,"8"],
+          [K_9,"9"],
+          [K_KP0,"0"],
+          [K_KP1,"1"],
+          [K_KP2,"2"],
+          [K_KP3,"3"],
+          [K_KP4,"4"],
+          [K_KP5,"5"],
+          [K_KP6,"6"],
+          [K_KP7,"7"],
+          [K_KP8,"8"],
+          [K_KP9,"9"]]
     while ncour:
         aff()
         for event in pygame.event.get():
@@ -82,6 +121,7 @@ def main():
                 if event.key==K_RETURN:
                     if texte!=None:
                         ncour=False
+                    return texte
                 elif event.key==K_BACKSPACE:
                     texte=texte[:-1]
     return texte            
