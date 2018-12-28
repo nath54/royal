@@ -42,6 +42,7 @@ sos=1
 modlp=1
 arsel=0
 mpar=1
+etren=0
 
 ####text de version#####
 
@@ -171,6 +172,7 @@ def aff():
     barem=pygame.Rect(0,0,0,0)
     bmus=pygame.Rect(0,0,0,0)
     bafl1,bafl2=pygame.Rect(0,0,0,0),pygame.Rect(0,0,0,0)
+    bren=pygame.Rect(0,0,0,0)
     if smenu!=1:  imgm1="images/m1.png"
     else       :  imgm1="images/m1sel.png"
     if smenu!=2:  imgm2="images/m2.png"
@@ -316,6 +318,9 @@ def aff():
         bmus=pygame.draw.rect(fenetre,col,(int(800/1200*tex),int(700/1000*tey),int(150/1200*tex),int(75/1000*tey)),0)
         pygame.draw.rect(fenetre,(0,0,0),(int(800/1200*tex),int(700/1000*tey),int(150/1200*tex),int(75/1000*tey)),5)
         fenetre.blit(font.render("musique",20,(0,0,0)),[int(810/1200*tex),int(710/1000*tey)])
+        bren=pygame.draw.rect(fenetre,(100,100,100),(int(100/1200*tex),int(400/1000*tey),int(250/1200*tex),int(75/1000*tey)),0)
+        pygame.draw.rect(fenetre,(0,0,0),(int(100/1200*tex),int(400/1000*tey),int(250/1200*tex),int(75/1000*tey)),5)
+        fenetre.blit(font.render("rénitialiser le compte",20,(0,0,0)),[int(110/1200*tex),int(410/1000*tey)])
     elif smenu==5:
         clt=(215,215,215)
         fenetre.blit(font.render("Développeur : ",20,clt),[int(100/1200*tex),int(200/1000*tey)])
@@ -352,7 +357,7 @@ def aff():
                 xxx=int(480/1200*tex)
                 yyy+=tyy+30
     pygame.display.update()
-    return bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp,bcred,barem,bafl1,bafl2,bmus
+    return bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp,bcred,barem,bafl1,bafl2,bmus,bren
 
 def get_card(rar,aren):
     ll=[]
@@ -498,10 +503,22 @@ def deckale(j):
     return deck
 
 def alertbox(txt):
+    ltxt=[]
+    nbl=40
+    if len(txt) < nbl: ltxt.append(txt)
+    else:
+        for dd in range(int(len(txt)/nbl)):
+            if dd<=len(txt)/50: ltxt.append(txt[dd*nbl:(dd+1)*nbl])
+        try: ltxt.append(txt[(dd+1)*nbl:len(txt)])
+        except: pass
     bx,by,btx,bty=int(tex/3),int(tey/3),int(500/1200*tex),int(350/1000*tey)
     pygame.draw.rect(fenetre,(50,10,100),(bx,by,btx,bty),0)
     pygame.draw.rect(fenetre,(10,10,10),(bx,by,btx,bty),5)
-    fenetre.blit(font.render(txt,20,(200,200,200)),[bx+15,by+15])
+    ky=0
+    print(ltxt,txt)
+    for xt in ltxt:
+        fenetre.blit(font.render(xt,20,(200,200,200)),[bx+15,by+15+ky])
+        ky+=25
     bb=pygame.draw.rect(fenetre,(125,125,10),(int(bx+btx/4*2),int(by+bty/5*3),int(btx/4),int(bty/5)),0)
     pygame.draw.rect(fenetre,(125,125,120),(int(bx+btx/4*2),int(by+bty/5*3),int(btx/4),int(bty/5)),5)
     fenetre.blit(font.render("ok",20,(200,200,200)),[int(5+bx+btx/4*2),int(5+by+bty/5*3)])
@@ -616,7 +633,7 @@ needtoaff=True
 encour=True
 while encour:
     if needtoaff:
-        bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp,bcred,barem,bafl1,bafl2,bmus=aff()
+        bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp,bcred,barem,bafl1,bafl2,bmus,bren=aff()
         needtoaff=False
     for cc in j.deck:
         if j.cartpos[cc]==0: del(j.deck[j.deck.index(cc)])
@@ -665,6 +682,16 @@ while encour:
             elif rpos.colliderect(bchlp):
                 if modlp==1: modlp=2
                 else: modlp=1
+            elif rpos.colliderect(bren):
+                etren+=1
+                if etren==1:
+                    alertbox("Êtes vous vraiment sur ?")
+                    alertbox("Si vous voulez vraiment rénitialiser votre compte, veuillez rappuyer sur le bouton rénitialiser")
+                elif etren==2:
+                    alertbox("Votre compte a été rénitialisé")
+                    alertbox("Veuillez relancer le jeu.")
+                    os.remove("stats.nath")
+                    exit()
             for c in rcs:
                 if rpos.colliderect(c):
                     if cselec!=rcs.index(c): cselec=rcs.index(c)
