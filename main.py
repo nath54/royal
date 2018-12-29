@@ -618,6 +618,7 @@ def vdate():
         ff=open("dc.nath","a")
         ff.write(txt)
         ff.close()
+    save(j)
             
 def cracourcis():
     if sos==1:
