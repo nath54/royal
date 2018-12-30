@@ -44,6 +44,8 @@ arsel=0
 mpar=1
 etren=0
 fichtps="tps.nath"
+pageaide=1
+pageaidetot=3
 
 t1t=time.time()
 
@@ -83,7 +85,7 @@ if not "stats.nath" in os.listdir():
     ct=""
     for x in ctpp+[0,0,0]:
         if care[x] == 0 and ctpp[x] != 0 and ctpp[x] != 1:
-            tc+="5"
+            tc+="10"
             ct+="1"
         else :
             tc+="0"
@@ -96,6 +98,7 @@ if not "stats.nath" in os.listdir():
     f=open("stats.nath","w")
     f.write(txt)
     f.close()
+    smenu=8
 if not "params.nath" in os.listdir():
     txt="1000#750#1#1#1"
     g=open("params.nath","w")
@@ -215,7 +218,7 @@ def deblocrt(crt):
     fenetre.blit( font.render("Statistiques de la carte : ",20,clt) , [int(600/1200*tex),int(300/1000*tey)] )
     fenetre.blit( font.render("vie : "+str(cvie[crt]),20,clt) , [int(500/1200*tex),int(350/1000*tey)] )
     fenetre.blit( font.render("dégats attaque : "+str(catt[crt]),20,clt) , [int(500/1200*tex),int(400/1000*tey)] )
-    fenetre.blit( font.render("vitesse attasue : "+str(cvat[crt]),20,clt) , [int(500/1200*tex),int(450/1000*tey)] )
+    fenetre.blit( font.render("vitesse attaque : "+str(cvat[crt]),20,clt) , [int(500/1200*tex),int(450/1000*tey)] )
     fenetre.blit( font.render("portee : "+str(cpor[crt]),20,clt) , [int(500/1200*tex),int(500/1000*tey)] )
     fenetre.blit( font.render("vitesse : "+str(cvit[crt]),20,clt) , [int(500/1200*tex),int(550/1000*tey)] )
     fenetre.blit( font.render("rareté : "+str(rarete[crar[crt]]),20,clt) , [int(500/1200*tex),int(600/1000*tey)] )
@@ -265,7 +268,9 @@ def aff():
     barem=pygame.Rect(0,0,0,0)
     bmus=pygame.Rect(0,0,0,0)
     bafl1,bafl2=pygame.Rect(0,0,0,0),pygame.Rect(0,0,0,0)
+    bfal1,bfal2=pygame.Rect(0,0,0,0),pygame.Rect(0,0,0,0)
     bren=pygame.Rect(0,0,0,0)
+    btut=pygame.Rect(0,0,0,0)
     if smenu!=1:  imgm1="images/m1.png"
     else       :  imgm1="images/m1sel.png"
     if smenu!=2:  imgm2="images/m2.png"
@@ -300,6 +305,9 @@ def aff():
             fenetre.blit(font.render("Arène suivante : "+str(atro[ars])+" , "+str(atro[ars]-j.trophes)+" trophés restants",20,(215,210,230)),[50/1200*tex,750/1000*tey])
         bpr=fenetre.blit(pygame.transform.scale(pygame.image.load("images/para.png"),[int(100/1200*tex),int(100/1000*tey)]),[tex-int(150/1200*tex),int(150/1000*tey)])
         bcred=fenetre.blit(pygame.transform.scale(pygame.image.load("images/cred.png"),[int(150/1200*tex),int(100/1000*tey)]),[tex-int(150/1200*tex),tey-int(150/1000*tey)])
+        btut=pygame.draw.rect(fenetre,(200,25,70),(tex-int(200/1200*tex),int(500/1000*tey),int(150/1200*tex),int(100/1000*tey)),0)
+        pygame.draw.rect(fenetre,(0,0,0),(tex-int(200/1200*tex),int(500/1000*tey),int(150/1200*tex),int(100/1000*tey)),5)
+        fenetre.blit(font.render("aide",30,(0,0,0)),[tex-int(190/1200*tex),int(510/1000*tey)])
     elif smenu==1: #menu cartes
         if scrtm+44 > len(ctpp): ac=len(ctpp)
         else:
@@ -458,10 +466,54 @@ def aff():
             if xxx >= tex-txx-40:
                 xxx=int(480/1200*tex)
                 yyy+=tyy+30
-    elif smenu==7:  #menu aide/tutoriel
-        pass
+    elif smenu==8:  #menu aide/tutoriel
+        fona=pygame.font.SysFont("Georgia",20)
+        clt=(0,0,0)
+        pygame.draw.rect(fenetre,(150,20,150),(int(100/1200*tex),int(200/1000*tey),int(1000/1200*tex),int(700/1000*tey)),0)
+        pygame.draw.rect(fenetre,(0,0,0),(int(100/1200*tex),int(200/1000*tey),int(1000/1200*tex),int(700/1000*tey)),5)
+        if pageaide < pageaidetot : bfal2=fenetre.blit(pygame.transform.scale(pygame.image.load("images/flch.png"),[int(50/1200*tex),int(100/1000*tey)]),[tex-int(60/1200*tex),int(450/1000*tey)])
+        if pageaide > 1           : bfal1=fenetre.blit(pygame.transform.flip(pygame.transform.scale(pygame.image.load("images/flch.png"),[int(50/1200*tex),int(100/1000*tey)]),1,0),[int(20/1200*tex),int(450/1000*tey)])
+        if pageaide==1:
+            fenetre.blit(fona.render("AIDE CLASH OF FIGHTERS - PAGE N°1"                                                                ,30,clt),[int(350/1200*tex),int(200/1000*tey)])
+            fenetre.blit(fona.render("Le but du jeu est de détruire les tours ennemies tout en gardant les siennes"                     ,30,clt),[int(120/1200*tex),int(260/1000*tey)])
+            fenetre.blit(fona.render("Il faut créer un deck de 8 cartes dans le menu [Cartes]."                                         ,30,clt),[int(120/1200*tex),int(300/1000*tey)])
+            fenetre.blit(fona.render("Pour mettre une carte dans le deck, il faut double-cliquez sur la carte"                          ,30,clt),[int(120/1200*tex),int(340/1000*tey)])
+            fenetre.blit(fona.render("Pour enlever une carte du deck, c'est la même chose : double-cliquer dessus"                      ,30,clt),[int(120/1200*tex),int(380/1000*tey)])
+            fenetre.blit(fona.render("Pour lancer une partie, il faut cliquer sur le bouton [Play] dans le menu [Combat]"               ,30,clt),[int(120/1200*tex),int(420/1000*tey)])
+            fenetre.blit(fona.render("Quand une partie est lancée, toutes les cartes du deck sont consommées une fois"                  ,30,clt),[int(120/1200*tex),int(460/1000*tey)])
+            fenetre.blit(fona.render("Lors d'une partie, pour jouer une carte, il faut cliquer dessus dans le menu à droite"            ,30,clt),[int(120/1200*tex),int(500/1000*tey)])
+            fenetre.blit(fona.render("Puis il faut cliquer à l'endroit ou vous voulez poser votre carte"                                ,30,clt),[int(120/1200*tex),int(540/1000*tey)])
+            fenetre.blit(fona.render("Une carte consomme de l'elixir, vous gagnez de l'elixir régulierement"                            ,30,clt),[int(120/1200*tex),int(580/1000*tey)])
+            fenetre.blit(fona.render("L'indicateur d'élixir est une barre violette à droite"                                            ,30,clt),[int(120/1200*tex),int(620/1000*tey)])
+            fenetre.blit(fona.render("Il y a du temps pour finir une partie, si les 3 tours ennemies ne sont pas détruite"              ,30,clt),[int(120/1200*tex),int(660/1000*tey)])
+            fenetre.blit(fona.render("Au bout de 300 secondes, celui qui aura détruit le plus de tour gagne"                            ,30,clt),[int(120/1200*tex),int(700/1000*tey)])
+            fenetre.blit(fona.render("A la fin d'une partie, le vainqueur recois des trophés et de l'or"                                ,30,clt),[int(120/1200*tex),int(740/1000*tey)])
+            fenetre.blit(fona.render("Le perdant, lui, perd des trophés et gagne beaucoup moins d'or"                                   ,30,clt),[int(120/1200*tex),int(780/1000*tey)])
+        if pageaide==2:
+            fenetre.blit(fona.render("AIDE CLASH OF FIGHTERS - PAGE N°2"                                                                ,30,clt),[int(350/1200*tex),int(200/1000*tey)])
+            fenetre.blit(fona.render("Pour ouvrir un coffre, il faut aller dans le menu [Coffre], puis cliquer sur le coffre désiré"    ,30,clt),[int(120/1200*tex),int(260/1000*tey)])
+            fenetre.blit(fona.render("Dans le jeu, il y a une monnaie virtuelle : l'or"                                                 ,30,clt),[int(120/1200*tex),int(300/1000*tey)])
+            fenetre.blit(fona.render("Un coffre coûte de l'or, il y a différents types de coffres"                                      ,30,clt),[int(120/1200*tex),int(340/1000*tey)])
+            fenetre.blit(fona.render("Un coffre donne des cartes et un peu d'or"                                                        ,30,clt),[int(120/1200*tex),int(380/1000*tey)])
+            fenetre.blit(fona.render("Chaque coffre a un nombre de carte différents par rareté de carte"                                ,30,clt),[int(120/1200*tex),int(420/1000*tey)])
+            fenetre.blit(fona.render("Il y a 5 niveaux de rareté : "                                                                    ,30,clt),[int(120/1200*tex),int(460/1000*tey)])
+            fenetre.blit(fona.render("Commun , rare , épique , légendaire , divin"                                                      ,30,clt),[int(120/1200*tex),int(500/1000*tey)])
+            fenetre.blit(fona.render("Plus une carte à un niveau de rareté élevé, plus il est difficile d'en trouver"                   ,30,clt),[int(120/1200*tex),int(540/1000*tey)])
+        if pageaide==3:
+            fenetre.blit(fona.render("AIDE CLASH OF FIGHTERS - PAGE N°3"                                                                ,30,clt),[int(350/1200*tex),int(200/1000*tey)])        
+            fenetre.blit(fona.render("Pour accéder au paramètres, il faut cliquer sur le bouton[parametres] dans le menu"               ,30,clt),[int(120/1200*tex),int(260/1000*tey)])
+            fenetre.blit(fona.render("Dans les paramètres, il y a possibilité de changer la résolution de la fenetre"                   ,30,clt),[int(120/1200*tex),int(300/1000*tey)])
+            fenetre.blit(fona.render("Il faut éviter de changer la résolution de la fenetre si cela n'est pas nécéssaire"               ,30,clt),[int(120/1200*tex),int(340/1000*tey)])
+            fenetre.blit(fona.render("Le jeu est réglé pour fonctionner à la résolution par défaut"                                     ,30,clt),[int(120/1200*tex),int(380/1000*tey)])
+            fenetre.blit(fona.render("Dans les paramètres, il y a possibilité de créer un raccourci"                                    ,30,clt),[int(120/1200*tex),int(420/1000*tey)])
+            fenetre.blit(fona.render("Attention! Le raccourcis ne sera pas créé directement sur le Bureau, il faudra le déplacer"       ,30,clt),[int(120/1200*tex),int(460/1000*tey)])
+            fenetre.blit(fona.render("Il y a aussi possibilité de changer la commande de lancement du jeu"                              ,30,clt),[int(120/1200*tex),int(500/1000*tey)])
+            fenetre.blit(fona.render("Si la commande par défaut ne marche pas, il faut la changer"                                      ,30,clt),[int(120/1200*tex),int(540/1000*tey)])
+            fenetre.blit(fona.render("De même pour le système d'exploitation"                                                           ,30,clt),[int(120/1200*tex),int(580/1000*tey)])
+            
+            
     pygame.display.update()
-    return bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp,bcred,barem,bafl1,bafl2,bmus,bren
+    return bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp,bcred,barem,bafl1,bafl2,bmus,bren,bfal1,bfal2,btut
 
 def get_card(rar,aren):
     ll=[]
@@ -742,7 +794,7 @@ needtoaff=True
 encour=True
 while encour:
     if needtoaff:
-        bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp,bcred,barem,bafl1,bafl2,bmus,bren=aff()
+        bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchsos,bchlp,bcred,barem,bafl1,bafl2,bmus,bren,bfal1,bfal2,btut=aff()
         needtoaff=False
     if smenu==4:
         pygame.draw.rect(fenetre,(50,20,100),(int(18/1200*tex),int(118/1000*tey),int(500/1200*tex),int(40/1000*tey)),0)
@@ -757,6 +809,8 @@ while encour:
         if event.type==QUIT: encour=False
         elif event.type==KEYDOWN:
             if event.key==K_q: encour=False
+            elif event.key==K_e: smenu=8
+            needtoaff=True
         elif event.type==MOUSEBUTTONUP:
             needtoaff=True
             pos=pygame.mouse.get_pos()
@@ -781,8 +835,11 @@ while encour:
             elif rpos.colliderect(bpr): smenu=4
             elif rpos.colliderect(bcred): smenu=5
             elif rpos.colliderect(barem): smenu,arsel=6,j.arene
+            elif rpos.colliderect(btut): smenu=8
             elif rpos.colliderect(bf1): scrtm-=44
             elif rpos.colliderect(bf2): scrtm+=44
+            elif rpos.colliderect(bfal1): pageaide-=1
+            elif rpos.colliderect(bfal2): pageaide+=1
             elif rpos.colliderect(bmus):
                 if mpar==1: mpar=2
                 else: mpar=1

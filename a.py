@@ -666,7 +666,7 @@ def bb():
         if c1.vie<=0:
             if c1.crcrtdead != None:
                 for x in range(c1.crcrtdead[0]): carts1.append( Carte(c1.px,c1.py,c1.crcrtdead[1],c1.camp) )
-            if c1.tp==41:
+            if c1.tp==41 or c1.tp==51:
                 porte=125
                 fenetre.blit(pygame.transform.scale(pygame.image.load("images/explose.png"),[int(2*porte/1200*tex),int(2*porte/1000*tey)]),[int(c1.px-porte/2),int(c1.py-porte/2)])
                 pygame.display.update()
@@ -696,9 +696,9 @@ def bb():
         if c2.vie<=0:
             if c2.crcrtdead != None:
                 for x in range(c2.crcrtdead[0]): carts2.append( Carte(c2.px,c2.py,c2.crcrtdead[1],c2.camp) )
-            if c2.tp==41:
+            if c2.tp==41 or c2.tp==51:
                 porte=125
-                fenetre.blit(pygame.transform.scale(pygame.image.load("images/explose.png"),[int(2*porte/1200*tex),int(2*porte/1000*tey)]),[int(c1.px-porte/2),int(c1.py-porte/2)])
+                fenetre.blit(pygame.transform.scale(pygame.image.load("images/explose.png"),[int(2*porte/1200*tex),int(2*porte/1000*tey)]),[int(c2.px-porte/2),int(c2.py-porte/2)])
                 pygame.display.update()
                 for c in carts1:
                     if math.sqrt((c2.px-c.px)*(c2.px-c.px)+(c2.py-c.py)*(c2.py-c.py)) < porte: c.vie-=c2.att
