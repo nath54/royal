@@ -497,11 +497,13 @@ def botpc(j):
     jcs=j.cartactu[j.cartselec]
     if j.elixir>celi[jcs]:
         if j.camp==2:
-            if ctpc[jcs]!=3:
+            if ctpc[jcs]!=3 and ctpc[jcs]!=4:
                 xx,yy=random.randint(0,tex-int(200/1200*tex)),random.randint(0,int(tey/2))
             else:
-                if carts1!=[]:
-                    cc=random.choice(carts1)
+                if ctpp[jcs]!=52: ccc=carts2
+                else: ccc=carts2
+                if ccc!=[]:
+                    cc=random.choice(ccc)
                     xx,yy=cc.px,cc.py
             for x in range(cnbp[jcs]):
                 if ctpc[jcs]==4: sorps.append(Carte(xx,yy,jcs,j.camp))
@@ -511,11 +513,13 @@ def botpc(j):
             j.cartselec=random.randint(0,3)
             del(j.cartactu[j.cartselec])
         else:
-            if ctpc[jcs]!=3:
+            if ctpc[jcs]!=3 and ctpc[jcs]!=4:
                 xx,yy=random.randint(0,tex-int(200/1200*tex)),random.randint(int(tey/2),tey)
             else:
-                if carts2!=[]:
-                    cc=random.choice(carts2)
+                if ctpp[jcs]!=52: ccc=carts1
+                else: cc=carts2
+                if ccc!=[]:
+                    cc=random.choice(ccc)
                     xx,yy=cc.px,cc.py
             for x in range(cnbp[jcs]):
                 if ctpc[jcs]==4: sorps.append(Carte(xx,yy,jcs,j.camp))
@@ -626,21 +630,19 @@ def bb():
         s.py+=bs
         if ss[1]<=0:
             if s.camp==1:
-                for c in carts2:
-                    if dtouch(s,c):
-                        c.vie-=s.att
-                        if s.tipeatt==8 and c.tpcarte==1:c.etat.append("empoisoné")
-                        elif s.tipeatt==9 and c.tpcarte==1: c.etat.append("gelé")
-                if s.crcrtdead != None:
-                    for x in range(s.crcrtdead[0]): carts1.append( Carte(s.px,s.py,s.crcrtdead[1],s.camp) )
+                if s.tp==52: cc1,cc2=carts1,carts1
+                else: cc1,cc2=carts2,carts1
             else:
-                for c in carts1:
-                    if dtouch(s,c):
-                        c.vie-=s.att
-                        if s.tipeatt==8 and c.tpcarte==1:c.etat.append("empoisoné")
-                        elif s.tipeatt==9 and c.tpcarte==1: c.etat.append("gelé")
-                if s.crcrtdead != None:
-                    for x in range(s.crcrtdead[0]): carts2.append( Carte(s.px,s.py,s.crcrtdead[1],s.camp) )
+                if s.tp==52: cc1,cc2=carts2,carts2
+                else: cc1,cc2=carts1,carts2
+            for c in cc1:
+                if dtouch(s,c):
+                    c.vie-=s.att
+                    if s.tipeatt==8 and c.tpcarte==1: c.etat.append("empoisoné")
+                    elif s.tipeatt==9 and c.tpcarte==1: c.etat.append("gelé")
+                    elif s.tp==52: c.etat.append("énervé")
+            if s.crcrtdead != None:
+                for x in range(s.crcrtdead[0]): cc2.append( Carte(s.px,s.py,s.crcrtdead[1],s.camp) )
             del(sorts[sorts.index(ss)])
     for sp in sorps:
         if sp.vie <= 0:
