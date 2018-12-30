@@ -47,7 +47,7 @@ class Joueur:
 
 
 ##############
-cpdps=[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
+cpdps=ctpp[2:]
 
 j1=Joueur(1)
 j1.nom=jjr[0]
@@ -63,10 +63,16 @@ ara=jjr[4].split("|")
 nar=[]
 for a in ara: nar.append(int(a))
 j1.cartpos=nar
+
+ara=jjr[6].split("|")
+nar=[]
+for a in ara: nar.append(int(a))
+j1.cartdeb=nar
 spr=open("params.nath","r").read().split("#")
 tex,tey=int(spr[0]),int(spr[1])
 
 j2=Joueur(2)
+if j1.arene==0: j2.tpel=4
 
 if j1.arene==4: cltxt=(0,0,0)
 
@@ -92,9 +98,16 @@ rmape=pygame.Rect(0,0,int(800/1200*tex),tey)
 for rr in lms: rmape.clip(rr)
 #print(rmape)
 
+
+www=0
 while len(j2.deck) < 8:
-    j2.deck.append(random.choice(cpdps))
-    j2.deck=list(set(j2.deck))
+    az=random.choice(cpdps)
+    if care[az] <= j1.arene:
+        j2.deck.append(az)
+        j2.deck=list(set(j2.deck))
+    www+=1
+    if www>=100:
+        j2.deck=j1.deck
 
 from cartes import *
 #rar: 0=commun , 1=rare , 2=epique , 3=legendaire , 4=dieu
@@ -133,6 +146,11 @@ class Mis:
         self.rect=None
     def ev(self):
         if math.sqrt((self.cible.px-self.px)*(self.cible.px-self.px)+(self.cible.py-self.py)*(self.cible.py-self.py)) > self.vit:
+            a=(self.px-self.cible.px)
+            b=(self.py-self.cible.py)
+            try: agl=math.degrees(math.tan(a/b))
+            except: agl=0
+            self.img=pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/"+mimg[self.pos.mtp]),[self.tx,self.ty]),agl)
             a=-abs(self.cible.px-self.px)
             b=-abs(self.cible.py-self.py)
             c,f=int(math.sqrt(a*a+b*b)),self.vit
@@ -839,7 +857,10 @@ def save(j):
         t5+=str(jj)+"|"
     t5=t5[:-1]
     t6=str(j.arene)
-    txt=t1+"#"+t2+"#"+t3+"#"+t4+"#"+t5+"#"+t6+"#"
+    t7=""
+    for jj in j.cartdeb: t7+=str(jj)+"|"
+    t7=t7[:-1]
+    txt=t1+"#"+t2+"#"+t3+"#"+t4+"#"+t5+"#"+t6+"#"+t7+"#"
     ff.write(txt)
     ff.close()
 
