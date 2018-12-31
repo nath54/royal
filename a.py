@@ -486,6 +486,22 @@ class Carte:
                     cart.etat.append("cloné")
                     if self.camp==2: carts2.append( cart )
                     else: carts1.append( cart )
+        if self.tipeatt==11:
+            if self.camp==1: cc=carts1
+            else: cc=carts2
+            tchs=[]
+            for c in cc:
+                if dtouch(self,c) and c!=self: tchs.append(c)
+            for c in tchs:
+                if not "énervé" in c.etat: c.etat.append("énervé")
+        if self.tp==53:
+            tchs=[]
+            for c in carts1+carts2:    
+                if c.camp==self.camp and dtouch(self,c) and c.tpcarte==1:
+                    tchs.append(c)
+            for c in tchs:
+                if c.vie<c.vie_tot:
+                    c.vie+=self.att
         self.attack()
         
 
@@ -500,7 +516,7 @@ def botpc(j):
             if ctpc[jcs]!=3 and ctpc[jcs]!=4:
                 xx,yy=random.randint(0,tex-int(200/1200*tex)),random.randint(0,int(tey/2))
             else:
-                if ctpp[jcs]!=52: ccc=carts2
+                if ctpp[jcs]!=52 and ctpc[jcs]!=4: ccc=carts1
                 else: ccc=carts2
                 if ccc!=[]:
                     cc=random.choice(ccc)
@@ -516,8 +532,8 @@ def botpc(j):
             if ctpc[jcs]!=3 and ctpc[jcs]!=4:
                 xx,yy=random.randint(0,tex-int(200/1200*tex)),random.randint(int(tey/2),tey)
             else:
-                if ctpp[jcs]!=52: ccc=carts1
-                else: cc=carts2
+                if ctpp[jcs]!=52 and ctpc[jcs]!=4: ccc=carts2
+                else: ccc=carts1
                 if ccc!=[]:
                     cc=random.choice(ccc)
                     xx,yy=cc.px,cc.py
@@ -803,7 +819,7 @@ while encour:
                 else: cond=cond2
                 if cond:
                     if j1.elixir >= celi[jcs]:
-                        if not vcp(pos[0],pos[1],ctxx[jcs],ctyy[jcs]) or ctpc[jcs]==1 or ctpc[jcs]==3:
+                        if not vcp(pos[0],pos[1],ctxx[jcs],ctyy[jcs]) or ctpc[jcs]==1 or ctpc[jcs]==3 or ctpc[jcs]==4:
                             if ctpc[jcs]==3:
                                 sa=40
                                 sorts.append( [Carte(pos[0]-sa,pos[1]-sa,jcs,1),sa] )
