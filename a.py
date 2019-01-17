@@ -250,7 +250,8 @@ class Carte:
         self.etat=[]
         self.recte=pygame.Rect(self.px,self.py,self.tx,self.ty)
         self.aaa,self.bbb=random.randint(0,1),random.randint(0,1)
-        
+        self.dasp=time.time()
+        self.tpasp=0.1
     def atta(self,cible):
         if self.mtp!=None:
             miss.append(Mis(self,cible,self.mtp))
@@ -502,6 +503,19 @@ class Carte:
             for c in tchs:
                 if c.vie<c.vie_tot:
                     c.vie+=self.att
+        if self.tipeatt==7:
+            if time.time()-self.dasp > self.tpasp:
+                self.dasp=time.time()
+                if self.camp==1: cc=carts1
+                else: cc=carts2
+                tchs=[]
+                for c in cc:
+                    if dtouch(self,c):
+                        if c.tpcarte == 2: tchs.append(c)
+                for c in tchs:
+                    if c.vie < c.vie_tot:
+                        c.vie+=self.att
+                        if c.vie > c.vie_tot: c.vie=c.vie_tot
         self.attack()
         
 
@@ -589,7 +603,7 @@ def aff():
             dtfas=False
             for et in c.etat:
                 if type(et)==list:
-                    if et[0]=="assomé": dtafs=True
+                    if et[0]=="assomé": dtfas=True
             if dtfas: fenetre.blit(pygame.transform.scale(pygame.image.load("images/zzz.png"),[c.tx,c.ty]),[c.px,c.py])
         for m in miss: m.rect=fenetre.blit(m.img,[m.px,m.py])
         for ss in sorts:
