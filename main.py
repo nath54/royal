@@ -61,6 +61,24 @@ except:
 
 ##############
 
+
+class Joueur:
+    def __init__(self):
+        self.nom="None"
+        self.deck=[]
+        self.argent=0
+        self.trophes=0
+        self.cartpos=[]
+        self.arene=1
+        for ar in atpp:
+            if self.trophes >= atro[ar]: self.arene=ar
+        self.exp=0
+        self.niveau=0
+        self.xpmax=100
+    
+j=Joueur()
+j=load(j)
+
 font=pygame.font.SysFont("Serif",20)
 
 
@@ -121,24 +139,6 @@ def savetps():
     ff.write(txt)
     ff.close()
     
-
-class Joueur:
-    def __init__(self):
-        self.nom="None"
-        self.deck=[]
-        self.argent=0
-        self.trophes=0
-        self.cartpos=[]
-        self.arene=1
-        for ar in atpp:
-            if self.trophes >= atro[ar]: self.arene=ar
-        self.exp=0
-        self.niveau=0
-        self.xpmax=100
-    
-j=Joueur()
-j=load(j)
-
 def rx(x): return int(x/1200*j.tex)
 def ry(y): return int(y/1000*j.tey)
 
