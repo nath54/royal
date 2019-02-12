@@ -61,6 +61,40 @@ except:
 
 ##############
 
+font=pygame.font.SysFont("Serif",20)
+
+dpseudo=False
+if not fichs in os.listdir():
+    txt=""
+    import textbox
+    tc=""
+    ct=""
+    for x in ctpp+[0,0,0]:
+        if care[x] == 0 and ctpp[x] != 0 and ctpp[x] != 1:
+            tc+="10"
+            ct+="1"
+        else :
+            tc+="0"
+            ct+="0"
+        tc+="|"
+        ct+="|"
+    tc=tc[:-1]
+    ct=ct[:-1]
+    txt+="pseudo"+cac+cac+"2000"+cac+"0"+cac+tc+cac+"0"+cac+ct+cac+"0"+cac+"0"
+    f=open(fichs,"w")
+    f.write(txt)
+    f.close()
+    smenu=8
+    dpseudo=True
+if not fichp in os.listdir():
+    txt="1000"+cac+"750"+cac+"1"+cac+"1"+cac+"1"
+    g=open(fichp,"w")
+    g.write(txt)
+    g.close()
+if not fichh in os.listdir():
+    h=open(fichh,"w")
+    h.close()
+
 
 class Joueur:
     def __init__(self):
@@ -78,39 +112,6 @@ class Joueur:
     
 j=Joueur()
 j=load(j)
-
-font=pygame.font.SysFont("Serif",20)
-
-
-if not fichs in os.listdir():
-    txt=""
-    import textbox
-    tc=""
-    ct=""
-    for x in ctpp+[0,0,0]:
-        if care[x] == 0 and ctpp[x] != 0 and ctpp[x] != 1:
-            tc+="10"
-            ct+="1"
-        else :
-            tc+="0"
-            ct+="0"
-        tc+="|"
-        ct+="|"
-    tc=tc[:-1]
-    ct=ct[:-1]
-    txt+=textbox.main("pseudo",j.tex,j.tey)+cac+cac+"2000"+cac+"0"+cac+tc+cac+"0"+cac+ct+cac+"0"+cac+"0"
-    f=open(fichs,"w")
-    f.write(txt)
-    f.close()
-    smenu=8
-if not fichp in os.listdir():
-    txt="1000"+cac+"750"+cac+"1"+cac+"1"+cac+"1"
-    g=open(fichp,"w")
-    g.write(txt)
-    g.close()
-if not fichh in os.listdir():
-    h=open(fichh,"w")
-    h.close()
 
 
 def temps():
@@ -805,7 +806,11 @@ if j.mpar==1: pygame.mixer.music.play()
 
 if version < dv and dv != 0.0:
     alertbox("Une mise à jour est disponible")
-    
+    textbox.main("pseudo",j.tex,j.tey)
+
+if dpseudo:
+    j.nom=textbox.main(j.nom,j.tex,j.tey)
+
 vdate()
 
 needtoaff=True
