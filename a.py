@@ -2,8 +2,9 @@
 import random,pygame,math,time
 from pygame.locals import *
 from cartes import *
+from lib import *
 
-spr=open("params.nath","r").read().split("#")
+spr=open(fichp,"r").read().split("#")
 tex,tey=int(spr[0]),int(spr[1])
 
 tpx,tpy=int(tex/1.5),tey
@@ -16,7 +17,7 @@ sorts=[]
 sorps=[]
 dtsp=time.time()
 cltxt=(215,215,215)
-temps=300
+temps=2*60
 dtps=time.time()
 etps=time.time()
 j1ga=False
@@ -31,7 +32,7 @@ jjr=open("stats.nath","r").read().split("#")
 class Joueur:
     def __init__(self,camp):
         self.camp=camp
-        self.nom="bot"
+        self.nom="bot"+str(random.randint(0,100))
         self.deck=[]
         self.cartactu=[]
         self.rcartactu=[]
@@ -50,6 +51,9 @@ class Joueur:
 cpdps=ctpp[2:]
 
 j1=Joueur(1)
+j1=load(j1)
+print(j1.arene)
+"""
 j1.nom=jjr[0]
 ara=jjr[1].split("|")
 nar=[]
@@ -68,9 +72,9 @@ ara=jjr[6].split("|")
 nar=[]
 for a in ara: nar.append(int(a))
 j1.cartdeb=nar
-spr=open("params.nath","r").read().split("#")
+spr=open(fichp,"r").read().split("#")
 tex,tey=int(spr[0]),int(spr[1])
-
+"""
 j2=Joueur(2)
 if j1.arene==0: j2.tpel=4
 
@@ -874,7 +878,7 @@ while encour:
         else: jegal=True
         encour=False
         time.sleep(atp)
-
+"""
 def save(j):
     ff=open("stats.nath","w")
     t1=str(j.nom)
@@ -895,45 +899,56 @@ def save(j):
     txt=t1+"#"+t2+"#"+t3+"#"+t4+"#"+t5+"#"+t6+"#"+t7+"#"
     ff.write(txt)
     ff.close()
-
+"""
 
 fenetre.fill((0,0,0))
 img="images/perdu.png"
 encour2=False
 arg,tro=0,0
+vict=0
 if jegal or countr()[0]==countr()[1]:
     img="images/egal.png"
     encour2=True
     arg=random.randint(10,30)
+    epx=random.randint(0,10)
     tro=0
     j1.argent+=arg
+    j1.exp+=epx
 if carts2==[] or j1ga or j1.nbtour>j2.nbtour or countr()[0]>countr()[1]:
     img="images/gagné.png"
     encour2=True
     arg=random.randint(20,60)
     tro=random.randint(20,40)
+    epx=random.randint(20,60)
     j1.argent+=arg
     j1.trophes+=tro
+    j1.exp+=epx
     fenetre.blit(font.render("vous avez gagné "+str(tro)+" trophés",20,(10,10,10)),[tex/1.5,tey/1.2])
+    vict=1
 if carts1==[] or j2ga or j1.nbtour<j2.nbtour or countr()[0]<countr()[1]:
     img="images/perdu.png"
     encour2=True
     arg=random.randint(0,10)
     tro=random.randint(20,30)
+    epx=random.randint(0,10)
     j1.argent+=arg
     j1.trophes-=tro
+    j1.exp+=epx
     if j1.trophes < 0: j1.trophes=0
     fenetre.blit(font.render("vous avez perdu "+str(abs(tro))+" trophés",20,(10,10,10)),[tex/1.5,tey/1.2])
+    vict=2
 
 for cc in j1.deck:
     if j1.cartpos[cc] >= 1: j1.cartpos[cc]-=1
 
 save(j1)
+rhisto(j1.deck,j2.deck,vict,countr()[0],countr()[1],j1.nom,j2.nom,1)
 
 fenetre.blit(pygame.transform.scale(pygame.image.load(img),[tex,tey]),[0,0])
 bmenu=fenetre.blit(pygame.transform.scale(pygame.image.load("images/bmenu.png"),[int(100/1200*tex),int(50/1000*tey)]),[tex/2,tey/2])
 fenetre.blit(font.render("vous avez gagné "+str(arg)+" or",20,(150,150,10)),[tex-650,tey-200])
 fenetre.blit(font.render("vous avez gagné "+str(tro)+" trophés",20,(150,150,10)),[tex-650,tey-150])
+fenetre.blit(font.render("vous avez gagné "+str(epx)+" experience",20,(150,150,10)),[tex-650,tey-100])
 
 pygame.display.update()
 
