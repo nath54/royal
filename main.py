@@ -486,7 +486,6 @@ def aff():
         lsh=lhisto()[::-1]
         hx,hy=rx(50),ry(150)
         htx,hty=rx(1000),ry(140)
-        print(lsh)
         for hh in lsh[:nbh]:
             if hh[7]==1: cln1,cln2=(0,0,150),(150,0,0)
             else: cln2,cln1=(0,0,150),(150,0,0)
