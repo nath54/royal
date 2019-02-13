@@ -528,7 +528,7 @@ def aff():
             ##
             if (hh[7]==1 and hh[2]==1) or (hh[7]==2 and hh[2]==2):  txtt,cltt="victoire",(0,200,0)
             elif (hh[7]==1 and hh[2]==2) or (hh[7]==2 and hh[2]==1): txtt,cltt="défaite",(200,0,0)
-            else: txtt,cltt="égalité",(200,200,0)
+            else: txtt,cltt="égalité",(160,140,0)
             fenetre.blit(font.render(txtt,20,cltt),[hx+rx(460),hy+ry(10)])
             hy+=hty+rx(25)
     pygame.display.update()

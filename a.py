@@ -27,6 +27,8 @@ modj=False
 
 pygame.init()
 
+fonb=pygame.font.SysFont("Serif",40)
+
 jjr=open("stats.nath","r").read().split("#")
 
 class Joueur:
@@ -304,7 +306,7 @@ class Carte:
                     else: carts2.append( Carte(self.px+self.tx/2,self.py+self.ty+10,self.apcarte,self.camp) )
             tchs=[]
             for c in cc:
-                if dtouch(self,c) and c.tpcarte!=3: tchs.append(c)
+                if dtouch(self,c) and c.tpcarte!=3 and c.endroit in self.att_endroit: tchs.append(c)
             if tchs==[]: return False
             if  self.tpatt == 1:
                 lpp=tchs[0]
@@ -566,7 +568,7 @@ def botpc(j):
 def bot(j):
     botpc(j)
         
-            
+fps=0
 
 fond=pygame.transform.scale(pygame.image.load("images/fond.png"),[tpx,tpy])
 font=pygame.font.SysFont("Serif",20)
@@ -633,9 +635,11 @@ def aff():
         pygame.draw.rect(fenetre,(250,250,250),(1100/1200*tex,50/1000*tey,50/1200*tex,750/1000*tey),5)
         fenetre.blit(font.render(str(j1.elixir)+"/"+str(maxelixir),20,(150,20,150)),[1100/1200*tex,800/1000*tey])
         #statsgame
-        fenetre.blit(font.render(j1.nom+" : "+str(3-j2.nbtr),20,(0,0,250)),[20,20])
-        fenetre.blit(font.render(j2.nom+" : "+str(3-j1.nbtr),20,(250,0,0)),[220,20])
-        fenetre.blit(font.render(str(temps)+" sec restantes",20,(250,0,250)),[420,20])
+        fenetre.blit(font.render(j1.nom+" : "+str(3-j2.nbtr),20,(0,0,250)),[rx(20),ry(20)])
+        fenetre.blit(font.render(j2.nom+" : "+str(3-j1.nbtr),20,(250,0,0)),[rx(220),ry(20)])
+        if temps > 5: fenetre.blit(font.render(str(temps)+" sec restantes",20,(250,0,250)),[rx(420),ry(20)])
+        else: fenetre.blit(fonb.render(str(temps)+" sec restantes",20,(250,0,250)),[rx(300),ry(500)])
+        fenetre.blit(font.render("fps : "+str(fps),20,(200,200,200)),[rx(1100),ry(965)])
     pygame.display.update()
 
 
@@ -815,6 +819,7 @@ cm()
 
 encour=True
 while encour:
+    tit=time.time()
     if carts2==[] or carts1==[]:
         encour=False
         encour2=True
@@ -878,6 +883,9 @@ while encour:
         else: jegal=True
         encour=False
         time.sleep(atp)
+    tiit=time.time()
+    fps=int(1.0/(tiit-tit))
+
 """
 def save(j):
     ff=open("stats.nath","w")

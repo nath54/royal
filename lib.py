@@ -2,7 +2,6 @@
 from cartes import *
 
 tex,tey=1000,750
-teex,teey=1000,750
 smenu=2
 scrtm=0
 cselec=None
@@ -137,5 +136,6 @@ def lhisto():
                 lst.append(ll)
     return lst
 
-
+def rx(x): return int(x/1200*tex)
+def ry(y): return int(y/1000*tey)
 
