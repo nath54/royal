@@ -88,6 +88,8 @@ def load(j):
         if j.trophes >= atro[ar]: j.arene=ar
     j.exp=int(jjr[7])
     j.niveau=int(jjr[8])
+    j.xpmax=int(100)
+    for x in range(j.niveau-1): j.xpmax=j.xpmax+int(j.xpmax*0.3)
     spr=open(fichp,"r").read().split("#")
     j.tex=int(spr[0])
     j.tey=int(spr[1])
