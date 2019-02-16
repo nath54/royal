@@ -14,7 +14,7 @@ fichtps="tps.nath"
 pageaide=1
 pageaidetot=3
 
-
+dire="./"
 
 fichs="stats.nath"
 fichp="params.nath"
@@ -27,6 +27,7 @@ ccac="_"
 
 rarete=["commun","rare","epique","legendaire","divin"]
 craret=[(0,0,140),(150,105,25),(150,0,150),(20,150,20),(250,250,0)]
+
 
 def save(j):
     #stats
@@ -47,12 +48,14 @@ def save(j):
     t7=t7[:-1]
     t8=str(j.exp)
     t9=str(j.niveau)
-    txt=t1+cac+t2+cac+t3+cac+t4+cac+t5+cac+t6+cac+t7+cac+t8+cac+t9
+    if j.arensl != None: t10=str(j.arensl)
+    else: t10="N"
+    txt=t1+cac+t2+cac+t3+cac+t4+cac+t5+cac+t6+cac+t7+cac+t8+cac+t9+cac+t10
     ff=open(fichs,"w")
     ff.write(txt)
     ff.close()
     #params
-    txt=str(j.teex)+cac+str(j.teey)+cac+str(j.sos)+cac+str(j.modlp)+cac+str(j.mpar)
+    txt=str(j.teex)+cac+str(j.teey)+cac+str(j.sos)+cac+str(j.modlp)+cac+str(j.mpar)+cac+str(j.fpsmax)
     ff=open(fichp,"w")
     ff.write(txt)
     ff.close()
@@ -89,6 +92,8 @@ def load(j):
     j.exp=int(jjr[7])
     j.niveau=int(jjr[8])
     j.xpmax=int(100)
+    if jjr[9][0]=="N": j.arensl=None
+    else:    j.arensl=int(jjr[9])
     for x in range(j.niveau-1): j.xpmax=j.xpmax+int(j.xpmax*0.3)
     spr=open(fichp,"r").read().split("#")
     j.tex=int(spr[0])
@@ -98,6 +103,8 @@ def load(j):
     j.sos=int(spr[2])
     j.modlp=int(spr[3])
     j.mpar=int(spr[4])
+    print(spr)
+    j.fpsmax=int(spr[5])
     return j
 
 def rhisto(j1deck,j2deck,jvict,j1cr,j2cr,j1nom,j2nom,nbj1):

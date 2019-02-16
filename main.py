@@ -80,14 +80,14 @@ if not fichs in os.listdir():
         ct+="|"
     tc=tc[:-1]
     ct=ct[:-1]
-    txt+="pseudo"+cac+cac+"2000"+cac+"0"+cac+tc+cac+"0"+cac+ct+cac+"0"+cac+"0"
+    txt+="pseudo"+cac+cac+"2000"+cac+"0"+cac+tc+cac+"0"+cac+ct+cac+"0"+cac+"0"+cac+"0"
     f=open(fichs,"w")
     f.write(txt)
     f.close()
     smenu=8
     dpseudo=True
 if not fichp in os.listdir():
-    txt="1000"+cac+"750"+cac+"1"+cac+"1"+cac+"1"
+    txt="1000"+cac+"750"+cac+"1"+cac+"1"+cac+"1"+cac+"60"
     g=open(fichp,"w")
     g.write(txt)
     g.close()
@@ -109,6 +109,8 @@ class Joueur:
         self.exp=0
         self.niveau=0
         self.xpmax=100
+        self.arensl=None
+        self.fpsmax=60
     
 j=Joueur()
 j=load(j)
@@ -145,6 +147,13 @@ def ry(y): return int(y/1000*j.tey)
 
 def texte(xx,yy,txt,cl,tt):
     return fenetre.blit(pygame.font.SysFont("Serif",tt).render(txt,20,cl),[xx,yy])
+
+def button(text,x,y,tx,ty,cl1,cl2):
+    tb=2
+    bb=pygame.draw.rect(fenetre,cl1,(x,y,tx,ty),0)
+    pygame.draw.rect(fenetre,cl2,(x,y,tx,ty),tb)
+    fenetre.blit(pygame.transform.scale(font.render(text,20,cl2),[int(tx/1.5),int(ty/1.5)]),[int(x+tx/5),int(y+ty/5)])
+    return bb
 
 def deblocrt(crt):
     clt=(250,250,250)
@@ -190,13 +199,13 @@ def deblocrt(crt):
                 rpos=pygame.Rect(pos[0],pos[1],1,1)
                 if rpos.colliderect(bexit):
                     ouv=False
-
+"""
 def button(x,y,tx,ty,text,cl):
     tb=2
     bb=pygame.draw.rect(fenetre,cl,(x,y,tx,ty),0)
     pygame.draw.rect(fenetre,(0,0,0),(x,y,tx,ty),tb)
     fenetre.blit(pygame.transform.scale(font.render(text,20,(0,0,0)),[tx-2*tb+2,ty-2*tb-2]),[x+tb+1,y+tb+1])
-    return bb
+    return bb"""
 
 def aff():
     global arsel
@@ -204,7 +213,9 @@ def aff():
     bchlp=pygame.Rect(0,0,0,0)
     bren=pygame.Rect(0,0,0,0)
     bts=[]
-    for x in range(20): bts.append( None )
+    for x in range(25): bts.append( None )
+    barensl=[]
+    for x in range(len(atpp)): barensl.append(None)
     #0=bouton play
     #1=bouton deck aléatoire
     #2=bouton flèche cartes gauche
@@ -225,6 +236,8 @@ def aff():
     #17=bouton tutoriel
     #18=bouton menu profil
     #19=bouton menu historique
+    #20=bouton augmenter fpsmax
+    #21=bouton diminuer fpsmax
     if smenu!=1:  imgm1="images/m1.png"
     else       :  imgm1="images/m1sel.png"
     if smenu!=2:  imgm2="images/m2.png"
@@ -392,6 +405,9 @@ def aff():
         bren=pygame.draw.rect(fenetre,(100,100,100),(int(100/1200*j.tex),int(400/1000*j.tey),int(250/1200*j.tex),int(75/1000*j.tey)),0)
         pygame.draw.rect(fenetre,(0,0,0),(int(100/1200*j.tex),int(400/1000*j.tey),int(250/1200*j.tex),int(75/1000*j.tey)),5)
         fenetre.blit(font.render("rénitialiser le compte",20,(0,0,0)),[int(110/1200*j.tex),int(410/1000*j.tey)])
+        button("limite fps : "+str(j.fpsmax),rx(110),ry(900),rx(200),ry(75),(200,200,200),(20,15,5))
+        bts[20]=button("augmenter",rx(310),ry(900),rx(100),ry(75),(20,100,200),(0,0,0))
+        bts[21]=button("diminuer",rx(10),ry(900),rx(100),ry(75),(200,100,20),(0,0,0))
     elif smenu==5:  #menu credit
         clt=(215,215,215)
         fenetre.blit(font.render("Développeur : ",20,clt),[int(100/1200*j.tex),int(200/1000*j.tey)])
@@ -479,7 +495,7 @@ def aff():
         pygame.draw.rect(fenetre,(200,200,250),(grxx,gryy,int(j.exp/j.xpmax*grtx),grty),0)
         pygame.draw.rect(fenetre,(250,250,250),(grxx,gryy,grtx,grty),5)
         texte(grxx-60+int(j.exp/j.xpmax*grtx),gryy+20,str(j.exp)+"/"+str(j.xpmax),(0,0,250),20)
-        bts[19]=button(rx(50),ry(850),rx(100),ry(50),"historique",(150,150,5))
+        bts[19]=button("historique",rx(50),ry(850),rx(100),ry(50),(150,150,5),(10,10,10))
     elif smenu==10: #historique
         #0=j1 deck 1=j1 deck 2=joueur victorieux 3=j1 crowns 4=j2 crowns 5=j1 nom 6=j2 nom 7=nbj1
         nbh=5
@@ -532,7 +548,7 @@ def aff():
             fenetre.blit(font.render(txtt,20,cltt),[hx+rx(460),hy+ry(10)])
             hy+=hty+rx(25)
     pygame.display.update()
-    return rcs,rcf,rcd,lbpr,bchlp,bren,bts
+    return rcs,rcf,rcd,lbpr,bchlp,bren,bts,barensl
 
 def get_card(rar,aren):
     ll=[]
@@ -718,10 +734,30 @@ def alertbox(txt):
                 if rpos.colliderect(bb):
                     boucle=False
                     break
-            
+
+
 def maj():
-    #TODO
-    pass
+    button("Mise à jour en cour",rx(j.tex/3),ry(j.tey/3),rx(j.tex/3),ry(j.tey/3),(0,150,50),(15,51,51))
+    pygame.display.update()
+
+    url="https://github.com/nath54/royal/archive/master.zip"
+    from urllib.request import urlopen
+    with open('../royal.zip', 'wb') as fich:
+        fich.write(urlopen(url).read())
+    import zipfile
+    with zipfile.ZipFile("../royal.zip", "r") as z:
+        z.extractall("../royale")
+    import os
+    os.rename(dire+fichs,"../royale/royal-master/"+fichs)
+    os.rename(dire+fichp,"../royale/royal-master/"+fichp)
+    os.rename(dire+fichh,"../royale/royal-master/"+fichh)
+    os.rename("../royale/royal-master","../royale_maj")
+    import shutil
+    shutil.rmtree('../royal/')
+    os.rename("../royale_maj","../royal")
+    os.remove("../royal.zip")
+    os.rmdir("../royale")
+
 
 def vdate():
     date=time.localtime()
@@ -799,6 +835,8 @@ time.sleep(1)
 dc=time.time()
 tdc=0.5
 
+maj()
+
 mus=["Music/Dream.mp3","Music/Harp.mp3"]
 musmenu=pygame.mixer.music.load(random.choice(mus))
 if j.mpar==1: pygame.mixer.music.play()
@@ -821,8 +859,7 @@ while encour:
         j.niveau+=1
         j.xpmax=j.xpmax+int(float(j.xpmax)*0.3)
     if needtoaff:
-        #bplay,bm1,bm2,bm3,rcs,rcf,rcd,bale,bf1,bf2,bpr,lbpr,brac,bchj.sos,bchlp,bcred,barem,bafl1,bafl2,bmus,bren,bfal1,bfal2,btut,bts=aff()
-        rcs,rcf,rcd,lbpr,bchlp,bren,bts=aff()
+        rcs,rcf,rcd,lbpr,bchlp,bren,bts,barensl=aff()
         needtoaff=False
     if smenu==4:
         pygame.draw.rect(fenetre,(50,20,100),(int(18/1200*j.tex),int(118/1000*j.tey),int(500/1200*j.tex),int(40/1000*j.tey)),0)
@@ -906,6 +943,11 @@ while encour:
                     save(j)
                     alertbox("Veuillez relancer le jeu pour appliquer les parametres")
                     encour=False
+            for bb in barensl:
+                if bb!=None:
+                    if rpos.colliderect(bb):
+                        if barensl.index(bb) <= j.arene:
+                            j.barensl=barensl.index(bb)
             ###for bouton in boutons
             for bt in bts:
                 if bt != None:
@@ -952,6 +994,10 @@ while encour:
                         elif di==17: smenu=8
                         elif di==18: smenu=9
                         elif di==19: smenu=10
+                        elif di==20: j.fpsmax+=5
+                        elif di==21:
+                            j.fpsmax-=5
+                            if j.fpsmax < 5: j.fpsmax=5
             ###
             save(j)
     

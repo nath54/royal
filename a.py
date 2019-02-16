@@ -47,6 +47,8 @@ class Joueur:
         self.cartpos=[]
         self.arene=1
         self.nbtour=3
+        self.fpsmax=60
+        self.arensl=None
 
 
 ##############
@@ -812,6 +814,7 @@ def vcp(x,y,tx,ty):
 
 fenetre=pygame.display.set_mode([tex,tey])
 pygame.display.set_caption("THE CLASH OF FIGHTERS")
+fpsClock = pygame.time.Clock()
 
 deb()
 cm()
@@ -883,6 +886,7 @@ while encour:
         else: jegal=True
         encour=False
         time.sleep(atp)
+    fpsClock.tick(j1.fpsmax)
     tiit=time.time()
     fps=int(1.0/(tiit-tit))
 
