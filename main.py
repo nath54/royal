@@ -735,28 +735,51 @@ def alertbox(txt):
                     boucle=False
                     break
 
-
+#MAJ
 def maj():
-    button("Mise à jour en cour",rx(j.tex/3),ry(j.tey/3),rx(j.tex/3),ry(j.tey/3),(0,150,50),(15,51,51))
+    ##aff
+    pygame.draw.rect(fenetre,(150,150,25),(rx(100),ry(100),rx(1000),ry(800)),0)
+    pygame.draw.rect(fenetre,(15,15,25),(rx(100),ry(100),rx(1000),ry(800)),5)
+    fenetre.blit( pygame.font.SysFont("Serif",40).render("Mise à jour en cour",20,(0,0,0)) , [rx(500),ry(300)])
     pygame.display.update()
-
+    ##
     url="https://github.com/nath54/royal/archive/master.zip"
     from urllib.request import urlopen
     with open('../royal.zip', 'wb') as fich:
         fich.write(urlopen(url).read())
+    ##aff
+    fenetre.blit( pygame.font.SysFont("Serif",20).render("-Téléchargement : fait",20,(0,0,0)) , [rx(400),ry(500)])
+    pygame.display.update()
+    ##
     import zipfile
     with zipfile.ZipFile("../royal.zip", "r") as z:
         z.extractall("../royale")
+    ##aff
+    fenetre.blit( pygame.font.SysFont("Serif",20).render("-Extraction : fait",20,(0,0,0)) , [rx(500),ry(500)])
+    pygame.display.update()
+    ##
     import os
     os.rename(dire+fichs,"../royale/royal-master/"+fichs)
     os.rename(dire+fichp,"../royale/royal-master/"+fichp)
     os.rename(dire+fichh,"../royale/royal-master/"+fichh)
     os.rename("../royale/royal-master","../royale_maj")
+    ##aff
+    fenetre.blit( pygame.font.SysFont("Serif",20).render("-Copie des fichiers du jeu : fait",20,(0,0,0)) , [rx(600),ry(500)])
+    pygame.display.update()
+    ##
     import shutil
     shutil.rmtree('../royal/')
     os.rename("../royale_maj","../royal")
     os.remove("../royal.zip")
     os.rmdir("../royale")
+    ##aff
+    fenetre.blit( pygame.font.SysFont("Serif",20).render("-Suppression des fichier inutiles : fait",20,(0,0,0)) , [rx(700),ry(500)])
+    pygame.display.update()
+    ##
+    ##aff
+    fenetre.blit( pygame.font.SysFont("Serif",20).render("-Mise à jour effectuée : fait",20,(0,0,0)) , [rx(800),ry(500)])
+    pygame.display.update()
+    ##
 
 
 def vdate():
