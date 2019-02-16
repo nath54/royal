@@ -770,7 +770,7 @@ def maj():
     ##
     import shutil
     dd=os.getcwd().split("\\")
-    ddd="../"+dd[len(dd)]
+    ddd="../"+dd[len(dd)-1]
     shutil.rmtree(ddd)
     os.rename("../royale_maj",ddd)
     os.remove("../royal.zip")
