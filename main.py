@@ -862,15 +862,13 @@ time.sleep(1)
 dc=time.time()
 tdc=0.5
 
-maj()
-
 mus=["Music/Dream.mp3","Music/Harp.mp3"]
 musmenu=pygame.mixer.music.load(random.choice(mus))
 if j.mpar==1: pygame.mixer.music.play()
 
 if version < dv and dv != 0.0:
     alertbox("Une mise à jour est disponible")
-    textbox.main("pseudo",j.tex,j.tey)
+    maj()
 
 if dpseudo:
     j.nom=textbox.main(j.nom,j.tex,j.tey)
