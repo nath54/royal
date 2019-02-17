@@ -748,42 +748,33 @@ def maj():
     from urllib.request import urlopen
     with open('../royal.zip', 'wb') as fich:
         fich.write(urlopen(url).read())
-    ##aff
-    fenetre.blit( pygame.font.SysFont("Serif",20).render("-Téléchargement : fait",20,(0,0,0)) , [rx(400),ry(400)])
-    pygame.display.update()
-    ##
     import zipfile
     with zipfile.ZipFile("../royal.zip", "r") as z:
         z.extractall("../royale")
-    ##aff
-    fenetre.blit( pygame.font.SysFont("Serif",20).render("-Extraction : fait",20,(0,0,0)) , [rx(400),ry(500)])
-    pygame.display.update()
-    ##
     import os
     os.rename(dire+fichs,"../royale/royal-master/"+fichs)
     os.rename(dire+fichp,"../royale/royal-master/"+fichp)
     os.rename(dire+fichh,"../royale/royal-master/"+fichh)
     os.rename("../royale/royal-master","../royale_maj")
-    ##aff
-    fenetre.blit( pygame.font.SysFont("Serif",20).render("-Copie des fichiers du jeu : fait",20,(0,0,0)) , [rx(400),ry(600)])
-    pygame.display.update()
+    alertbox("Le programme va se quitter pour installer la mise à jour, quand la mise à jour sera installée, veuillez relancer le programme")
     ##
-    import shutil
+    txt="""
+    import shutil,os,time
+    print("Mise à jour en cour d'installation")
+    time.sleep(1)
+    os.system("cd ../")
     dd=os.getcwd().split("\\")
-    ddd="../"+dd[len(dd)-1]
+    ddd=dd[len(dd)-1]
     shutil.rmtree(ddd)
-    os.rename("../royale_maj",ddd)
-    os.remove("../royal.zip")
-    os.rmdir("../royale")
-    ##aff
-    fenetre.blit( pygame.font.SysFont("Serif",20).render("-Suppression des fichier inutiles : fait",20,(0,0,0)) , [rx(400),ry(700)])
-    pygame.display.update()
-    ##
-    ##aff
-    fenetre.blit( pygame.font.SysFont("Serif",20).render("-Mise à jour effectuée : fait",20,(0,0,0)) , [rx(400),ry(800)])
-    pygame.display.update()
-    ##
-    alertbox("Le jeux à été mis à jour")
+    os.rename("royale_maj",ddd)
+    os.remove("royal.zip")
+    os.rmdir("royale")
+    """
+    f=open("../maj.py","w")
+    f.write(txt)
+    f.close()
+    proc= subprocess.Popen("python "+"../maj.py", shell=True)
+    exit()
 
 
 def vdate():
