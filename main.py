@@ -759,16 +759,19 @@ def maj():
     alertbox("Le programme va se quitter pour installer la mise à jour, quand la mise à jour sera installée, veuillez relancer le programme")
     ##
     txt="""
-    import shutil,os,time
-    print("Mise à jour en cour d'installation")
-    time.sleep(1)
-    os.system("cd ../")
-    dd=os.getcwd().split("\\")
-    ddd=dd[len(dd)-1]
-    shutil.rmtree(ddd)
-    os.rename("royale_maj",ddd)
-    os.remove("royal.zip")
-    os.rmdir("royale")
+import shutil,os,time
+print("Mise à jour en cour d'installation")
+time.sleep(1)
+os.system("cd ../")
+dd=os.getcwd().split("\\")
+ddd=dd[len(dd)-1]
+shutil.rmtree(ddd)
+os.rename("royale_maj",ddd)
+os.remove("royal.zip")
+os.rmdir("royale")
+import subprocess
+proc= subprocess.Popen("python "+"../maj.py", shell=True)
+exit()
     """
     f=open("../maj.py","w")
     f.write(txt)
