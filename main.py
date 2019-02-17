@@ -742,7 +742,8 @@ def maj():
     pygame.draw.rect(fenetre,(150,150,25),(rx(100),ry(100),rx(1000),ry(800)),0)
     pygame.draw.rect(fenetre,(15,15,25),(rx(100),ry(100),rx(1000),ry(800)),5)
     fenetre.blit( pygame.font.SysFont("Serif",40).render("Mise à jour en cour",20,(0,0,0)) , [rx(500),ry(150)])
-    fenetre.blit( pygame.font.SysFont("Serif",20).render("Cela peut prendre quelques minutes en fonction de votre connection",20,(0,0,0)) , [rx(400),ry(300)])
+    fenetre.blit( pygame.font.SysFont("Serif",20).render("Cela peut prendre quelques minutes en fonction de votre connection",20,(0,0,0)) , [rx(200),ry(300)])
+    fenetre.blit( pygame.font.SysFont("Serif",20).render("Si il y a un problème, veuillez réinstaller la nouvelle version manuellement depuis https://github.com/nath54/royal",20,(0,0,0)) , [rx(200),ry(400)])
     pygame.display.update()
     ##
     import os,shutil
