@@ -745,6 +745,13 @@ def maj():
     fenetre.blit( pygame.font.SysFont("Serif",20).render("Cela peut prendre quelques minutes en fonction de votre connection",20,(0,0,0)) , [rx(400),ry(300)])
     pygame.display.update()
     ##
+    import os,shutil
+    if "royal.zip" in os.listdir("../"): os.remove("../royal.zip")
+    if "royal-master.zip" in os.listdir("../"): os.remove("../royal-master.zip")
+    if "maj.py" in os.listdir("../"): os.remove("../maj.py")
+    if "royale" in os.listdir("../"): shutil.rmtree("../royale")
+    if "royale_maj" in os.listdir("../"): shutil.rmtree("../royale_maj")
+    ##
     url="https://github.com/nath54/royal/archive/master.zip"
     from urllib.request import urlopen
     with open('../royal.zip', 'wb') as fich:
@@ -752,13 +759,6 @@ def maj():
     import zipfile
     with zipfile.ZipFile("../royal.zip", "r") as z:
         z.extractall("../royale")
-    ##
-    import os,shutil
-    if "royal.zip" in os.listdir("../"): os.remove("../royal.zip")
-    if "royal-master.zip" in os.listdir("../"): os.remove("../royal-master.zip")
-    if "maj.py" in os.listdir("../"): os.remove("../maj.py")
-    if "royale" in os.listdir("../"): shutil.rmtree("../royale")
-    if "royale_maj" in os.listdir("../"): shutil.rmtree("../royale_maj")
     ##
     os.rename(dire+fichs,"../royale/royal-master/"+fichs)
     os.rename(dire+fichp,"../royale/royal-master/"+fichp)
@@ -770,18 +770,18 @@ def maj():
     txt="""
 #coding:utf-8
 import shutil,os,time
-print("Mise à jour en cour d'installation")
+print("Mise a jour en cour d'installation")
 time.sleep(1)
 os.system("cd ../")
 dd='"""+dd+"""'
-dd=dd.split("\\\\")
-ddd=dd[len(dd)-1]
+ddd=dd
 shutil.rmtree(ddd)
 os.rename("royale_maj",ddd)
 os.remove("royal.zip")
 os.rmdir("royale")
 import subprocess
-proc= subprocess.Popen("python "+ddd+"/main.py", shell=True)
+os.system("cd "+ddd)
+proc= subprocess.Popen("python main.py", shell=True)
 exit()
     """
     f=open("../maj.py","w")
