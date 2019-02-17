@@ -779,6 +779,8 @@ def maj():
         if d!="\\":
             ddd+=d
         else: ddd+="\\\\"
+    if j.modlp==1: lp="3"
+    else: lp=""
     txt="""
 #coding:utf-8
 import shutil,os,time
@@ -793,7 +795,7 @@ os.remove("royal.zip")
 os.rmdir("royale")
 import subprocess
 os.system("cd "+ddd)
-proc= subprocess.Popen("python main.py", shell=True)
+proc= subprocess.Popen('python"""+lp+""" main.py', shell=True)
 exit()
     """
     f=open("../maj.py","w")
