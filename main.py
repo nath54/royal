@@ -65,6 +65,7 @@ font=pygame.font.SysFont("Serif",20)
 
 dpseudo=False
 if "maj.py" in os.listdir("../"): os.remove("../maj.py")
+if "maj.py~" in os.listdir("../"): os.remove("../maj.py~")
 if not fichs in os.listdir():
     txt=""
     import textbox
