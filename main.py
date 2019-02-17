@@ -773,13 +773,14 @@ os.rename("royale_maj",ddd)
 os.remove("royal.zip")
 os.rmdir("royale")
 import subprocess
-proc= subprocess.Popen("python "+"../maj.py", shell=True)
+proc= subprocess.Popen("python "+ddd+"/main.py", shell=True)
 exit()
     """
     f=open("../maj.py","w")
     f.write(txt)
     f.close()
     proc= subprocess.Popen("python "+"../maj.py", shell=True)
+    print("Exit")
     exit()
 
 
