@@ -758,12 +758,15 @@ def maj():
     os.rename("../royale/royal-master","../royale_maj")
     alertbox("Le programme va se quitter pour installer la mise à jour, quand la mise à jour sera installée, veuillez relancer le programme")
     ##
+    dd=os.getcwd()
     txt="""
+#coding:utf-8
 import shutil,os,time
 print("Mise à jour en cour d'installation")
 time.sleep(1)
 os.system("cd ../")
-dd=os.getcwd().split("\\")
+dd="""+dd+"""
+dd=dd.split("\\\\")
 ddd=dd[len(dd)-1]
 shutil.rmtree(ddd)
 os.rename("royale_maj",ddd)
