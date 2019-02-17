@@ -414,7 +414,7 @@ def aff():
         button("limite fps : "+str(j.fpsmax),rx(110),ry(900),rx(200),ry(75),(200,200,200),(20,15,5))
         bts[20]=button("augmenter",rx(310),ry(900),rx(100),ry(75),(20,100,200),(0,0,0))
         bts[21]=button("diminuer",rx(10),ry(900),rx(100),ry(75),(200,100,20),(0,0,0))
-        if True: bts[22]=button("mettre à jour",rx(100),ry(800),rx(150),ry(75),(0,200,0),(0,0,0))
+        if False: bts[22]=button("mettre à jour",rx(100),ry(800),rx(150),ry(75),(0,200,0),(0,0,0))
     elif smenu==5:  #menu credit
         clt=(215,215,215)
         fenetre.blit(font.render("Développeur : ",20,clt),[int(100/1200*j.tex),int(200/1000*j.tey)])
@@ -1046,7 +1046,7 @@ while encour:
                         elif di==21:
                             j.fpsmax-=5
                             if j.fpsmax < 5: j.fpsmax=5
-                        elif di==22: maj()
+                        #elif di==22: maj()
             ###
             save(j)
     
