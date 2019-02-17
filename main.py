@@ -240,6 +240,7 @@ def aff():
     #19=bouton menu historique
     #20=bouton augmenter fpsmax
     #21=bouton diminuer fpsmax
+    #22=bouton mettre à jour
     if smenu!=1:  imgm1="images/m1.png"
     else       :  imgm1="images/m1sel.png"
     if smenu!=2:  imgm2="images/m2.png"
@@ -410,6 +411,7 @@ def aff():
         button("limite fps : "+str(j.fpsmax),rx(110),ry(900),rx(200),ry(75),(200,200,200),(20,15,5))
         bts[20]=button("augmenter",rx(310),ry(900),rx(100),ry(75),(20,100,200),(0,0,0))
         bts[21]=button("diminuer",rx(10),ry(900),rx(100),ry(75),(200,100,20),(0,0,0))
+        if True: bts[22]=button("mettre à jour",rx(100),ry(100),rx(150),ry(500),(0,200,0),(0,0,0))
     elif smenu==5:  #menu credit
         clt=(215,215,215)
         fenetre.blit(font.render("Développeur : ",20,clt),[int(100/1200*j.tex),int(200/1000*j.tey)])
@@ -762,20 +764,25 @@ def maj():
     with zipfile.ZipFile("../royal.zip", "r") as z:
         z.extractall("../royale")
     ##
-    os.rename(dire+fichs,"../royale/royal-master/"+fichs)
-    os.rename(dire+fichp,"../royale/royal-master/"+fichp)
-    os.rename(dire+fichh,"../royale/royal-master/"+fichh)
+    shutil.copyfile(dire+fichs,"../royale/royal-master/"+fichs)
+    shutil.copyfile(dire+fichp,"../royale/royal-master/"+fichp)
+    shutil.copyfile(dire+fichh,"../royale/royal-master/"+fichh)
     os.rename("../royale/royal-master","../royale_maj")
     alertbox("Le programme va se quitter pour installer la mise à jour, quand la mise à jour sera installée, veuillez relancer le programme")
     ##
     dd=os.getcwd()
+    ddd=""
+    for d in list(dd):
+        if d!="\\":
+            ddd+=d
+        else: ddd+="\\\\"
     txt="""
 #coding:utf-8
 import shutil,os,time
 print("Mise a jour en cour d'installation")
 time.sleep(1)
 os.system("cd ../")
-dd='"""+dd+"""'
+dd='"""+ddd+"""'
 ddd=dd
 shutil.rmtree(ddd)
 os.rename("royale_maj",ddd)
@@ -872,7 +879,6 @@ tdc=0.5
 
 if version < dv and dv != 0.0:
     alertbox("Une mise à jour est disponible")
-    maj()
 
 if dpseudo:
     j.nom=textbox.main(j.nom,j.tex,j.tey)
@@ -1032,6 +1038,7 @@ while encour:
                         elif di==21:
                             j.fpsmax-=5
                             if j.fpsmax < 5: j.fpsmax=5
+                        elif di==22: maj()
             ###
             save(j)
     
