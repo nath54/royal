@@ -33,6 +33,8 @@ from cartes import *
 import subprocess
 from lib import *
 
+amaj=False
+
 pygame.init()
 
 t1t=time.time()
@@ -52,6 +54,7 @@ try:
     ff=open("dernier_version","w")
     ff.write(str(dv))
     ff.close()
+    if version < dv: amaj=True
 except:
     if not "dernier_version" in os.listdir():
         dv=0.0
@@ -738,7 +741,7 @@ def alertbox(txt):
                 if rpos.colliderect(bb):
                     boucle=False
                     break
-
+"""
 #MAJ
 def maj():
     ##aff
@@ -804,6 +807,7 @@ exit()
     proc= subprocess.Popen("python "+"../maj.py", shell=True)
     print("Exit")
     exit()
+    """
 
 
 def vdate():
