@@ -784,23 +784,22 @@ def maj():
         else: ddd+="\\\\"
     if j.modlp==1: lp="3"
     else: lp=""
-    txt="""
-#coding:utf-8
-import shutil,os,time
-print("Mise a jour en cour d'installation")
-time.sleep(1)
-dd='"""+ddd+"""'
-os.system("cd "+dd+"/../")
-ddd=dd
-shutil.rmtree(ddd)
-os.rename("royale_maj",ddd)
-os.remove("royal.zip")
-os.rmdir("royale")
-import subprocess
-os.system("cd "+ddd)
-proc= subprocess.Popen('python"""+lp+""" main.py', shell=True)
-exit()
-    """
+    txt=
+    #coding:utf-8
+    import shutil,os,time
+    print("Mise a jour en cour d'installation")
+    time.sleep(1)
+    dd='""""""'
+    os.system("cd "+dd+"/../")
+    ddd=dd
+    shutil.rmtree(ddd)
+    os.rename("royale_maj",ddd)
+    os.remove("royal.zip")
+    os.rmdir("royale")
+    import subprocess
+    os.system("cd "+ddd)
+    proc= subprocess.Popen('python"""""" main.py', shell=True)
+    exit()
     f=open("../maj.py","w")
     f.write(txt)
     f.close()
