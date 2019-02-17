@@ -411,7 +411,7 @@ def aff():
         button("limite fps : "+str(j.fpsmax),rx(110),ry(900),rx(200),ry(75),(200,200,200),(20,15,5))
         bts[20]=button("augmenter",rx(310),ry(900),rx(100),ry(75),(20,100,200),(0,0,0))
         bts[21]=button("diminuer",rx(10),ry(900),rx(100),ry(75),(200,100,20),(0,0,0))
-        if True: bts[22]=button("mettre à jour",rx(100),ry(100),rx(150),ry(500),(0,200,0),(0,0,0))
+        if True: bts[22]=button("mettre à jour",rx(100),ry(800),rx(150),ry(75),(0,200,0),(0,0,0))
     elif smenu==5:  #menu credit
         clt=(215,215,215)
         fenetre.blit(font.render("Développeur : ",20,clt),[int(100/1200*j.tex),int(200/1000*j.tey)])
@@ -746,7 +746,8 @@ def maj():
     pygame.draw.rect(fenetre,(15,15,25),(rx(100),ry(100),rx(1000),ry(800)),5)
     fenetre.blit( pygame.font.SysFont("Serif",40).render("Mise à jour en cour",20,(0,0,0)) , [rx(500),ry(150)])
     fenetre.blit( pygame.font.SysFont("Serif",20).render("Cela peut prendre quelques minutes en fonction de votre connection",20,(0,0,0)) , [rx(200),ry(300)])
-    fenetre.blit( pygame.font.SysFont("Serif",20).render("Si il y a un problème, veuillez réinstaller la nouvelle version manuellement depuis https://github.com/nath54/royal",20,(0,0,0)) , [rx(200),ry(400)])
+    fenetre.blit( pygame.font.SysFont("Serif",20).render("Si il y a un problème, veuillez réinstaller la nouvelle version manuellement ",20,(0,0,0)) , [rx(200),ry(400)])
+    fenetre.blit( pygame.font.SysFont("Serif",20).render("depuis https://github.com/nath54/royal",20,(0,0,0)) , [rx(200),ry(500)])
     pygame.display.update()
     ##
     import os,shutil
@@ -767,6 +768,8 @@ def maj():
     shutil.copyfile(dire+fichs,"../royale/royal-master/"+fichs)
     shutil.copyfile(dire+fichp,"../royale/royal-master/"+fichp)
     shutil.copyfile(dire+fichh,"../royale/royal-master/"+fichh)
+    shutil.copyfile(dire+ficht,"../royale/royal-master/"+ficht)
+    shutil.copyfile(dire+fichd,"../royale/royal-master/"+fichd)
     os.rename("../royale/royal-master","../royale_maj")
     alertbox("Le programme va se quitter pour installer la mise à jour, quand la mise à jour sera installée, veuillez relancer le programme")
     ##
@@ -781,8 +784,8 @@ def maj():
 import shutil,os,time
 print("Mise a jour en cour d'installation")
 time.sleep(1)
-os.system("cd ../")
 dd='"""+ddd+"""'
+os.system("cd "+dd+"/../")
 ddd=dd
 shutil.rmtree(ddd)
 os.rename("royale_maj",ddd)

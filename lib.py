@@ -19,6 +19,8 @@ dire="./"
 fichs="stats.nath"
 fichp="params.nath"
 fichh="historique.nath"
+ficht="tps.nath"
+fichd="dc.nath"
 
 cac="#"
 cacc="|"
