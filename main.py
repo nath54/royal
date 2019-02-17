@@ -64,6 +64,7 @@ except:
 font=pygame.font.SysFont("Serif",20)
 
 dpseudo=False
+if "maj.py" in os.listdir("../"): os.remove("../maj.py")
 if not fichs in os.listdir():
     txt=""
     import textbox
@@ -751,7 +752,14 @@ def maj():
     import zipfile
     with zipfile.ZipFile("../royal.zip", "r") as z:
         z.extractall("../royale")
-    import os
+    ##
+    import os,shutil
+    if "royal.zip" in os.listdir("../"): os.remove("../royal.zip")
+    if "royal-master.zip" in os.listdir("../"): os.remove("../royal-master.zip")
+    if "maj.py" in os.listdir("../"): os.remove("../maj.py")
+    if "royale" in os.listdir("../"): shutil.rmtree("../royale")
+    if "royale_maj" in os.listdir("../"): shutil.rmtree("../royale_maj")
+    ##
     os.rename(dire+fichs,"../royale/royal-master/"+fichs)
     os.rename(dire+fichp,"../royale/royal-master/"+fichp)
     os.rename(dire+fichh,"../royale/royal-master/"+fichh)
@@ -765,7 +773,7 @@ import shutil,os,time
 print("Mise à jour en cour d'installation")
 time.sleep(1)
 os.system("cd ../")
-dd="""+dd+"""
+dd='"""+dd+"""'
 dd=dd.split("\\\\")
 ddd=dd[len(dd)-1]
 shutil.rmtree(ddd)
