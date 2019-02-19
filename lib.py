@@ -1,35 +1,25 @@
 #coding:utf-8
 from cartes import *
+from lib2 import *
 
-tex,tey=1000,750
-smenu=2
-scrtm=0
-cselec=None
-sos=1
-modlp=1
-arsel=0
-mpar=1
-etren=0
-fichtps="tps.nath"
-pageaide=1
-pageaidetot=3
-
-dire="./"
-
-fichs="stats.nath"
-fichp="params.nath"
-fichh="historique.nath"
-ficht="tps.nath"
-fichd="dc.nath"
-
-cac="#"
-cacc="|"
-ccac="_"
-
-
-rarete=["commun","rare","epique","legendaire","divin"]
-craret=[(0,0,140),(150,105,25),(150,0,150),(20,150,20),(250,250,0)]
-
+class Joueure:
+    def __init__(self):
+        self.nom="None"
+        self.deck=[]
+        self.argent=0
+        self.trophes=0
+        self.cartpos=[]
+        self.arene=1
+        for ar in atpp:
+            if self.trophes >= atro[ar]: self.arene=ar
+        self.exp=0
+        self.niveau=0
+        self.xpmax=100
+        self.arensl=None
+        self.fpsmax=60
+        self.tex=100
+        self.tey=70
+    
 
 def save(j):
     #stats
@@ -100,12 +90,13 @@ def load(j):
     spr=open(fichp,"r").read().split("#")
     j.tex=int(spr[0])
     j.tey=int(spr[1])
-    j.teex=tex
-    j.teey=tey
+    print(j.tex,j.tey)
+    j.teex=j.tex
+    j.teey=j.tey
     j.sos=int(spr[2])
     j.modlp=int(spr[3])
     j.mpar=int(spr[4])
-    print(spr)
+    #print(spr)
     j.fpsmax=int(spr[5])
     return j
 
@@ -146,7 +137,4 @@ def lhisto():
                 ll.append(int(g[7]))
                 lst.append(ll)
     return lst
-
-def rx(x): return int(x/1200*tex)
-def ry(y): return int(y/1000*tey)
 

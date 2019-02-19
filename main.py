@@ -32,6 +32,7 @@ from pygame.locals import *
 from cartes import *
 import subprocess
 from lib import *
+from lib2 import *
 
 amaj=False
 
@@ -101,23 +102,7 @@ if not fichh in os.listdir():
     h.close()
 
 
-class Joueur:
-    def __init__(self):
-        self.nom="None"
-        self.deck=[]
-        self.argent=0
-        self.trophes=0
-        self.cartpos=[]
-        self.arene=1
-        for ar in atpp:
-            if self.trophes >= atro[ar]: self.arene=ar
-        self.exp=0
-        self.niveau=0
-        self.xpmax=100
-        self.arensl=None
-        self.fpsmax=60
-    
-j=Joueur()
+j=Joueure()
 j=load(j)
 
 
@@ -292,13 +277,13 @@ def aff():
         if scrtm+44 > len(ctpp): ac=len(ctpp)
         else:
             ac=scrtm+44
-            bts[3]=fenetre.blit(pygame.transform.scale(pygame.image.load("images/flch.png"),[int(20/1200*j.tex),int(100/1000*j.tey)]),[j.tex-1-int(20/1200*j.tex),j.tey/2])
-        if scrtm>0: bts[2]=fenetre.blit(pygame.transform.flip(pygame.transform.scale(pygame.image.load("images/flch.png"),[int(20/1200*j.tex),int(100/1000*j.tey)]),1,0),[1,j.tey/2])
+            bts[3]=fenetre.blit(pygame.transform.scale(pygame.image.load("images/flch.png"),[rx(20),ry(100)]),[j.tex-1-rx(20),j.tey/2])
+        if scrtm>0: bts[2]=fenetre.blit(pygame.transform.flip(pygame.transform.scale(pygame.image.load("images/flch.png"),[rx(20),ry(100)]),1,0),[1,j.tey/2])
         lscrt=range(scrtm,ac)
         for cc in j.deck:
             if j.cartpos[cc]==0: del(j.deck[j.deck.index(cc)])
-        xx,yy=50,350
-        tx,ty=int(60/1200*j.tex),int(85/1000*j.tey)
+        xx,yy=rx(50),ry(350)
+        tx,ty=rx(60),ry(85)
         xxx=None
         for g in lscrt:
             if g == cselec and j.cartpos[g]>0:
@@ -312,77 +297,77 @@ def aff():
             else: iii="images/fc.png"
             nbc=str(j.cartpos[g])
             clr=craret[crar[g]]
-            rcs.append( fenetre.blit(pygame.transform.scale(pygame.image.load(iii),[tx+30,ty+30]),[xx-15,yy-15]) )
+            rcs.append( fenetre.blit(pygame.transform.scale(pygame.image.load(iii),[tx+rx(30),ty+ry(30)]),[xx-rx(15),yy-ry(15)]) )
             if j.cartdeb[g]==1 or j.cartpos[g] > 0:
                 fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cimg[g]),[tx,ty]),[xx,yy])
             else:
                 fenetre.blit(pygame.transform.scale(pygame.image.load("images/inc.png"),[tx,ty]),[xx,yy])
-            pygame.draw.rect(fenetre,clr,(xx-12,yy-12,20+len(nbc)*3,20),0)
-            fenetre.blit(font.render(nbc,20,(250-clr[0],250-clr[1],250-clr[2])),[xx-8,yy-12])
-            xx+=tx+35
+            pygame.draw.rect(fenetre,clr,(xx-rx(12),yy-ry(12),rx(20+len(nbc)*3),ry(20)),0)
+            fenetre.blit(font.render(nbc,20,(250-clr[0],250-clr[1],250-clr[2])),[xx-rx(8),yy-ry(12)])
+            xx+=tx+rx(35)
             if xx>j.tex-tx*1.2:
-                xx=50
-                yy+=ty+35
+                xx=rx(50)
+                yy+=ty+ry(35)
         if cselec!=None:
                 g=cselec+scrtm
-                txi,tyi=400,400
+                txi,tyi=rx(400),ry(400)
                 xi,yi=j.tex-txi,j.tey-tyi
                 if xxx != None:
                     if xxx <= j.tex/2:  xi,yi=j.tex-txi,j.tey-tyi
                     else: xi,yi=0,j.tey-tyi
                 pygame.draw.rect(fenetre,(200,200,200),(xi,yi,txi,tyi),0)
                 if j.cartdeb[g]==1:
-                    fenetre.blit(font.render(str(cnom[g])                         ,20,(50,50,50))      ,[xi+5 ,yi])
-                    fenetre.blit(font.render("vie = "        +str(cvie[g])        ,20,(0,0,0))         ,[xi+5 ,yi+20])
-                    fenetre.blit(font.render("att = "        +str(catt[g])        ,20,(0,0,0))         ,[xi+5 ,yi+40])
-                    fenetre.blit(font.render("vitesse att = "+str(cvat[g])        ,20,(0,0,0))         ,[xi+5 ,yi+60])
-                    fenetre.blit(font.render("vitesse = "    +str(cvit[g])        ,20,(0,0,0))         ,[xi+150,yi+20])
-                    fenetre.blit(font.render("elixir = "     +str(celi[g])        ,20,(150,0,150))     ,[xi+150,yi+40])
-                    fenetre.blit(font.render("rareté = "     +str(rarete[crar[g]]),20,craret[crar[g]]) ,[xi+150,yi+60])
+                    fenetre.blit(font.render(str(cnom[g])                         ,20,(50,50,50))      ,[xi+rx(5 ),yi])
+                    fenetre.blit(font.render("vie = "        +str(cvie[g])        ,20,(0,0,0))         ,[xi+rx(5 ),yi+ry(20)])
+                    fenetre.blit(font.render("att = "        +str(catt[g])        ,20,(0,0,0))         ,[xi+rx(5 ),yi+ry(40)])
+                    fenetre.blit(font.render("vitesse att = "+str(cvat[g])        ,20,(0,0,0))         ,[xi+rx(5 ),yi+ry(60)])
+                    fenetre.blit(font.render("vitesse = "    +str(cvit[g])        ,20,(0,0,0))         ,[xi+rx(150),yi+ry(20)])
+                    fenetre.blit(font.render("elixir = "     +str(celi[g])        ,20,(150,0,150))     ,[xi+rx(150),yi+ry(40)])
+                    fenetre.blit(font.render("rareté = "     +str(rarete[crar[g]]),20,craret[crar[g]]) ,[xi+rx(150),yi+ry(60)])
                     txt=cdes[g]
                     tl=30
                     aa=int(len(txt)/tl)
                     ttx=" "
                     w=0
-                    yty=yi+80
+                    yty=yi+ry(80)
                     for t in txt:
                         if w>=tl and t==" ":
                             w=0
-                            fenetre.blit(font.render(str(ttx),20,(50,50,50)),[xi+5,yty])
+                            fenetre.blit(font.render(str(ttx),20,(50,50,50)),[xi+rx(5),yty])
                             yty+=20
                             ttx=""
                         ttx+=t
                         w+=1
-                    fenetre.blit(font.render(str(ttx),20,(50,50,50)),[xi+5,yty])
+                    fenetre.blit(font.render(str(ttx),20,(50,50,50)),[xi+rx(5),yty])
                 else:
-                    fenetre.blit(font.render("Carte Inconnue",20,(0,0,0)),[xi+5,yi])
-        pygame.draw.rect(fenetre,(100,50,25),(0,(130/1000*j.tey),j.tex,200),0)
-        pygame.draw.rect(fenetre,(150,150,5),(20,(150/1000*j.tey),j.tex-40,160),5)
-        xx,yy,tx,ty=50,120,int(60/1200*j.tex),int(85/1000*j.tey)
+                    fenetre.blit(font.render("Carte Inconnue",20,(0,0,0)),[xi+rx(5),yi])
+        pygame.draw.rect(fenetre,(100,50,25),(0,ry(130),j.tex,ry(200)),0)
+        pygame.draw.rect(fenetre,(150,150,5),(rx(20),ry(150),j.tex-rx(40),ry(160)),5)
+        xx,yy,tx,ty=rx(50),ry(120),rx(60),ry(85)
         for ca in j.deck:
-            rcd.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/fc.png"),[tx+30,ty+30]),[xx-15,yy]) )
-            fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cimg[ca]),[tx,ty]),[xx,yy+15])
-            xx+=tx+50
+            rcd.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/fc.png"),[tx+rx(30),ty+ry(30)]),[xx-rx(15),yy]) )
+            fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cimg[ca]),[tx,ty]),[xx,yy+ry(15)])
+            xx+=tx+rx(50)
         if len(j.deck)==8: cl=(0,200,0)
         else: cl=(200,0,0)
-        fenetre.blit(pygame.font.SysFont("Sans",40).render(str(len(j.deck))+"/ 8",20,cl),[j.tex-150,150])
-        bts[1]=pygame.Rect(int(j.tex-90/1200*j.tex),int(150/1000*j.tey),int(65/1200*j.tex),int(45/1000*j.tey))
-        fenetre.blit(pygame.transform.scale(pygame.image.load("images/bale.png"),[int(65/1200*j.tex),int(45/1000*j.tey)]),[int(j.tex-90/1200*j.tex),int(150/1000*j.tey)])
+        fenetre.blit(pygame.font.SysFont("Sans",40).render(str(len(j.deck))+"/ 8",20,cl),[j.tex-rx(150),ry(150)])
+        bts[1]=pygame.Rect(j.tex-rx(90),ry(150),rx(65),ry(45))
+        fenetre.blit(pygame.transform.scale(pygame.image.load("images/bale.png"),[rx(65),ry(45)]),[j.tex-rx(90),ry(150)])
     elif smenu==3: #menu coffres
-        xx,yy=50,100
-        tx,ty=150,150
+        xx,yy=rx(50),ry(100)
+        tx,ty=rx(150),ry(150)
         for cf in cftpp:
             rcf.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cfimg[cf]),[tx,ty]),[xx,yy]) )
-            fenetre.blit(font.render(cfnom[cf],20,(250,250,250)),[xx,yy+ty+5])
+            fenetre.blit(font.render(cfnom[cf],20,(250,250,250)),[xx,yy+ty+ry(5)])
             if j.argent >= cfarg[cf]: clf=(150,145,15)
             else: clf=(180,0,0)
-            fenetre.blit(font.render(str(cfarg[cf])+" or",20,clf),[xx,yy+ty+25])
-            xx+=tx+20
+            fenetre.blit(font.render(str(cfarg[cf])+" or",20,clf),[xx,yy+ty+ry(25)])
+            xx+=tx+rx(20)
             if xx >= j.tex-tx+1:
-                xx=50
-                yy+=ty+50
+                xx=rx(50)
+                yy+=ty+ry(50)
     elif smenu==4:  #menu pararametres
-        fenetre.blit(font.render("résolution de l'écran : ",0,(250,250,250)),[int(300/1200*j.tex),int(180/1000*j.tey)])
+        fenetre.blit(font.render("résolution de l'écran : ",0,(250,250,250)),[rx(300),ry(180)])
         lbpr.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/fl.png"),[int(40/1200*j.tex),int(30/1000*j.tey)]),[int(355/1200*j.tex),int(250/1000*j.tey)])                             )
         lbpr.append( fenetre.blit(pygame.transform.flip(pygame.transform.scale(pygame.image.load("images/fl.png"),[int(40/1200*j.tex),int(30/1000*j.tey)]),1,0),[int(80/1200*j.tex),int(250/1000*j.tey)])   )
         lbpr.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/fl.png"),[int(40/1200*j.tex),int(30/1000*j.tey)]),[int(755/1200*j.tex),int(250/1000*j.tey)])                             )
