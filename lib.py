@@ -109,14 +109,14 @@ def rhisto(j1deck,j2deck,jvict,j1cr,j2cr,j1nom,j2nom,nbj1):
     for a in j2deck:
         txt+=str(a)+ccac
     txt=txt[:-1]+cacc+str(jvict)+cacc+str(j1cr)+cacc+str(j2cr)+cacc+j1nom+cacc+j2nom+cacc+str(nbj1)+cac
-    f=open(fichh,"a")
+    f=open(dire+fichh,"a")
     f.write(txt)
     f.close()
     #0=deck j1 1=deck j2 2=joueur victorieux 3=j1 crowns 4=j2 crowns 5=j1 nom 6=j2 nom 7=nbj1
 
 def lhisto():
     lst=[]
-    f=open(fichh,"r").read().split(cac)
+    f=open(dire+fichh,"r").read().split(cac)
     if f != []:
         for ff in f:
             if len(ff)>5:
