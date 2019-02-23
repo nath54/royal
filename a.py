@@ -133,7 +133,7 @@ def affattack(p1,p2):
 def dtouch(c1,c2):
     if c1.camp==1: cl=(0,0,200)
     else           : cl=(200,0,0)
-    rr=pygame.draw.circle(fenetre,cl,(int(c1.px+c1.tx/2),int(c1.py+c1.ty/2)),c1.portee,1)
+    rr=pygame.draw.rect(fenetre,cl,(int(c1.px+c1.tx/2)-c1.portee,int(c1.py+c1.ty/2)-c1.portee,2*c1.portee,2*c1.portee),1)
     if rr.colliderect(c2.px,c2.py,c2.tx,c2.ty): return True
     return False
 
