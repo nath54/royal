@@ -2,15 +2,6 @@
 from lib2 import *
 from lib3 import *
                                                                                                                                                                                                                                                                                                                                             
-nctxx,nctyy=[],[]
-for c in ctxx: nctxx.append(int(c))
-for c in ctyy: nctyy.append(int(c))
-ctxx=nctxx
-ctyy=nctyy
-
-ncpor=[]
-for c in cpor: ncpor.append(rz(c))
-cpor=ncpor
 
 
 aa=1200/tex
@@ -32,7 +23,6 @@ cend=[1          ,1           ,1           ,1          ,1          ,1           
 caen=[[1,2]      ,[1,2]       ,[1]         ,[1,2]      ,[1,2]      ,[1]          ,[1]         ,[1]        ,[1,2]      ,[1]         ,[1]             ,[1]        ,[1,2]      ,[1,2]       ,[1,2]       ,[1,2]            ,[1,2]       ,[1]        ,[1]                 ,[1,2]                  ,[1,2]       ,[1,2]        ,[1]             ,[1,2]      ,[1,2]                  ,[1]           ,[1,2]       ,[1]          ,[1,2]        ,[1]           ,[1,2]        ,[1]        ,[1]            ,[1]                ,[1]          ,[1,2]      ,[1,2]            ,[1]                   ,[1]         ,[1,2]      ,[1,2]      ,[1,2]        ,[1,2]              ,[1,2]               ,[1,2]       ,[1]        ,[1]          ,[1,2]               ,[1,2]          ,[1]        ,[1]         ,[1,2]      ,[1,2]      ,[1,2]      ,[1,2]      ,[1]             ]
 cims=[0          ,2           ,None        ,0          ,1          ,None         ,None        ,None       ,0          ,None        ,2               ,None       ,2          ,None        ,1           ,None             ,None        ,None       ,None                ,3                      ,None        ,4            ,None            ,None       ,3                      ,2             ,None        ,None         ,5            ,None          ,None         ,None       ,None           ,None               ,None         ,None       ,6                ,None                  ,None        ,None       ,0          ,None         ,7                  ,8                   ,None        ,None       ,None         ,None                ,6              ,None       ,None        ,None       ,None       ,None       ,9          ,None            ]
 cimg=["tour1_1.png","te2.png" ,"c0.png"    ,"c1.png"   ,"c2.png"   ,"c6.png"     ,"c3.png"    ,"c4.png"   ,"c5.png"   ,"c7.png"    ,"c8.png"        ,"c9.png"   ,"c10.png"  ,"c11.png"   ,"c12.png"   ,"c13.png"        ,"c14.png"   ,"c15.png"  ,"c15.png"           ,"c16.png"              ,"c17.png"   ,"c18.png"    ,"c19.png"       ,"c20.png"  ,"c21.png"              ,"c22.png"     ,"c24.png"   ,"c23.png"    ,"c25.png"    ,"c26.png"     ,"c27.png"    ,"c35.png"  ,"c29.png"      ,"c30.png"          ,"c7.png"     ,"c31.png"  ,"c32.png"        ,"c33.png"             ,"c34.png"   ,"c36.png"  ,"c37.png"  ,"c38.png"    ,"c39.png"          ,"c40.png"           ,"c41.png"   ,"c42.png"  ,"c43.png"    ,"c44.png"           ,"c45.png"      ,"c46.png"  ,"c47.png"   ,"c48.png"  ,"c49.png"  ,"c50.png"  ,"c51.png"  ,"c52.png"       ]
-care=[0          ,0           ,0           ,0          ,0          ,1            ,2           ,2          ,0          ,2           ,0               ,0          ,10         ,10          ,3           ,3                ,3           ,2          ,2                   ,4                      ,10          ,5            ,8               ,1          ,4                      ,2             ,2           ,2            ,9            ,10            ,0            ,4          ,2              ,6                  ,2            ,5          ,2                ,10                    ,6           ,6          ,0          ,1            ,7                  ,3                   ,10          ,10         ,3            ,1                   ,6              ,6          ,6           ,10         ,3          ,9          ,9          ,3               ]
 ctxx=[rx(75)     ,rx(100)     ,rx(50)      ,rx(50)     ,rx(50)     ,rx(50)       ,rx(100)     ,rx(50)     ,rx(50)     ,rx(30)      ,rx(50)          ,rx(75)     ,rx(50)     ,rx(50)      ,rx(100)     ,rx(100)          ,rx(100)     ,rx(50)     ,rx(50)              ,rx(50)                 ,rx(50)      ,rx(50)       ,rx(60)          ,rx(40)     ,rx(60)                 ,rx(60)        ,rx(20)      ,rx(50)       ,rx(50)       ,rx(50)        ,rx(100)      ,rx(90)     ,rx(55)         ,rx(60)             ,rx(30)       ,rx(50)     ,rx(50)           ,rx(50)                ,rx(50)      ,rx(50)     ,rx(55)     ,rx(48)       ,rx(26)             ,rx(26)              ,rx(80)      ,rx(50)     ,rx(50)       ,rx(50)              ,rx(50)         ,rx(65)     ,rx(45)      ,rx(50)     ,rx(50)     ,rx(80)     ,rx(50)     ,rx(50)          ]
 ctyy=[ry(75)     ,ry(100)     ,ry(50)      ,ry(50)     ,ry(50)     ,ry(50)       ,ry(100)     ,ry(50)     ,ry(50)     ,ry(30)      ,ry(50)          ,ry(75)     ,ry(50)     ,ry(50)      ,ry(100)     ,ry(100)          ,ry(100)     ,ry(50)     ,ry(50)              ,ry(50)                 ,ry(50)      ,ry(50)       ,ry(60)          ,ry(40)     ,ry(60)                 ,ry(60)        ,ry(20)      ,ry(50)       ,ry(50)       ,ry(50)        ,ry(100)      ,ry(90)     ,ry(55)         ,ry(60)             ,ry(30)       ,ry(50)     ,ry(50)           ,ry(50)                ,ry(50)      ,ry(50)     ,ry(55)     ,ry(48)       ,ry(26)             ,ry(26)              ,ry(80)      ,ry(50)     ,ry(50)       ,ry(50)              ,ry(50)         ,ry(65)     ,ry(45)      ,ry(50)     ,ry(50)     ,ry(80)     ,ry(50)     ,ry(50)          ]
 cact=[None       ,None        ,None        ,None       ,None       ,None         ,None        ,None       ,None       ,None        ,None            ,None       ,None       ,None        ,None        ,None             ,None        ,None       ,None                ,None                   ,None        ,None         ,None            ,None       ,None                   ,None          ,None        ,None         ,None         ,None          ,None         ,None       ,34             ,23                 ,None         ,None       ,17               ,None                  ,None        ,None       ,None       ,None         ,None               ,None                ,None        ,None       ,None         ,None                ,None           ,None       ,None        ,None       ,None       ,None       ,None       ,None            ]
@@ -93,6 +83,17 @@ cdes=["C'est une petite tour qui a pour but de proteger la tour du roi",
       "Le soin soigne",
       "Il est venu du ciel pour purifier la Terre",
       "Le diablotin a une très forte envie de sang"]
+
+nctxx,nctyy=[],[]
+for c in ctxx: nctxx.append(int(c))
+for c in ctyy: nctyy.append(int(c))
+ctxx=nctxx
+ctyy=nctyy
+
+ncpor=[]
+for c in cpor: ncpor.append(rz(c))
+cpor=ncpor
+
 
 cftpp=[0                ,1                  ,2                    ,3                        ,4                  ,5                ,6                ]
 cfnom=["coffre de bois" ,"coffre en  bronze","coffre en argent"   ,"coffre en or"           ,"coffre légendaire","coffre divin"   ,"coffre gratuit" ]
