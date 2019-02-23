@@ -32,7 +32,7 @@ pygame.init()
 
 fonb=pygame.font.SysFont("Serif",40)
 
-jjr=open("stats.nath","r").read().split("#")
+jjr=open(dire+fichs,"r").read().split("#")
 
 class Joueur:
     def __init__(self,camp):
@@ -897,7 +897,7 @@ while encour:
 
 """
 def save(j):
-    ff=open("stats.nath","w")
+    ff=open(dire+fichs,"w")
     t1=str(j.nom)
     t2=""
     for jj in j.deck:
