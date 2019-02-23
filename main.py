@@ -31,8 +31,7 @@ import pygame,time,os,random
 from pygame.locals import *
 from cartes import *
 import subprocess
-from lib import *
-from lib2 import *
+
 
 amaj=False
 
@@ -101,6 +100,8 @@ if not fichh in os.listdir():
     h=open(fichh,"w")
     h.close()
 
+from lib import *
+from lib2 import *
 
 j=Joueure()
 j=load(j)
