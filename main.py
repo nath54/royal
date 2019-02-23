@@ -66,7 +66,7 @@ font=pygame.font.SysFont("Serif",20)
 dpseudo=False
 if "maj.py" in os.listdir("../"): os.remove("../maj.py")
 if "maj.py~" in os.listdir("../"): os.remove("../maj.py~")
-if not fichs in os.listdir():
+if not fichs in os.listdir(dire):
     txt=""
     import textbox
     tc=""
@@ -83,18 +83,18 @@ if not fichs in os.listdir():
     tc=tc[:-1]
     ct=ct[:-1]
     txt+="pseudo"+cac+cac+"2000"+cac+"0"+cac+tc+cac+"0"+cac+ct+cac+"0"+cac+"0"+cac+"0"
-    f=open(fichs,"w")
+    f=open(dire+fichs,"w")
     f.write(txt)
     f.close()
     smenu=8
     dpseudo=True
-if not fichp in os.listdir():
+if not fichp in os.listdir(dire):
     txt="1000"+cac+"750"+cac+"1"+cac+"1"+cac+"1"+cac+"60"
-    g=open(fichp,"w")
+    g=open(dire+fichp,"w")
     g.write(txt)
     g.close()
-if not fichh in os.listdir():
-    h=open(fichh,"w")
+if not fichh in os.listdir(dire):
+    h=open(dire+fichh,"w")
     h.close()
 
 from lib import *

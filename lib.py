@@ -44,19 +44,19 @@ def save(j):
     if j.arensl != None: t10=str(j.arensl)
     else: t10="N"
     txt=t1+cac+t2+cac+t3+cac+t4+cac+t5+cac+t6+cac+t7+cac+t8+cac+t9+cac+t10
-    ff=open(fichs,"w")
+    ff=open(dire+fichs,"w")
     ff.write(txt)
     ff.close()
     #params
     txt=str(j.teex)+cac+str(j.teey)+cac+str(j.sos)+cac+str(j.modlp)+cac+str(j.mpar)+cac+str(j.fpsmax)
-    ff=open(fichp,"w")
+    ff=open(dire+fichp,"w")
     ff.write(txt)
     ff.close()
 
 
 
 def load(j):
-    jjr=open(fichs,"r").read().split("#")
+    jjr=open(dire+fichs,"r").read().split("#")
     j.nom=jjr[0]
     ara,nar=jjr[1].split("|"),[]
     if len(ara) > 1:
@@ -88,7 +88,7 @@ def load(j):
     if jjr[9][0]=="N": j.arensl=None
     else:    j.arensl=int(jjr[9])
     for x in range(j.niveau-1): j.xpmax=j.xpmax+int(j.xpmax*0.3)
-    spr=open(fichp,"r").read().split("#")
+    spr=open(dire+fichp,"r").read().split("#")
     j.tex=int(spr[0])
     j.tey=int(spr[1])
     print(j.tex,j.tey)

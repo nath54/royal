@@ -1,4 +1,7 @@
 #coding:utf-8
+import os
+from os.path import expanduser
+home = expanduser("~")
 
 smenu=2
 scrtm=0
@@ -12,7 +15,13 @@ fichtps="tps.nath"
 pageaide=1
 pageaidetot=3
 
-dire="./"
+cd="/"
+
+dires="royal_stats"
+if not dires in os.listdir(home):
+    os.mkdir(home+cd+dires)
+
+dire=home+cd+dires+cd
 
 fichs="stats.nath"
 fichp="params.nath"
