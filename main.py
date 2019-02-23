@@ -109,7 +109,7 @@ j=load(j)
 
 def temps():
     if fichtps in os.listdir():
-        tps=open(fichtps,"r").read()
+        tps=open(dire+fichtps,"r").read()
         if len(tps)>0:
             if tps[-1]=="\n": tps=tps[:-1]
             tps=int(float(tps))
@@ -123,13 +123,13 @@ def savetps():
     if not fichtps in os.listdir():
         txt=str(int(t2t-t1t))
     else:
-        fa=open(fichtps,"r").read()
+        fa=open(dire+fichtps,"r").read()
         if len(fa)>0:
             if fa[-1]=="\n": fb=fa[:-1]
             else: fb=fa
             fc=int(fb)
         txt=str(fc+int(t2t-t1t))
-    ff=open(fichtps,"w")
+    ff=open(dire+fichtps,"w")
     ff.write(txt)
     ff.close()
     
