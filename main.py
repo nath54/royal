@@ -885,6 +885,10 @@ while encour:
     while j.exp >= j.xpmax:
         j.exp=j.exp-j.xpmax
         j.niveau+=1
+        alertbox("Vous avez évolué !")
+        alertbox("Vous êtes maintenant niveau "+str(j.niveau)+" !")
+        alertbox("cadeau : "+str(j.expmax)+" or")
+        j.argent+=j.expmax
         j.xpmax=j.xpmax+int(float(j.xpmax)*0.3)
     if needtoaff:
         rcs,rcf,rcd,lbpr,bchlp,bren,bts,barensl=aff()
