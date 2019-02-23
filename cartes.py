@@ -1,7 +1,18 @@
 #coding:utf-8
 from lib2 import *
+from lib3 import *
+                                                                                                                                                                                                                                                                                                                                            
+nctxx,nctyy=[],[]
+for c in ctxx: nctxx.append(int(c))
+for c in ctyy: nctyy.append(int(c))
+ctxx=nctxx
+ctyy=nctyy
 
-tex,tey=1000,800
+ncpor=[]
+for c in cpor: ncpor.append(rz(c))
+cpor=ncpor
+
+
 aa=1200/tex
 ctpp=[0          ,1           ,2           ,3          ,4          ,5            ,6           ,7          ,8          ,9           ,10              ,11         ,12         ,13          ,14          ,15               ,16          ,17         ,18                  ,19                     ,20          ,21           ,22              ,23         ,24                     ,25            ,26          ,27          ,28           ,29            ,30           ,31         ,32             ,33                 ,34           ,35         ,36               ,37                    ,38          ,39         ,40         ,41           ,42                 ,43                  ,44          ,45         ,46           ,47                  ,48             ,49         ,50          ,51         ,52         ,53         ,54          ,55              ]
 cnom=["tour1"    ,"tour2"     ,"chevalier" ,"archer"   ,"mage"     ,"petit golem","golem"     ,"fantome"  ,"princesse","squelettes","tour a canons" ,"le géant" ,"le sniper","le psycho" ,"le dragon" ,"la boule de feu","la comète" ,"le zombie","la horde de zombie","le sorcier electrique","le cloneur","le geleur"  ,"le massdarmeur","l'oiseau" ,"la tour de electrique","la catapulte","la mouche" ,"le vampire","le soigneur","le bricoleur","les fleches","la foudre","le cimetière","l'arbre a oiseaux","le squelette","le gel"   ,"le nécromancien","le créateur d'élixir","l'assassin","Le poison","la reine" ,"le kamikaze","les esprits d'eau","les esprits de feu","le clonage","le piege" ,"l'emmerdeur","le fut à chevalier","le champignon","Larbre"   ,"Le buisson","La bombe" ,"La rage"  ,"Le soin"  ,"l'ange"    ,"les diablotins"  ]
@@ -82,16 +93,6 @@ cdes=["C'est une petite tour qui a pour but de proteger la tour du roi",
       "Le soin soigne",
       "Il est venu du ciel pour purifier la Terre",
       "Le diablotin a une très forte envie de sang"]
-                                                                                                                                                                                                                                                                                                                                            
-nctxx,nctyy=[],[]
-for c in ctxx: nctxx.append(int(c))
-for c in ctyy: nctyy.append(int(c))
-ctxx=nctxx
-ctyy=nctyy
-
-ncpor=[]
-for c in cpor: ncpor.append(rz(c))
-cpor=ncpor
 
 cftpp=[0                ,1                  ,2                    ,3                        ,4                  ,5                ,6                ]
 cfnom=["coffre de bois" ,"coffre en  bronze","coffre en argent"   ,"coffre en or"           ,"coffre légendaire","coffre divin"   ,"coffre gratuit" ]
