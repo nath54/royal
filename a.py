@@ -7,7 +7,7 @@ from lib2 import *
 
 j=load(Joueure())
 
-spr=open(fichp,"r").read().split("#")
+spr=open(dire+fichp,"r").read().split("#")
 j.tex,j.tey=int(spr[0]),int(spr[1])
 
 tpx,tpy=int(j.tex/1.5),j.tey
@@ -80,7 +80,7 @@ ara=jjr[6].split("|")
 nar=[]
 for a in ara: nar.append(int(a))
 j1.cartdeb=nar
-spr=open(fichp,"r").read().split("#")
+spr=open(dire+fichp,"r").read().split("#")
 j.tex,j.tey=int(spr[0]),int(spr[1])
 """
 j2=Joueur(2)
