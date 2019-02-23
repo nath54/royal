@@ -189,13 +189,7 @@ def deblocrt(crt):
                 rpos=pygame.Rect(pos[0],pos[1],1,1)
                 if rpos.colliderect(bexit):
                     ouv=False
-"""
-def button(x,y,tx,ty,text,cl):
-    tb=2
-    bb=pygame.draw.rect(fenetre,cl,(x,y,tx,ty),0)
-    pygame.draw.rect(fenetre,(0,0,0),(x,y,tx,ty),tb)
-    fenetre.blit(pygame.transform.scale(font.render(text,20,(0,0,0)),[tx-2*tb+2,ty-2*tb-2]),[x+tb+1,y+tb+1])
-    return bb"""
+nbcm=36
 
 def aff():
     global arsel
@@ -274,16 +268,16 @@ def aff():
         pygame.draw.rect(fenetre,(0,0,0),(j.tex-int(200/1200*j.tex),int(500/1000*j.tey),int(150/1200*j.tex),int(100/1000*j.tey)),5)
         fenetre.blit(font.render("aide",30,(0,0,0)),[j.tex-int(190/1200*j.tex),int(510/1000*j.tey)])
     elif smenu==1: #menu cartes
-        if scrtm+44 > len(ctpp): ac=len(ctpp)
+        if scrtm+nbcm > len(ctpp): ac=len(ctpp)
         else:
-            ac=scrtm+44
+            ac=scrtm+nbcm
             bts[3]=fenetre.blit(pygame.transform.scale(pygame.image.load("images/flch.png"),[rx(20),ry(100)]),[j.tex-1-rx(20),j.tey/2])
         if scrtm>0: bts[2]=fenetre.blit(pygame.transform.flip(pygame.transform.scale(pygame.image.load("images/flch.png"),[rx(20),ry(100)]),1,0),[1,j.tey/2])
         lscrt=range(scrtm,ac)
         for cc in j.deck:
             if j.cartpos[cc]==0: del(j.deck[j.deck.index(cc)])
-        xx,yy=rx(50),ry(350)
-        tx,ty=rx(60),ry(85)
+        xx,yy=rx(80),ry(370)
+        tx,ty=rx(80),ry(100)
         xxx=None
         for g in lscrt:
             if g == cselec and j.cartpos[g]>0:
@@ -304,10 +298,10 @@ def aff():
                 fenetre.blit(pygame.transform.scale(pygame.image.load("images/inc.png"),[tx,ty]),[xx,yy])
             pygame.draw.rect(fenetre,clr,(xx-rx(12),yy-ry(12),rx(20+len(nbc)*3),ry(20)),0)
             fenetre.blit(font.render(nbc,20,(250-clr[0],250-clr[1],250-clr[2])),[xx-rx(8),yy-ry(12)])
-            xx+=tx+rx(35)
+            xx+=tx+rx(40)
             if xx>j.tex-tx*1.2:
-                xx=rx(50)
-                yy+=ty+ry(35)
+                xx=rx(80)
+                yy+=ty+ry(40)
         if cselec!=None:
                 g=cselec+scrtm
                 txi,tyi=rx(400),ry(400)
@@ -343,29 +337,29 @@ def aff():
                     fenetre.blit(font.render("Carte Inconnue",20,(0,0,0)),[xi+rx(5),yi])
         pygame.draw.rect(fenetre,(100,50,25),(0,ry(130),j.tex,ry(200)),0)
         pygame.draw.rect(fenetre,(150,150,5),(rx(20),ry(150),j.tex-rx(40),ry(160)),5)
-        xx,yy,tx,ty=rx(50),ry(120),rx(60),ry(85)
+        xx,yy,tx,ty=rx(50),ry(160),rx(80),ry(100)
         for ca in j.deck:
             rcd.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/fc.png"),[tx+rx(30),ty+ry(30)]),[xx-rx(15),yy]) )
             fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cimg[ca]),[tx,ty]),[xx,yy+ry(15)])
             xx+=tx+rx(50)
         if len(j.deck)==8: cl=(0,200,0)
         else: cl=(200,0,0)
-        fenetre.blit(pygame.font.SysFont("Sans",40).render(str(len(j.deck))+"/ 8",20,cl),[j.tex-rx(150),ry(150)])
+        fenetre.blit(pygame.font.SysFont("Sans",40).render(str(len(j.deck))+"/ 8",20,cl),[j.tex-rx(150),ry(220)])
         bts[1]=pygame.Rect(j.tex-rx(90),ry(150),rx(65),ry(45))
         fenetre.blit(pygame.transform.scale(pygame.image.load("images/bale.png"),[rx(65),ry(45)]),[j.tex-rx(90),ry(150)])
     elif smenu==3: #menu coffres
-        xx,yy=rx(50),ry(100)
-        tx,ty=rx(150),ry(150)
+        xx,yy=rx(80),ry(150)
+        tx,ty=rx(200),ry(200)
         for cf in cftpp:
             rcf.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/"+cfimg[cf]),[tx,ty]),[xx,yy]) )
             fenetre.blit(font.render(cfnom[cf],20,(250,250,250)),[xx,yy+ty+ry(5)])
             if j.argent >= cfarg[cf]: clf=(150,145,15)
             else: clf=(180,0,0)
             fenetre.blit(font.render(str(cfarg[cf])+" or",20,clf),[xx,yy+ty+ry(25)])
-            xx+=tx+rx(20)
+            xx+=tx+rx(80)
             if xx >= j.tex-tx+1:
-                xx=rx(50)
-                yy+=ty+ry(50)
+                xx=rx(80)
+                yy+=ty+ry(80)
     elif smenu==4:  #menu pararametres
         fenetre.blit(font.render("résolution de l'écran : ",0,(250,250,250)),[rx(300),ry(180)])
         lbpr.append( fenetre.blit(pygame.transform.scale(pygame.image.load("images/fl.png"),[int(40/1200*j.tex),int(30/1000*j.tey)]),[int(355/1200*j.tex),int(250/1000*j.tey)])                             )
@@ -1003,8 +997,8 @@ while encour:
                             else:
                                 alertbox("votre deck n'est pas composé de 8 cartes !")
                         elif di==1: j.deck=deckale(j)
-                        elif di==2: scrtm-=44
-                        elif di==3: scrtm+=44
+                        elif di==2: scrtm-=nbcm
+                        elif di==3: scrtm+=nbcm
                         elif di==4: smenu=4
                         elif di==5: smenu=5
                         elif di==6: smenu=1
