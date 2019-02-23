@@ -1,6 +1,7 @@
 #coding:utf-8
 from cartes import *
 from lib2 import *
+from lib3 import *
 
 class Joueure:
     def __init__(self):

@@ -1,4 +1,5 @@
 #coding:utf-8
+from lib3 import *
 
 def test():
     rv = (3,1)
@@ -28,10 +29,6 @@ def test():
 test()
 
 import pygame,time,os,random
-from pygame.locals import *
-from cartes import *
-import subprocess
-
 
 amaj=False
 
@@ -102,6 +99,9 @@ if not fichh in os.listdir():
 
 from lib import *
 from lib2 import *
+from pygame.locals import *
+from cartes import *
+import subprocess
 
 j=Joueure()
 j=load(j)
